@@ -1,69 +1,54 @@
 # Sistema de Gestão para Home Care
 
-## 📖 Descrição do Projeto
-Este projeto foi desenvolvido como parte do **Projeto Integrador do SENAI**.  
-O sistema tem como objetivo auxiliar na organização e no gerenciamento de serviços de **home care**, permitindo o controle de pacientes, profissionais da saúde e atendimentos realizados em domicílio.
+## 📖 Apresentação do Projeto
 
-A proposta do projeto é facilitar o acesso às informações de atendimento, melhorar o acompanhamento dos pacientes e organizar os dados relacionados aos serviços prestados.
+Este projeto foi desenvolvido como parte do **Projeto Integrador do SENAI**. A proposta da solução é criar um sistema que auxilie na **gestão de serviços de home care**, permitindo organizar informações sobre pacientes, profissionais da saúde e atendimentos realizados em domicílio.
 
----
+A área de atendimento domiciliar apresenta desafios relacionados ao controle de dados, registro de atendimentos e acompanhamento de pacientes. Muitas vezes essas informações são registradas de forma manual ou em diferentes sistemas, o que pode dificultar a organização e o acesso rápido às informações.
 
-## 🎯 Objetivo
-O objetivo principal do projeto é desenvolver um sistema que ajude a organizar e gerenciar informações relacionadas ao atendimento domiciliar na área da saúde.
-
-Objetivos específicos:
-- Melhorar o controle de pacientes atendidos em home care
-- Registrar atendimentos realizados por profissionais da saúde
-- Manter um histórico organizado das visitas e procedimentos
-- Facilitar a consulta de informações importantes sobre os pacientes
+Dessa forma, o projeto busca desenvolver uma solução que facilite o **registro, consulta e acompanhamento dos dados**, contribuindo para uma gestão mais eficiente dos serviços de home care.
 
 ---
 
-## ⚙️ Funcionalidades
-O sistema possui as seguintes funcionalidades:
+## 🎯 Objetivos do Projeto
 
-- Cadastro de pacientes
-- Cadastro de profissionais da saúde
-- Registro de atendimentos domiciliares
-- Consulta de histórico de atendimentos
-- Organização de informações de pacientes e profissionais
+O principal objetivo do projeto é desenvolver uma aplicação que ajude na organização e no gerenciamento das informações relacionadas ao atendimento domiciliar.
+
+### Objetivos específicos
+
+- Melhorar o controle de pacientes atendidos em serviços de home care  
+- Registrar atendimentos realizados por profissionais da saúde  
+- Organizar o histórico de atendimentos dos pacientes  
+- Facilitar o acesso às informações dos serviços prestados  
+
+---
+
+## 👥 Participantes
+
+Equipe responsável pelo desenvolvimento do projeto:
+
+- **Gabriel Quinelato de Araujo Pontes** — Back-end  
+- **João Francisco Barbatti Alves** — Front-end  
+- **Kayke dos Santos Cruz** — Front-end  
+- **Luis Eduardo Rocha de Almeida** — Back-end / Spring Boot  
+- **Rafael Felipe Rodrigues Pinheiro** — Front-end  
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-As tecnologias utilizadas no desenvolvimento do projeto incluem:
+As seguintes tecnologias e ferramentas foram utilizadas no desenvolvimento do projeto:
 
-- HTML
-- CSS
-- JavaScript
-- Java e Spring 
-- FlutterFlow
-- GitHub
+- **HTML** — estrutura das páginas web  
+- **CSS** — estilização da interface  
+- **JavaScript** — interatividade e funcionalidades do sistema  
+- **Java** — desenvolvimento da lógica do sistema (backend)  
+- **Spring Boot** — framework utilizado para construção da aplicação backend  
+- **FlutterFlow** — desenvolvimento e prototipação da interface da aplicação  
+- **GitHub** — controle de versão e hospedagem do repositório  
 
----
-
-## 👥 Integrantes do Projeto
-
-- Gabriel Quinelato de Araujo Pontes
-- João Francisco Barbatti Alves
-- Kayke dos Santos Cruz
-- Luis Eduardo Rocha de Almeida
-- Rafael Felipe Rodrigues Pinheiro
-
- ##👥 Docentes do Projeto
-
-- Debora Souza
-- Felippe do Nascimento
-- 
 ---
 
 ## 🏫 Instituição
 
-Projeto desenvolvido no **SENAI** como parte do **Projeto Integrador do curso Desenvolvimento de Sistemas**.
-
----
-
-## 📄 Licença
-
-Este projeto foi desenvolvido para fins educacionais.
+Projeto desenvolvido no **SENAI** como parte das atividades do **Projeto Integrador do curso Desenvolvimento de Sistemas**.
