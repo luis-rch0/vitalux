@@ -36,7 +36,8 @@ As tecnologias utilizadas no desenvolvimento do projeto incluem:
 
 - HTML
 - CSS
-- JavaScript / Java
+- JavaScript
+- Java e Spring 
 - FlutterFlow
 - GitHub
 
