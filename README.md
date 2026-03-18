@@ -44,7 +44,6 @@ As seguintes tecnologias e ferramentas foram utilizadas no desenvolvimento do pr
 - **JavaScript** — interatividade e funcionalidades do sistema  
 - **Java** — desenvolvimento da lógica do sistema (backend)  
 - **Spring Boot** — framework utilizado para construção da aplicação backend  
-- **FlutterFlow** — desenvolvimento e prototipação da interface da aplicação  
 - **GitHub** — controle de versão e hospedagem do repositório  
 
 ---
