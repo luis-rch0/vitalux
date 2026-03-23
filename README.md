@@ -30,7 +30,7 @@ Equipe responsável pelo desenvolvimento do projeto:
 - **Gabriel Quinelato de Araujo Pontes** — Back-end  
 - **João Francisco Barbatti Alves** — Front-end  
 - **Kayke dos Santos Cruz** — Front-end  
-- **Luis Eduardo Rocha de Almeida** — Back-end / Spring Boot  
+- **Luis Eduardo Rocha de Almeida** — Back-end
 - **Rafael Felipe Rodrigues Pinheiro** — Front-end  
 
 ---
