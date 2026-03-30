@@ -111,6 +111,14 @@
             <artifactId>jakarta.persistence-api</artifactId>
         </dependency>
 
+		<!-- Source: https://mvnrepository.com/artifact/org.projectlombok/lombok-maven-plugin -->
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok-maven-plugin</artifactId>
+    		<version>1.18.20.0</version>
+    		<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
