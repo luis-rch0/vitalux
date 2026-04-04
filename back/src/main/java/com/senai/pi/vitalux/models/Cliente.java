@@ -38,6 +38,5 @@ public class Cliente {
     @Column(name="endereco")
     private String endereco;
 
-
 }
     
