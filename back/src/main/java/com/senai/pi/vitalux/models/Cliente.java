@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +26,16 @@ public class Cliente {
     @Id
     private Integer id;
 
+    @NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome")
     private String nome;
 
+    @NotBlank(message = "CPF é obrigatório")
     @Column(name = "cpf")
     private String cpf;
 
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email deve ser válido")
     @Column(name = "email")
     private String email;
 
