@@ -2,6 +2,8 @@ package com.senai.pi.vitalux.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,21 +50,15 @@ public class Cliente {
     @Column(name = "prontuario")
     private String prontuario;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Consulta> consultas;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Farmacia> farmacias;
 
     public Cliente(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
         this.id = id;
     }
 
