@@ -1,5 +1,7 @@
 package com.senai.pi.vitalux.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,32 +14,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="farmacia")
+@Table(name = "farmacia")
 public class Farmacia {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name="nome")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name="cnpj")
+    @Column(name = "cnpj")
     private String cnpj;
 
-    @Column(name="endereco")
+    @Column(name = "endereco")
     private String endereco;
 
-    @Column(name="telefone")
+    @Column(name = "telefone")
     private String telefone;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;

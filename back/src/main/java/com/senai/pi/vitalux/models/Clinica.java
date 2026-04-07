@@ -1,5 +1,8 @@
 package com.senai.pi.vitalux.models;
+
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,43 +19,44 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="clinica")
+@Table(name = "clinica")
 public class Clinica {
 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    
-    @Column(name="id")
+
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name="nome")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name="cnpj")
+    @Column(name = "cnpj")
     private String cnpj;
 
-    @Column(name="endereco")
+    @Column(name = "endereco")
     private String endereco;
 
-    @Column(name="telefone")
+    @Column(name = "telefone")
     private String telefone;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_listagem")
     private ListagemMedica listagemMedica;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "clinica")
     private List<Consulta> consultas;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "clinica", cascade = CascadeType.ALL)
     private ConformidadeLegal conformidadeLegal;
 

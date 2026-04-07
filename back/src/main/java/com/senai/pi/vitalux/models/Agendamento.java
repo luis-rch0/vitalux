@@ -2,6 +2,8 @@ package com.senai.pi.vitalux.models;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,29 +16,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="agendamento")
+@Table(name = "agendamento")
 public class Agendamento {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name="descricao")
+    @Column(name = "descricao")
     private String descricao;
 
-    @Column(name="dataHora")
+    @Column(name = "dataHora")
     private LocalDateTime dataHora;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    
 }

@@ -3,6 +3,7 @@ package com.senai.pi.vitalux.models;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,6 +50,7 @@ public class ListagemMedica {
     @Column(name = "ativo")
     private boolean ativo;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "listagemMedica")
     private List<Clinica> clinicas;
 }

@@ -2,6 +2,7 @@ package com.senai.pi.vitalux.models;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,24 +19,25 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="conformidade_legal")
+@Table(name = "conformidade_legal")
 public class ConformidadeLegal {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name="observacao")
+    @Column(name = "observacao")
     private String observacao;
 
-    @Column(name="segue_normas")
+    @Column(name = "segue_normas")
     private boolean segueNormas;
 
-    @Column(name="data_verificacao")
+    @Column(name = "data_verificacao")
     private LocalDate dataVerificacao;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_clinica")
     private Clinica clinica;
