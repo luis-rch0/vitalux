@@ -2,7 +2,6 @@ package com.senai.pi.vitalux.models;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,10 +12,14 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "clinica")
+@ToString(exclude = "clinica")
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "conformidade_legal")
@@ -37,7 +40,6 @@ public class ConformidadeLegal {
     @Column(name = "data_verificacao")
     private LocalDate dataVerificacao;
 
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "id_clinica")
     private Clinica clinica;

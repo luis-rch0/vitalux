@@ -14,9 +14,13 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@EqualsAndHashCode(exclude = "cliente")
+@ToString(exclude = "cliente")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -35,7 +39,6 @@ public class Agendamento {
     @Column(name = "dataHora")
     private LocalDateTime dataHora;
 
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;

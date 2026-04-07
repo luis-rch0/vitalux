@@ -12,10 +12,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = { "clinica", "cliente", "agendamento" })
+@ToString(exclude = { "clinica", "cliente", "agendamento" })
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "consulta")
@@ -30,17 +34,14 @@ public class Consulta {
     @Column(name = "descricao")
     private String descricao;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_clinica")
     private Clinica clinica;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_agendamento")
     private Agendamento agendamento;

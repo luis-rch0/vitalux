@@ -1,6 +1,7 @@
 package com.senai.pi.vitalux.config;
 
 import org.springframework.context.annotation.Configuration;
+
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 
@@ -9,7 +10,7 @@ import io.swagger.v3.oas.annotations.info.Info;
     info = @Info(
         title = "API",
         version = "1.0",
-        description = "Gabriel Quinelato, Luis Eduardo. Rafael Felipe, Kayke dos Santos"
+        description = "Gabriel Quinelato, Luis Eduardo. Rafael Felipe, Kayke dos Santos, João Francisco Barbatti"
     )
 )
 public class Swagger {

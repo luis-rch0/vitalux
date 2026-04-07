@@ -2,7 +2,6 @@ com\senai\pi\vitalux\services\Conformidade_legalService.class
 com\senai\pi\vitalux\models\Clinica.class
 com\senai\pi\vitalux\models\Farmacia.class
 com\senai\pi\vitalux\services\AgendamentoService.class
-com\senai\pi\vitalux\controllers\ConsultaController.class
 com\senai\pi\vitalux\controllers\AgendamentoController.class
 com\senai\pi\vitalux\models\ConformidadeLegal.class
 com\senai\pi\vitalux\services\ConsultaService.class

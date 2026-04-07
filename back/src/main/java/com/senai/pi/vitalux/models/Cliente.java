@@ -15,9 +15,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@EqualsAndHashCode(exclude = { "consultas", "farmacias" })
+@ToString(exclude = { "consultas", "farmacias" })
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -50,11 +54,9 @@ public class Cliente {
     @Column(name = "prontuario")
     private String prontuario;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Consulta> consultas;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Farmacia> farmacias;
 

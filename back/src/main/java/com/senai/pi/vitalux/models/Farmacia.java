@@ -1,7 +1,5 @@
 package com.senai.pi.vitalux.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,10 +10,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = "cliente")
+@ToString(exclude = "cliente")
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "farmacia")
@@ -39,7 +41,6 @@ public class Farmacia {
     @Column(name = "telefone")
     private String telefone;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_cliente")
     private Cliente cliente;
