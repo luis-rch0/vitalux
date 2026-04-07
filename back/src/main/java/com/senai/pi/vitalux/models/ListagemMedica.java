@@ -14,46 +14,41 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="listagem_medica")
+@Table(name = "listagem_medica")
 public class ListagemMedica {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name="nome")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name="cpf")
+    @Column(name = "cpf")
     private String cpf;
 
-    @Column(name="crm")
+    @Column(name = "crm")
     private String crm;
 
-    @Column(name="telefone")
+    @Column(name = "telefone")
     private String telefone;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name="data_nascimento")
+    @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    @Column(name="especialidade")
+    @Column(name = "especialidade")
     private String especialidade;
 
-    @Column(name="ativo")
+    @Column(name = "ativo")
     private boolean ativo;
-
 
     @OneToMany(mappedBy = "listagemMedica")
     private List<Clinica> clinicas;
 }
-
-    
-

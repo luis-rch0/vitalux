@@ -17,29 +17,29 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="cliente")
+@Table(name = "cliente")
 public class Cliente {
 
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
 
-    @Column(name="nome")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name="cpf")
+    @Column(name = "cpf")
     private String cpf;
 
-    @Column(name="email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name="telefone")
+    @Column(name = "telefone")
     private String telefone;
 
-    @Column(name="endereco")
+    @Column(name = "endereco")
     private String endereco;
 
-    @Column(name="prontuario")
+    @Column(name = "prontuario")
     private String prontuario;
 
     @OneToMany(mappedBy = "cliente")
@@ -60,6 +60,4 @@ public class Cliente {
         this.id = id;
     }
 
-
 }
-    
