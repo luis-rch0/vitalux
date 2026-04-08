@@ -24,4 +24,8 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
      * @return Lista de agendamentos ordenados
      */
     List<Agendamento> findAllByOrderByDataHoraDesc();
+
+
+    
+
 }

@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import com.senai.pi.vitalux.models.Cliente;
 import java.util.Optional;
-import java.util.List;
 
 /**
  * Repository para Cliente
@@ -32,5 +31,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
      * @param nome Parte do nome do cliente
      * @return Lista de clientes encontrados
      */
-    List<Cliente> findByNomeContainingIgnoreCase(String nome);
+    Optional<Cliente> findByNomeContainingIgnoreCase(String nome);
+
+
 }

@@ -15,14 +15,14 @@ import java.util.Optional;
 public class ClienteService {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteRepository cs;
 
     /**
      * Retorna todos os clientes cadastrados
      * @return Lista de todos os clientes
      */
     public List<Cliente> listarTodos() {
-        return clienteRepository.findAll();
+        return cs.findAll();
     }
 
     /**
@@ -31,7 +31,7 @@ public class ClienteService {
      * @return Optional contendo o cliente se encontrado
      */
     public Optional<Cliente> buscarPorId(Integer id) {
-        return clienteRepository.findById(id);
+        return cs.findById(id);
     }
 
     /**
@@ -40,7 +40,7 @@ public class ClienteService {
      * @return Optional contendo o cliente se encontrado
      */
     public Optional<Cliente> buscarPorCpf(String cpf) {
-        return clienteRepository.findByCpf(cpf);
+        return cs.findByCpf(cpf);
     }
 
     /**
@@ -49,7 +49,7 @@ public class ClienteService {
      * @return Optional contendo o cliente se encontrado
      */
     public Optional<Cliente> buscarPorEmail(String email) {
-        return clienteRepository.findByEmail(email);
+        return cs.findByEmail(email);
     }
 
     /**
@@ -57,8 +57,8 @@ public class ClienteService {
      * @param nome Parte do nome do cliente
      * @return Lista de clientes encontrados
      */
-    public List<Cliente> buscarPorNome(String nome) {
-        return clienteRepository.findByNomeContainingIgnoreCase(nome);
+    public Optional<Cliente> buscarPorNome(String nome) {
+        return cs.findByNomeContainingIgnoreCase(nome);
     }
 
     /**
@@ -67,7 +67,7 @@ public class ClienteService {
      * @return Cliente criado com ID gerado
      */
     public Cliente criar(Cliente cliente) {
-        return clienteRepository.save(cliente);
+        return cs.save(cliente);
     }
 
     /**
@@ -77,9 +77,9 @@ public class ClienteService {
      * @return Cliente atualizado ou null se não encontrado
      */
     public Cliente atualizar(Integer id, Cliente cliente) {
-        if (clienteRepository.existsById(id)) {
+        if (cs.existsById(id)) {
             cliente.setId(id);
-            return clienteRepository.save(cliente);
+            return cs.save(cliente);
         }
         return null;
     }
@@ -90,8 +90,8 @@ public class ClienteService {
      * @return true se deletado, false se não encontrado
      */
     public boolean deletar(Integer id) {
-        if (clienteRepository.existsById(id)) {
-            clienteRepository.deleteById(id);
+        if (cs.existsById(id)) {
+            cs.deleteById(id);
             return true;
         }
         return false;
@@ -103,6 +103,6 @@ public class ClienteService {
      * @return true se existe, false caso contrário
      */
     public boolean existe(Integer id) {
-        return clienteRepository.existsById(id);
+        return cs.existsById(id);
     }
 }
