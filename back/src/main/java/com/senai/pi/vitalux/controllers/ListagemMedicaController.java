@@ -1,8 +1,6 @@
 package com.senai.pi.vitalux.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.senai.pi.vitalux.models.ListagemMedica;
 import com.senai.pi.vitalux.services.ListagemMedicaService;
@@ -15,20 +13,18 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/medicos")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class ListagemMedicaController {
 
     @Autowired
-    private ListagemMedicaService listagemMedicaService;
+    private ListagemMedicaService ls;
 
     /**
      * Retorna uma lista de todos os médicos
      * @return ResponseEntity com lista de médicos
      */
     @GetMapping
-    public ResponseEntity<List<ListagemMedica>> listarTodos() {
-        List<ListagemMedica> medicos = listagemMedicaService.listarTodos();
-        return ResponseEntity.ok(medicos);
+    public List<ListagemMedica> listarTodos() {
+        return ls.listarTodos();
     }
 
     /**
@@ -37,10 +33,9 @@ public class ListagemMedicaController {
      * @return ResponseEntity com médico ou 404 se não encontrado
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ListagemMedica> buscarPorId(@PathVariable Integer id) {
-        Optional<ListagemMedica> medico = listagemMedicaService.buscarPorId(id);
-        return medico.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ListagemMedica buscarPorId(@PathVariable Integer id) {
+        Optional<ListagemMedica> medico = ls.buscarPorId(id);
+        return medico.orElse(null);
     }
 
     /**
@@ -49,10 +44,9 @@ public class ListagemMedicaController {
      * @return ResponseEntity com médico ou 404 se não encontrado
      */
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<ListagemMedica> buscarPorCpf(@PathVariable String cpf) {
-        Optional<ListagemMedica> medico = listagemMedicaService.buscarPorCpf(cpf);
-        return medico.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ListagemMedica buscarPorCpf(@PathVariable String cpf) {
+        Optional<ListagemMedica> medico = ls.buscarPorCpf(cpf);
+        return medico.orElse(null);
     }
 
     /**
@@ -61,10 +55,9 @@ public class ListagemMedicaController {
      * @return ResponseEntity com médico ou 404 se não encontrado
      */
     @GetMapping("/crm/{crm}")
-    public ResponseEntity<ListagemMedica> buscarPorCrm(@PathVariable String crm) {
-        Optional<ListagemMedica> medico = listagemMedicaService.buscarPorCrm(crm);
-        return medico.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ListagemMedica buscarPorCrm(@PathVariable String crm) {
+        Optional<ListagemMedica> medico = ls.buscarPorCrm(crm);
+        return medico.orElse(null);
     }
 
     /**
@@ -73,9 +66,8 @@ public class ListagemMedicaController {
      * @return ResponseEntity com lista de médicos encontrados
      */
     @GetMapping("/buscar/nome")
-    public ResponseEntity<List<ListagemMedica>> buscarPorNome(@RequestParam String nome) {
-        List<ListagemMedica> medicos = listagemMedicaService.buscarPorNome(nome);
-        return ResponseEntity.ok(medicos);
+    public List<ListagemMedica> buscarPorNome(@RequestParam String nome) {
+        return ls.buscarPorNome(nome);
     }
 
     /**
@@ -84,9 +76,8 @@ public class ListagemMedicaController {
      * @return ResponseEntity com lista de médicos encontrados
      */
     @GetMapping("/buscar/especialidade")
-    public ResponseEntity<List<ListagemMedica>> buscarPorEspecialidade(@RequestParam String especialidade) {
-        List<ListagemMedica> medicos = listagemMedicaService.buscarPorEspecialidade(especialidade);
-        return ResponseEntity.ok(medicos);
+    public List<ListagemMedica> buscarPorEspecialidade(@RequestParam String especialidade) {
+        return ls.buscarPorEspecialidade(especialidade);
     }
 
     /**
@@ -94,9 +85,8 @@ public class ListagemMedicaController {
      * @return ResponseEntity com lista de médicos ativos
      */
     @GetMapping("/ativos")
-    public ResponseEntity<List<ListagemMedica>> listarAtivos() {
-        List<ListagemMedica> medicos = listagemMedicaService.listarAtivos();
-        return ResponseEntity.ok(medicos);
+    public List<ListagemMedica> listarAtivos() {
+        return ls.listarAtivos();
     }
 
     /**
@@ -105,9 +95,8 @@ public class ListagemMedicaController {
      * @return ResponseEntity com médico criado e status 201
      */
     @PostMapping
-    public ResponseEntity<ListagemMedica> criar(@RequestBody ListagemMedica listagem) {
-        ListagemMedica novoMedico = listagemMedicaService.criar(listagem);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoMedico);
+    public ListagemMedica criar(@RequestBody ListagemMedica listagem) {
+        return ls.criar(listagem);
     }
 
     /**
@@ -117,12 +106,8 @@ public class ListagemMedicaController {
      * @return ResponseEntity com médico atualizado ou 404 se não encontrado
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ListagemMedica> atualizar(@PathVariable Integer id, @RequestBody ListagemMedica listagem) {
-        ListagemMedica medicoAtualizado = listagemMedicaService.atualizar(id, listagem);
-        if (medicoAtualizado != null) {
-            return ResponseEntity.ok(medicoAtualizado);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ListagemMedica atualizar(@PathVariable Integer id, @RequestBody ListagemMedica listagem) {
+        return ls.atualizar(id, listagem);
     }
 
     /**
@@ -131,10 +116,11 @@ public class ListagemMedicaController {
      * @return ResponseEntity sem conteúdo (204) ou 404 se não encontrado
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        if (listagemMedicaService.deletar(id)) {
-            return ResponseEntity.noContent().build();
+    public ListagemMedica deletar(@PathVariable Integer id) {
+        if (ls.deletar(id)) {
+            return null;
+        } else {
+            return null;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

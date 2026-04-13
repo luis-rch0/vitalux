@@ -30,8 +30,8 @@ public class ClienteService {
      * @param id ID do cliente
      * @return Optional contendo o cliente se encontrado
      */
-    public Optional<Cliente> buscarPorId(Integer id) {
-        return cs.findById(id);
+    public Cliente buscarPorId(Integer id) {
+        return cs.findById(id).get();
     }
 
     /**

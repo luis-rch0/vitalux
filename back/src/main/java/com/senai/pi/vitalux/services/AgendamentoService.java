@@ -2,6 +2,8 @@ package com.senai.pi.vitalux.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
 import com.senai.pi.vitalux.models.Agendamento;
 import com.senai.pi.vitalux.repositories.AgendamentoRepository;
 import java.util.List;
@@ -13,6 +15,9 @@ public class AgendamentoService {
 
     @Autowired
     private AgendamentoRepository as;
+
+    @Autowired
+    private ClienteService cs;
 
 
     public List<Agendamento> listarTodos() {
@@ -30,9 +35,10 @@ public class AgendamentoService {
     }
 
 
-    public Agendamento criar(Agendamento agendamento) {
-        as.save(agendamento);
-        return agendamento;
+    public Agendamento criar(AgendamentoRequestDTO agendamento) {
+        Agendamento novoAgendamento = new Agendamento(agendamento.getDescricao(), agendamento.getDataHora(), cs.buscarPorId(agendamento.getClienteId()));
+        as.save(novoAgendamento);
+        return novoAgendamento;
     }
 
 

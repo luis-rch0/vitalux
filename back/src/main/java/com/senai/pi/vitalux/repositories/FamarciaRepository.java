@@ -32,5 +32,5 @@ public interface FamarciaRepository extends JpaRepository<Farmacia, Integer> {
      * @param nome Parte do nome da farmácia
      * @return Lista de farmácias encontradas
      */
-    List<Farmacia> findByNomeContainingIgnoreCase(String nome);
+    Farmacia findByNomeContainingIgnoreCase(String nome);
 }

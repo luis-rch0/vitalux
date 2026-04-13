@@ -1,8 +1,6 @@
 package com.senai.pi.vitalux.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.senai.pi.vitalux.models.Farmacia;
 import com.senai.pi.vitalux.services.FarmaciaService;
@@ -15,20 +13,18 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/farmacias")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class FarmaciaController {
 
     @Autowired
-    private FarmaciaService farmaciaService;
+    private FarmaciaService fs;
 
     /**
      * Retorna uma lista de todas as farmácias
      * @return ResponseEntity com lista de farmácias
      */
     @GetMapping
-    public ResponseEntity<List<Farmacia>> listarTodos() {
-        List<Farmacia> farmacias = farmaciaService.listarTodos();
-        return ResponseEntity.ok(farmacias);
+    public List<Farmacia> listarTodos() {
+        return fs.listarTodos();
     }
 
     /**
@@ -37,10 +33,9 @@ public class FarmaciaController {
      * @return ResponseEntity com farmácia ou 404 se não encontrada
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Farmacia> buscarPorId(@PathVariable Integer id) {
-        Optional<Farmacia> farmacia = farmaciaService.buscarPorId(id);
-        return farmacia.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public Farmacia buscarPorId(@PathVariable Integer id) {
+        Optional<Farmacia> farmacia = fs.buscarPorId(id);
+        return farmacia.orElse(null);
     }
 
     /**
@@ -49,10 +44,9 @@ public class FarmaciaController {
      * @return ResponseEntity com farmácia ou 404 se não encontrada
      */
     @GetMapping("/cnpj/{cnpj}")
-    public ResponseEntity<Farmacia> buscarPorCnpj(@PathVariable String cnpj) {
-        Optional<Farmacia> farmacia = farmaciaService.buscarPorCnpj(cnpj);
-        return farmacia.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public Farmacia buscarPorCnpj(@PathVariable String cnpj) {
+        Optional<Farmacia> farmacia = fs.buscarPorCnpj(cnpj);
+        return farmacia.orElse(null);
     }
 
     /**
@@ -61,9 +55,8 @@ public class FarmaciaController {
      * @return ResponseEntity com lista de farmácias do cliente
      */
     @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<Farmacia>> buscarPorClienteId(@PathVariable Integer clienteId) {
-        List<Farmacia> farmacias = farmaciaService.buscarPorClienteId(clienteId);
-        return ResponseEntity.ok(farmacias);
+    public List<Farmacia> buscarPorClienteId(@PathVariable Integer clienteId) {
+        return fs.buscarPorClienteId(clienteId);
     }
 
     /**
@@ -72,9 +65,8 @@ public class FarmaciaController {
      * @return ResponseEntity com lista de farmácias encontradas
      */
     @GetMapping("/buscar/nome")
-    public ResponseEntity<List<Farmacia>> buscarPorNome(@RequestParam String nome) {
-        List<Farmacia> farmacias = farmaciaService.buscarPorNome(nome);
-        return ResponseEntity.ok(farmacias);
+    public Farmacia buscarPorNome(@RequestParam String nome) {
+        return fs.buscarPorNome(nome).orElse(null);
     }
 
     /**
@@ -83,9 +75,8 @@ public class FarmaciaController {
      * @return ResponseEntity com farmácia criada e status 201
      */
     @PostMapping
-    public ResponseEntity<Farmacia> criar(@RequestBody Farmacia farmacia) {
-        Farmacia novaFarmacia = farmaciaService.criar(farmacia);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaFarmacia);
+    public Farmacia criar(@RequestBody Farmacia farmacia) {
+        return fs.criar(farmacia);
     }
 
     /**
@@ -95,12 +86,8 @@ public class FarmaciaController {
      * @return ResponseEntity com farmácia atualizada ou 404 se não encontrada
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Farmacia> atualizar(@PathVariable Integer id, @RequestBody Farmacia farmacia) {
-        Farmacia farmaciaAtualizada = farmaciaService.atualizar(id, farmacia);
-        if (farmaciaAtualizada != null) {
-            return ResponseEntity.ok(farmaciaAtualizada);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public Farmacia atualizar(@PathVariable Integer id, @RequestBody Farmacia farmacia) {
+        return fs.atualizar(id, farmacia);
     }
 
     /**
@@ -109,10 +96,11 @@ public class FarmaciaController {
      * @return ResponseEntity sem conteúdo (204) ou 404 se não encontrada
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        if (farmaciaService.deletar(id)) {
-            return ResponseEntity.noContent().build();
+    public Farmacia deletar(@PathVariable Integer id) {
+        if (fs.deletar(id)) {
+            return null;
+        } else {
+            return null;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

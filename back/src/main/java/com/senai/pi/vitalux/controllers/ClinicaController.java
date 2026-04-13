@@ -1,8 +1,7 @@
 package com.senai.pi.vitalux.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import com.senai.pi.vitalux.models.Clinica;
 import com.senai.pi.vitalux.services.ClinicaService;
@@ -15,20 +14,18 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/clinicas")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class ClinicaController {
 
     @Autowired
-    private ClinicaService clinicaService;
+    private ClinicaService cs;
 
     /**
      * Retorna uma lista de todas as clínicas
      * @return ResponseEntity com lista de clínicas
      */
     @GetMapping
-    public ResponseEntity<List<Clinica>> listarTodos() {
-        List<Clinica> clinicas = clinicaService.listarTodos();
-        return ResponseEntity.ok(clinicas);
+    public List<Clinica> listarTodos() {
+        return cs.listarTodos();
     }
 
     /**
@@ -37,10 +34,9 @@ public class ClinicaController {
      * @return ResponseEntity com clínica ou 404 se não encontrada
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Clinica> buscarPorId(@PathVariable Integer id) {
-        Optional<Clinica> clinica = clinicaService.buscarPorId(id);
-        return clinica.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public Clinica buscarPorId(@PathVariable Integer id) {
+        Optional<Clinica> clinica = cs.buscarPorId(id);
+        return clinica.orElse(null);
     }
 
     /**
@@ -49,10 +45,9 @@ public class ClinicaController {
      * @return ResponseEntity com clínica ou 404 se não encontrada
      */
     @GetMapping("/cnpj/{cnpj}")
-    public ResponseEntity<Clinica> buscarPorCnpj(@PathVariable String cnpj) {
-        Optional<Clinica> clinica = clinicaService.buscarPorCnpj(cnpj);
-        return clinica.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public Clinica buscarPorCnpj(@PathVariable String cnpj) {
+        Optional<Clinica> clinica = cs.buscarPorCnpj(cnpj);
+        return clinica.orElse(null);
     }
 
     /**
@@ -61,9 +56,8 @@ public class ClinicaController {
      * @return ResponseEntity com lista de clínicas encontradas
      */
     @GetMapping("/buscar/nome")
-    public ResponseEntity<List<Clinica>> buscarPorNome(@RequestParam String nome) {
-        List<Clinica> clinicas = clinicaService.buscarPorNome(nome);
-        return ResponseEntity.ok(clinicas);
+    public List<Clinica> buscarPorNome(@RequestParam String nome) {
+        return cs.buscarPorNome(nome);
     }
 
     /**
@@ -72,9 +66,8 @@ public class ClinicaController {
      * @return ResponseEntity com clínica criada e status 201
      */
     @PostMapping
-    public ResponseEntity<Clinica> criar(@RequestBody Clinica clinica) {
-        Clinica novaClinica = clinicaService.criar(clinica);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novaClinica);
+    public Clinica criar(@RequestBody Clinica clinica) {
+        return cs.criar(clinica);
     }
 
     /**
@@ -84,12 +77,8 @@ public class ClinicaController {
      * @return ResponseEntity com clínica atualizada ou 404 se não encontrada
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Clinica> atualizar(@PathVariable Integer id, @RequestBody Clinica clinica) {
-        Clinica clinicaAtualizada = clinicaService.atualizar(id, clinica);
-        if (clinicaAtualizada != null) {
-            return ResponseEntity.ok(clinicaAtualizada);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public Clinica atualizar(@PathVariable Integer id, @RequestBody Clinica clinica) {
+        return cs.atualizar(id, clinica);
     }
 
     /**
@@ -98,10 +87,11 @@ public class ClinicaController {
      * @return ResponseEntity sem conteúdo (204) ou 404 se não encontrada
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        if (clinicaService.deletar(id)) {
-            return ResponseEntity.noContent().build();
+    public Clinica deletar(@PathVariable Integer id) {
+        if (cs.deletar(id)) {
+            return null;
+        } else {
+            return null;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }

@@ -57,7 +57,7 @@ public class FarmaciaService {
      * @param nome Parte do nome da farmácia
      * @return Lista de farmácias encontradas
      */
-    public List<Farmacia> buscarPorNome(String nome) {
+    public Farmacia buscarPorNome(String nome) {
         return farmaciaRepository.findByNomeContainingIgnoreCase(nome);
     }
 

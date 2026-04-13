@@ -32,7 +32,7 @@ public class ClienteController {
 
     @GetMapping("/{id}")
     public Cliente buscarPorId(@PathVariable Integer id) {
-        return cs.buscarPorId(id).orElse(null);
+        return cs.buscarPorId(id);
     }
 
 

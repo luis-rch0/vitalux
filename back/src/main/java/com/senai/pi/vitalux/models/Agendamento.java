@@ -2,7 +2,6 @@ package com.senai.pi.vitalux.models;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,22 +29,26 @@ public class Agendamento {
     @Column(name = "dataHora")
     private LocalDateTime dataHora;
     
-    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    private Cliente clienteId;
 
     public Agendamento() {
     }
 
 
-    public Agendamento(Integer id, String descricao, LocalDateTime dataHora, Cliente cliente) {
+    public Agendamento(Integer id, String descricao, LocalDateTime dataHora, Cliente clienteId) {
         this.id = id;
         this.descricao = descricao;
         this.dataHora = dataHora;
-        this.cliente = cliente;
+        this.clienteId = clienteId;
     }
 
+    public Agendamento(String descricao, LocalDateTime dataHora, Cliente clienteId) {
+        this.descricao = descricao;
+        this.dataHora = dataHora;
+        this.clienteId = clienteId;
+    }
 
     public Integer getId() {
         return id;
@@ -71,12 +74,13 @@ public class Agendamento {
         this.dataHora = dataHora;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Cliente getClienteId() {
+        return clienteId;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setClienteId(Cliente clienteId) {
+        this.clienteId = clienteId;
     }
+
     
 }
