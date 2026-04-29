@@ -61,6 +61,7 @@ Projeto desenvolvido no **SENAI** como parte das atividades do **Projeto Integra
 <img width="552" height="440" alt="image" src="https://github.com/user-attachments/assets/e9793382-dc8f-4fc7-9e61-7da04713df6b" />
 
 
+
 --- **Modelo Lógico**:
 
 
