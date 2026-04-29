@@ -98,10 +98,7 @@ public class Farmacia {
         this.cliente = cliente;
     }
 
-    public Farmacia orElse(Object object) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElse'");
-    }
+
 
     
 }

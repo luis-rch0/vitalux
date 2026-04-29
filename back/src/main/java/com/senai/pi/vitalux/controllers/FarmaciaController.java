@@ -66,7 +66,7 @@ public class FarmaciaController {
      */
     @GetMapping("/buscar/nome")
     public Farmacia buscarPorNome(@RequestParam String nome) {
-        return fs.buscarPorNome(nome).orElse(null);
+        return fs.buscarPorNome(nome);
     }
 
     /**
