@@ -1,46 +1,25 @@
 package com.senai.pi.vitalux.services;
-<<<<<<< HEAD
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
-import com.senai.pi.vitalux.models.Agendamento;
-import com.senai.pi.vitalux.repositories.AgendamentoRepository;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import com.senai.pi.vitalux.services.ClienteService;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-=======
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
 import com.senai.pi.vitalux.models.Agendamento;
 import com.senai.pi.vitalux.repositories.AgendamentoRepository;
 import java.util.List;
 import java.util.Optional;
->>>>>>> dee608f957cafa43114f1bee8bb15974a60c7b1a
+
 
 
 @Service
@@ -99,20 +78,21 @@ public class AgendamentoService {
         }
         return Optional.empty();
     }
-<<<<<<< HEAD
 
 
 
 
-    @Value("${groq.api-key}")
+
+    @Value("${GROQ_API_KEY}")
     private String apiKey;
 
-    @Value("${groq.model}")
+    @Value("${GROQ_MODEL}")
     private String model;
 
 
 private JsonNode callGroq(JsonNode body) {
         try {
+            
             byte[] payload = ObjectMapper.writeValueAsBytes(body);
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.groq.com/openai/v1/chat/completions&quot;"))
@@ -121,7 +101,10 @@ private JsonNode callGroq(JsonNode body) {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .POST(HttpRequest.BodyPublishers.ofByteArray(payload))
                 .build();
-
+            
+            
+            ObjectMapper objectMapper = new ObjectMapper();
+            HttpClient httpClient = HttpClient.newHttpClient();
             HttpResponse<String> response = HttpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             if (response.statusCode() / 100 != 2) {
                 // Tenta fallback de modelo se o atual estiver descontinuado/indisponível
@@ -139,9 +122,10 @@ private JsonNode callGroq(JsonNode body) {
                             if (body instanceof ObjectNode on) {
                                 on.put("model", candidate);
                             }
+                            
                             byte[] retryPayload = ObjectMapper.writeValueAsBytes(body);
                             HttpRequest retryReq = HttpRequest.newBuilder()
-                                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions&quot;"))
+                                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions;"))
                                 .timeout(Duration.ofSeconds(60))
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -171,6 +155,4 @@ private JsonNode callGroq(JsonNode body) {
 
 
     
-=======
->>>>>>> dee608f957cafa43114f1bee8bb15974a60c7b1a
 }
