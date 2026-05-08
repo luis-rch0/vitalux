@@ -1,24 +1,25 @@
 package com.senai.pi.vitalux.services;
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
 import com.senai.pi.vitalux.models.Agendamento;
 import com.senai.pi.vitalux.repositories.AgendamentoRepository;
-import java.util.List;
-import java.util.Optional;
 
 
 
@@ -92,10 +93,12 @@ public class AgendamentoService {
 
 private JsonNode callGroq(JsonNode body) {
         try {
-            
-            byte[] payload = ObjectMapper.writeValueAsBytes(body);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            byte[] payload = objectMapper.writeValueAsBytes(body);
+
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions&quot;"))
+                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions;"))
                 .timeout(Duration.ofSeconds(60))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -103,9 +106,9 @@ private JsonNode callGroq(JsonNode body) {
                 .build();
             
             
-            ObjectMapper objectMapper = new ObjectMapper();
+            
             HttpClient httpClient = HttpClient.newHttpClient();
-            HttpResponse<String> response = HttpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             if (response.statusCode() / 100 != 2) {
                 // Tenta fallback de modelo se o atual estiver descontinuado/indisponível
                 if (response.statusCode() == 400 && response.body() != null && response.body().toLowerCase().contains("model")) {
@@ -123,7 +126,8 @@ private JsonNode callGroq(JsonNode body) {
                                 on.put("model", candidate);
                             }
                             
-                            byte[] retryPayload = ObjectMapper.writeValueAsBytes(body);
+                            byte[] retryPayload = objectMapper.writeValueAsBytes(body);
+
                             HttpRequest retryReq = HttpRequest.newBuilder()
                                 .uri(URI.create("https://api.groq.com/openai/v1/chat/completions;"))
                                 .timeout(Duration.ofSeconds(60))
@@ -131,11 +135,12 @@ private JsonNode callGroq(JsonNode body) {
                                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                                 .POST(HttpRequest.BodyPublishers.ofByteArray(retryPayload))
                                 .build();
-                            HttpResponse<String> retryResp = HttpClient.send(retryReq, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+
+                            HttpResponse<String> retryResp = httpClient.send(retryReq, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
                             if (retryResp.statusCode() / 100 == 2) {
                                 // atualiza o modelo efetivo em memória
                                 this.model = candidate;
-                                return ObjectMapper.readTree(retryResp.body());
+                                return objectMapper.readTree(retryResp.body());
                             }
                         } catch (Exception ignore) {
                             // tenta próximo
@@ -144,7 +149,7 @@ private JsonNode callGroq(JsonNode body) {
                 }
                 throw new IllegalStateException("Erro Groq: HTTP " + response.statusCode() + " - " + response.body());
             }
-            return ObjectMapper.readTree(response.body());
+            return objectMapper.readTree(response.body());
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             throw new IllegalStateException("Chamada interrompida", ex);
@@ -154,5 +159,33 @@ private JsonNode callGroq(JsonNode body) {
     }
 
 
-    
+        Agendamento req = new Agendamento();
+        String systemPrompt = buildSystemPrompt();
+        String userPrompt;
+        double temperature;
+        ItemSpec[] specsForGeneration = null;
+        String ragContext = AgendamentoService.buildRagContext(user, req.getDocumentoId(), req.getAssunto(), req.getContexto());
+
+        if (useMode) {
+            specsForGeneration = buildSpecsForMode(req, count, numAlternativas);
+            temperature = 0.6; // média por combinar níveis
+            userPrompt = buildUserPromptForSpecs(req, specsForGeneration, ragContext);
+        } else {
+            TriParams tri = new TriParams(
+                req.getDiscriminacaoA() != null ? req.getDiscriminacaoA() : 0.0,
+                req.getDificuldadeB() != null ? req.getDificuldadeB() : 0.0,
+                req.getAcertoCasualC() != null ? req.getAcertoCasualC() : (1.0 / numAlternativas)
+            );
+            if (req.getDiscriminacaoA() == null || req.getDificuldadeB() == null || req.getAcertoCasualC() == null) {
+                tri = TriBloomEstimator.suggestParams(req.getProcessoCognitivo(), req.getDimensaoConhecimento(), numAlternativas);
+            }
+            temperature = temperatureByProcess(req);
+            userPrompt = buildUserPromptSingle(req, tri, numAlternativas, count, ragContext);
+        }
+
+            JsonNode body = buildGroqBody(systemPrompt, userPrompt, temperature);
+
+            JsonNode response = callGroq(body);
+
+
 }
