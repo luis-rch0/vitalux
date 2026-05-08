@@ -1,4 +1,5 @@
 package com.senai.pi.vitalux.services;
+<<<<<<< HEAD
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
@@ -29,6 +30,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+=======
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
+import com.senai.pi.vitalux.models.Agendamento;
+import com.senai.pi.vitalux.repositories.AgendamentoRepository;
+import java.util.List;
+import java.util.Optional;
+>>>>>>> dee608f957cafa43114f1bee8bb15974a60c7b1a
 
 
 @Service
@@ -87,6 +99,7 @@ public class AgendamentoService {
         }
         return Optional.empty();
     }
+<<<<<<< HEAD
 
 
 
@@ -158,4 +171,6 @@ private JsonNode callGroq(JsonNode body) {
 
 
     
+=======
+>>>>>>> dee608f957cafa43114f1bee8bb15974a60c7b1a
 }
