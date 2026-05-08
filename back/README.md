@@ -30,7 +30,7 @@ Equipe responsável pelo desenvolvimento do projeto:
 - **Gabriel Quinelato de Araujo Pontes** — Back-end  
 - **João Francisco Barbatti Alves** — Front-end  
 - **Kayke dos Santos Cruz** — Front-end  
-- **Luis Eduardo Rocha de Almeida** — Back-end
+- **Luis Eduardo Rocha de Almeida** — Back-end / Spring Boot  
 - **Rafael Felipe Rodrigues Pinheiro** — Front-end  
 
 ---
@@ -51,19 +51,3 @@ As seguintes tecnologias e ferramentas foram utilizadas no desenvolvimento do pr
 ## 🏫 Instituição
 
 Projeto desenvolvido no **SENAI** como parte das atividades do **Projeto Integrador do curso Desenvolvimento de Sistemas**.
-
-
-## Modelagem
-
---- **Modelo Conceitual**:
-
-
-<img width="552" height="440" alt="image" src="https://github.com/user-attachments/assets/e9793382-dc8f-4fc7-9e61-7da04713df6b" />
-
-
-
---- **Modelo Lógico**:
-
-
-<img width="607" height="478" alt="image" src="https://github.com/user-attachments/assets/13c8f631-5138-4ed9-90d2-fa423678cdcb" />
-

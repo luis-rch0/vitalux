@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-VitaluxApplication<vitalux>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.senai.pi.vitalux.VitaluxApplication",
+            "projectName": "vitalux",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
