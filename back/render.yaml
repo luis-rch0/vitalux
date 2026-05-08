@@ -1,0 +1,25 @@
+# Render.yaml - Configuração para Deploy no Render
+# Este arquivo deve estar na raiz do repositório
+
+services:
+  - type: web
+    name: vitalux-api
+    env: docker
+    dockerfilePath: ./back/Dockerfile
+    region: oregon
+    plan: free
+    
+    # Variáveis de ambiente
+    envVars:
+      - key: DATABASE_URL
+        scope: build,runtime
+      - key: POSTGRES_USER
+        scope: build,runtime
+      - key: POSTGRES_PASSWORD
+        scope: build,runtime
+
+    # Health check testa se a api está ativa e funcionando 
+    healthCheckPath: /v3/api-docs
+    healthCheckInterval: 300
+
+

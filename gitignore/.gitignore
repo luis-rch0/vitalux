@@ -1,0 +1,135 @@
+# Java / Maven
+*.class
+*.jar
+*.war
+*.ear
+/target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Build folders
+/build/
+out/
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.recommenders/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Operating system
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+*.log
+logs/
+
+# Node (if any front-end)
+node_modules/
+
+# Environment / secrets
+.env
+.env.local
+*.properties.local
+*.secrets
+*.key
+*.pem
+*.p12
+
+# Generated files
+/generated-sources/
+generated/
+coverage/
+test-output/
+
+# Spring Boot / runtime
+spring-boot.log
+spring-boot-devtools.properties
+
+# Misc
+*.class
+*.log
+*.cache
+*.tmp
+*.bak
+*.swp
+```// filepath: c:\Users\PET0155861\Documents\vitalux\vitalux\gitignore\.gitignore
+# Java / Maven
+*.class
+*.jar
+*.war
+*.ear
+/target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Build folders
+/build/
+out/
+bin/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.recommenders/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# VS Code
+.vscode/
+
+# Operating system
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+*.log
+logs/
+
+# Node (if any front-end)
+node_modules/
+
+# Environment / secrets
+.env
+.env.local
+*.properties.local
+*.secrets
+*.key
+*.pem
+*.p12
+
+# Generated files
+/generated-sources/
+generated/
+coverage/
+test-output/
+
+# Spring Boot / runtime
+spring-boot.log
+spring-boot-devtools.properties
+
+# Misc
+*.class
+*.log
+*.cache
+*.tmp
+*.bak
+*.swp

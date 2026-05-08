@@ -1,0 +1,289 @@
+create table listagem_medica (
+
+    listagem_id serial primary key,
+
+    nome varchar(150) not null,
+
+    cpf varchar(11) unique not null
+
+        check (cpf ~ '^[0-9]{11}$'),
+
+    crm varchar(20) unique not null,
+
+    telefone varchar(11)
+
+        check (telefone ~ '^[0-9]{10,11}$'),
+
+    email varchar(150) unique,
+
+    data_nascimento date,
+
+    ativo boolean default true
+
+);
+
+
+
+create table agendamento (
+
+    agendamento_id serial primary key,
+
+    dataagendada timestamp not null,
+
+    informacoesatendimento text
+
+);
+
+
+
+create table cliente (
+
+    cliente_id serial primary key,
+
+    nome varchar(150) not null,
+
+    idade int,
+
+    cpf varchar(11) unique not null
+
+        check (cpf ~ '^[0-9]{11}$'),
+
+    email varchar(150) unique,
+
+    numerotelefone varchar(11)
+
+        check (numerotelefone ~ '^[0-9]{10,11}$'),
+
+    endereco varchar(255),
+
+    prontuario text
+
+);
+
+
+
+create table farmacia (
+
+    farmacia_id serial primary key,
+
+    nome varchar(150) not null,
+
+    cnpj varchar(14) unique not null
+
+        check (cnpj ~ '^[0-9]{14}$'),
+
+    telefone varchar(11)
+
+        check (telefone ~ '^[0-9]{10,11}$'),
+
+    endereco varchar(255)
+
+);
+
+
+
+create table clinica (
+
+    clinica_id serial primary key,
+
+    nome varchar(150) not null,
+
+    cnpj varchar(14) unique not null
+
+        check (cnpj ~ '^[0-9]{14}$'),
+
+    endereco varchar(255),
+
+    numerotelefone varchar(11)
+
+        check (numerotelefone ~ '^[0-9]{10,11}$'),
+
+    id_listagem integer,
+
+    constraint fk_clinica_listagem
+
+        foreign key (id_listagem)
+
+        references listagem_medica(listagem_id)
+
+);
+
+
+
+create table conformidade_legal (
+
+    conformidadelegal_id serial primary key,
+
+    id_clinica integer not null,
+
+    segue_normas boolean default false,
+
+    data_verificacao date,
+
+    observacao text,
+
+    constraint fk_conformidade_clinica
+
+        foreign key (id_clinica)
+
+        references clinica(clinica_id)
+
+        on delete cascade
+
+);
+
+
+
+create table consulta (
+
+    consulta_id serial primary key,
+
+    observacoes text,
+
+    id_clinica integer not null,
+
+    id_cliente integer not null,
+
+    id_agendamento integer not null,
+
+    constraint fk_consulta_clinica
+
+        foreign key (id_clinica)
+
+        references clinica(clinica_id),
+
+    constraint fk_consulta_cliente
+
+        foreign key (id_cliente)
+
+        references cliente(cliente_id),
+
+    constraint fk_consulta_agendamento
+
+        foreign key (id_agendamento)
+
+        references agendamento(agendamento_id)
+
+);
+
+
+
+-- =========================
+
+-- queries de inserção (uso do sistema)
+
+-- =========================
+
+
+
+-- cadastrar cliente
+
+insert into cliente (nome, idade, cpf, email, numerotelefone, endereco, prontuario)
+
+values ('nome do cliente', 30, '12345678901', 'cliente@email.com', '11999999999', 'rua x, 123', 'observacoes');
+
+
+
+-- cadastrar médico
+
+insert into listagem_medica (nome, cpf, crm, telefone, email, data_nascimento)
+
+values ('nome do medico', '12345678901', 'crm0000', '11999999999', 'medico@email.com', '1990-01-01');
+
+
+
+-- cadastrar clínica
+
+insert into clinica (nome, cnpj, endereco, numerotelefone, id_listagem)
+
+values ('nome da clinica', '12345678000199', 'rua y, 456', '1133334444', 1);
+
+
+
+-- cadastrar farmácia
+
+insert into farmacia (nome, cnpj, telefone, endereco)
+
+values ('nome da farmacia', '12345678000199', '1133334444', 'rua z, 789');
+
+
+
+-- criar agendamento
+
+insert into agendamento (dataagendada, informacoesatendimento)
+
+values ('2026-06-01 10:00:00', 'consulta de rotina');
+
+
+
+-- registrar consulta
+
+insert into consulta (observacoes, id_clinica, id_cliente, id_agendamento)
+
+values ('paciente em observacao', 1, 1, 1);
+
+
+
+-- registrar conformidade legal
+
+insert into conformidade_legal (id_clinica, segue_normas, data_verificacao, observacao)
+
+values (1, true, '2026-04-10', 'tudo regularizado');
+
+
+
+-- =========================
+
+-- queries de consulta
+
+-- =========================
+
+
+
+-- listar clientes
+
+select * from cliente order by nome asc;
+
+
+
+-- buscar consultas de um cliente
+
+select * from consulta
+
+where id_cliente = 1;
+
+
+
+-- médicos ativos
+
+select * from listagem_medica
+
+where ativo = true;
+
+
+
+-- cliente + observações
+
+select c.nome, co.observacoes
+
+from cliente c
+
+join consulta co on c.cliente_id = co.id_cliente;
+
+
+
+-- clínicas e conformidade
+
+select cl.nome, cf.segue_normas
+
+from clinica cl
+
+join conformidade_legal cf on cl.clinica_id = cf.id_clinica;
+
+
+
+-- agenda ordenada
+
+select * from agendamento
+
+order by dataagendada asc;
