@@ -109,7 +109,6 @@ private JsonNode callGroq(JsonNode body) {
             String systemPrompt = buildSystemPrompt();
             double temperature = 0.6;
             body = buildGroqBody(systemPrompt, temperature);
-            JsonNode responser = callGroq(body);
             
             
             ObjectMapper objectMapper = new ObjectMapper();
@@ -117,7 +116,7 @@ private JsonNode callGroq(JsonNode body) {
             byte[] payload = objectMapper.writeValueAsBytes(body);
 
             HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions;"))
+                .uri(URI.create("https://api.groq.com/openai/v1/chat/completions"))
                 .timeout(Duration.ofSeconds(60))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -161,6 +160,7 @@ private JsonNode callGroq(JsonNode body) {
                                     this.model = candidate;
                                     return objectMapper.readTree(retryResp.body());
                                 }
+
                             } catch (Exception ignore) {
                                 // tenta próximo
                             }
@@ -176,11 +176,7 @@ private JsonNode callGroq(JsonNode body) {
                 throw new IllegalStateException("Falha ao chamar Groq", ex);
             }
             
-            
-
-
-
-        }
+}
 
     	private String buildSystemPrompt() {
 		return """
@@ -212,6 +208,7 @@ private JsonNode callGroq(JsonNode body) {
 
 		ObjectNode user = messages.addObject();
 		user.put("role", "user");
+        user.put("content", "Sua mensagem aqui");
 
 		body.put("temperature", temperature);
 		body.put("max_tokens", 1200);
