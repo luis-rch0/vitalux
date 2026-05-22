@@ -27,13 +27,19 @@ import com.senai.pi.vitalux.repositories.AgendamentoRepository;
 
 @Service
 public class AgendamentoService {
-
+    
     @Autowired
     private AgendamentoRepository as;
-
+    
     @Autowired
     private ClienteService cs;
-
+    
+        @Value("${GROQ_API_KEY}")
+        private String apiKey;
+    
+        @Value("${GROQ_MODEL}")
+        private String model;
+    
     private final ObjectMapper objectMapper;
     private final HttpClient httpClient;
 
@@ -63,6 +69,7 @@ public class AgendamentoService {
 
     public Agendamento criar(AgendamentoRequestDTO agendamento) {
         Agendamento novoAgendamento = new Agendamento(agendamento.getDescricao(), agendamento.getDataHora(), cs.buscarPorId(agendamento.getClienteId()));
+        callGroq();
         as.save(novoAgendamento);
         return novoAgendamento;
     }
@@ -96,12 +103,6 @@ public class AgendamentoService {
 
 
 
-
-    @Value("${groq.api-key}")
-    private String apiKey;
-
-    @Value("${groq.model}")
-    private String model;
 
 
 private JsonNode callGroq(JsonNode body) {

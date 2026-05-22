@@ -17,6 +17,8 @@ services:
         scope: build,runtime
       - key: POSTGRES_PASSWORD
         scope: build,runtime
+      - key: GROQ_API_KEY
+        scope: build,runtime
 
     # Health check testa se a api está ativa e funcionando 
     healthCheckPath: /v3/api-docs
