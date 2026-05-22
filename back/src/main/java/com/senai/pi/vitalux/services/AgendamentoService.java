@@ -69,7 +69,7 @@ public class AgendamentoService {
 
     public Agendamento criar(AgendamentoRequestDTO agendamento) {
         Agendamento novoAgendamento = new Agendamento(agendamento.getDescricao(), agendamento.getDataHora(), cs.buscarPorId(agendamento.getClienteId()));
-        callGroq();
+        callGroq(objectMapper.valueToTree(novoAgendamento));
         as.save(novoAgendamento);
         return novoAgendamento;
     }
