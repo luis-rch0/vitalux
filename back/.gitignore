@@ -133,3 +133,5 @@ spring-boot-devtools.properties
 *.tmp
 *.bak
 *.swp.env
+
+.application.properties.local
