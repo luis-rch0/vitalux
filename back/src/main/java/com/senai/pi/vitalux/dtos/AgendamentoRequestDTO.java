@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class AgendamentoRequestDTO {
     
+    
     private String descricao;
     private LocalDateTime dataHora;
     private Integer clienteId;
@@ -16,7 +17,6 @@ public class AgendamentoRequestDTO {
         this.dataHora = dataHora;
         this.clienteId = clienteId;
     }
-
     public String getDescricao() {
         return descricao;
     }

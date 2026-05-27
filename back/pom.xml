@@ -90,10 +90,6 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-                <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -105,15 +101,6 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <parent>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-parent</artifactId>
-            <version>3.3.5</version>
-        </parent>
     </dependencies>
 
     <build>

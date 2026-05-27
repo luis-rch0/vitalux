@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
 import com.senai.pi.vitalux.models.Agendamento;
 import com.senai.pi.vitalux.repositories.AgendamentoRepository;
@@ -65,6 +67,14 @@ public class AgendamentoService {
             return as.findById(id);
         }
         return Optional.empty();
+    }
+
+    private ObjectMapper objectMapper;
+
+    public AgendamentoRequestDTO create(AgendamentoRequestDTO dto) {
+        // evita recursão: converte DTO para entidade e salva no repository
+        Agendamento entidade = objectMapper.convertValue(dto, Agendamento.class);
+        return objectMapper.convertValue(as.save(entidade), AgendamentoRequestDTO.class);
     }
 }
 
