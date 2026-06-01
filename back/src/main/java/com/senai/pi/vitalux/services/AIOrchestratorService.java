@@ -1,14 +1,16 @@
 package com.senai.pi.vitalux.services;
 
-import com.senai.pi.vitalux.dtos.ChatRequestDTO;
-import com.senai.pi.vitalux.dtos.ChatResponseDTO;
-import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.util.Map;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
+import com.senai.pi.vitalux.dtos.ChatRequestDTO;
+import com.senai.pi.vitalux.dtos.ChatResponseDTO;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class AIOrchestratorService {
 
     private final GroqService groqService;
     private final AgendamentoService agendamentoService;
-    protected final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public ChatResponseDTO process(
             ChatRequestDTO request,
@@ -32,8 +34,8 @@ public class AIOrchestratorService {
         try {
              modelOutput = objectMapper.readValue(response, Map.class);
             Object respField = modelOutput.get("response");
-            if (respField instanceof String) {
-                userFacingResponse = (String) respField;
+            if (respField instanceof String string) {
+                userFacingResponse = string;
             }
         } catch (Exception e) {
             // se não for JSON, permanece como texto simples
