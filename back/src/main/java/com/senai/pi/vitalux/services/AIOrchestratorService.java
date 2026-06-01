@@ -16,7 +16,7 @@ public class AIOrchestratorService {
 
     private final GroqService groqService;
     private final AgendamentoService agendamentoService;
-    private final ObjectMapper objectMapper;
+    protected final ObjectMapper objectMapper;
 
     public ChatResponseDTO process(
             ChatRequestDTO request,
@@ -26,8 +26,30 @@ public class AIOrchestratorService {
         // 1) resposta livre do Groq (texto que será retornado ao cliente)
         String response = groqService.generate(request);
 
+        // tenta interpretar resposta do modelo como JSON com { response, metadata }
+        String userFacingResponse = response;
+        Map<String, Object> modelOutput = null;
+        try {
+             modelOutput = objectMapper.readValue(response, Map.class);
+            Object respField = modelOutput.get("response");
+            if (respField instanceof String) {
+                userFacingResponse = (String) respField;
+            }
+        } catch (Exception e) {
+            // se não for JSON, permanece como texto simples
+        }
+
         // 2) verifica metadata para ações (ex: create_agendamento)
+        // Prioriza metadata gerada pelo modelo; fallback para metadata da requisição
         Map<String, Object> metadata = request.getMetadata();
+        if (metadata == null && modelOutput != null) {
+            Object md = modelOutput.get("metadata");
+            if (md instanceof Map) {
+                //noinspection unchecked
+                metadata = (Map<String, Object>) md;
+            }
+        }
+
         if (metadata != null) {
             Object actionType = metadata.get("actionType");
             if ("create_agendamento".equals(actionType)) {
@@ -43,7 +65,7 @@ public class AIOrchestratorService {
                     AgendamentoRequestDTO created = agendamentoService.create(dto);
 
                     return ChatResponseDTO.builder()
-                            .response(response)
+                            .response(userFacingResponse)
                             .actionExecuted(true)
                             .actionType("create_agendamento")
                             .data(created)
@@ -60,7 +82,7 @@ public class AIOrchestratorService {
 
         // padrão: apenas retorno do modelo sem executar ação
         return ChatResponseDTO.builder()
-                .response(response)
+                .response(userFacingResponse)
                 .actionExecuted(false)
                 .build();
     }
