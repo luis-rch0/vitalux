@@ -10,8 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+//import jakarta.validation.constraints.Email;
+//import jakarta.validation.constraints.NotBlank;
 
 
 @Entity
@@ -22,16 +22,16 @@ public class Cliente {
     @Id
     private Integer id;
 
-    @NotBlank(message = "Nome é obrigatório")
+    //@NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome")
     private String nome;
 
-    @NotBlank(message = "CPF é obrigatório")
+    //@NotBlank(message = "CPF é obrigatório")
     @Column(name = "cpf")
     private String cpf;
 
-    @NotBlank(message = "Email é obrigatório")
-    @Email(message = "Email deve ser válido")
+    //@NotBlank(message = "Email é obrigatório")
+    //@Email(message = "Email deve ser válido")
     @Column(name = "email")
     private String email;
 
@@ -55,9 +55,9 @@ public class Cliente {
     public Cliente() {
     }
     
-    public Cliente(Integer id, @NotBlank(message = "Nome é obrigatório") String nome,
-        @NotBlank(message = "CPF é obrigatório") String cpf,
-        @NotBlank(message = "Email é obrigatório") @Email(message = "Email deve ser válido") String email,
+    public Cliente(Integer id, String nome,
+        String cpf,
+        String email,
         String telefone, String endereco, String prontuario, List<Consulta> consultas, List<Farmacia> farmacias) {
         this.id = id;
         this.nome = nome;
