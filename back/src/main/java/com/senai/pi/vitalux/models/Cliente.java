@@ -35,6 +35,10 @@ public class Cliente {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "senha")
+    @NotBlank(message = "Senha é obrigatória")
+    private String senha;
+
     @Column(name = "telefone")
     private String telefone;
 
@@ -58,7 +62,7 @@ public class Cliente {
     public Cliente(Integer id, String nome,
         String cpf,
         String email,
-        String telefone, String endereco, String prontuario, List<Consulta> consultas, List<Farmacia> farmacias) {
+        String telefone, String endereco, String prontuario, List<Consulta> consultas, List<Farmacia> farmacias, String senha) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -68,6 +72,7 @@ public class Cliente {
         this.prontuario = prontuario;
         this.consultas = consultas;
         this.farmacias = farmacias;
+        this.senha = senha;
     }
 
 
@@ -143,6 +148,12 @@ public class Cliente {
         this.farmacias = farmacias;
     }
 
+    public String getSenha() {
+        return senha;
+    }
 
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 
 }
