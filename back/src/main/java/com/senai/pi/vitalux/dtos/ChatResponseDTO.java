@@ -8,7 +8,4 @@ import lombok.Data;
 public class ChatResponseDTO {
 
     private String response;
-    private Boolean actionExecuted;
-    private String actionType;
-    private Object data;
 }

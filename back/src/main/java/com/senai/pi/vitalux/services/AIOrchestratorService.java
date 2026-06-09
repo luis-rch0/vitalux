@@ -1,12 +1,8 @@
 package com.senai.pi.vitalux.services;
 
-import java.util.Map;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.senai.pi.vitalux.dtos.AgendamentoRequestDTO;
 import com.senai.pi.vitalux.dtos.ChatRequestDTO;
 import com.senai.pi.vitalux.dtos.ChatResponseDTO;
 
@@ -17,75 +13,26 @@ import lombok.RequiredArgsConstructor;
 public class AIOrchestratorService {
 
     private final GroqService groqService;
-    private final AgendamentoService agendamentoService;
-    private final ObjectMapper objectMapper;
 
+    /**
+     * Processa uma pergunta/dúvida do usuário através da IA.
+     * A IA atua como assistente virtual de Q&A, respondendo perguntas sobre o fluxo
+     * da aplicação.
+     * 
+     * @param request Requisição com a mensagem do usuário
+     * @param auth    Autenticação do usuário (não utilizada atualmente, mas mantida
+     *                para referência)
+     * @return Resposta da IA com esclarecimento sobre o fluxo da aplicação
+     */
     public ChatResponseDTO process(
             ChatRequestDTO request,
-            Authentication auth
-    ) {
-
-        // 1) resposta livre do Groq (texto que será retornado ao cliente)
+            Authentication auth) {
+        // Gera resposta via IA baseada no contexto do fluxo da aplicação
         String response = groqService.generate(request);
 
-        // tenta interpretar resposta do modelo como JSON com { response, metadata }
-        String userFacingResponse = response;
-        Map<String, Object> modelOutput = null;
-        try {
-             modelOutput = objectMapper.readValue(response, Map.class);
-            Object respField = modelOutput.get("response");
-            if (respField instanceof String string) {
-                userFacingResponse = string;
-            }
-        } catch (Exception e) {
-            // se não for JSON, permanece como texto simples
-        }
-
-        // 2) verifica metadata para ações (ex: create_agendamento)
-        // Prioriza metadata gerada pelo modelo; fallback para metadata da requisição
-        Map<String, Object> metadata = request.getMetadata();
-        if (metadata == null && modelOutput != null) {
-            Object md = modelOutput.get("metadata");
-            if (md instanceof Map) {
-                //noinspection unchecked
-                metadata = (Map<String, Object>) md;
-            }
-        }
-
-        if (metadata != null) {
-            Object actionType = metadata.get("actionType");
-            if ("create_agendamento".equals(actionType)) {
-                Object agendamentoPayload = metadata.get("agendamento");
-                try {
-                    // converte payload genérico para o DTO existente
-                    AgendamentoRequestDTO dto = objectMapper.convertValue(agendamentoPayload, AgendamentoRequestDTO.class);
-
-                    // opcional: associar ao usuário autenticado (se necessário)
-                    // Ex: if (auth != null) { set clienteId a partir do auth quando apropriado }
-
-                    // chama serviço que executa o "post" / cria o agendamento
-                    AgendamentoRequestDTO created = agendamentoService.create(dto);
-
-                    return ChatResponseDTO.builder()
-                            .response(userFacingResponse)
-                            .actionExecuted(true)
-                            .actionType("create_agendamento")
-                            .data(created)
-                            .build();
-                } catch (Exception e) {
-                    return ChatResponseDTO.builder()
-                            .response("Falha ao criar agendamento: " + e.getMessage())
-                            .actionExecuted(false)
-                            .actionType("create_agendamento")
-                            .build();
-                }
-            }
-        }
-
-        // padrão: apenas retorno do modelo sem executar ação
+        // Retorna resposta ao cliente
         return ChatResponseDTO.builder()
-                .response(userFacingResponse)
-                .actionExecuted(false)
+                .response(response)
                 .build();
     }
 }
