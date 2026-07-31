@@ -1,0 +1,20 @@
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+back/.env.*
+back/.env.local
+# Java
+back/target/
+
+# Next.js
+front/node_modules/
+front/.next/
+front/coverage/
+
+# Cache local de ferramentas
+.npm-cache/
+.agents/
+
+# Pacotes locais para compartilhamento
+*.zip

@@ -1,0 +1,32 @@
+import { api, query } from "@/services/api";
+import type { AdminProfessionalDetail, Clinic, Dashboard, PageResponse, Patient, PatientDashboard, Professional, ServiceRequest, RequestStatus } from "@/types/api";
+
+export const carepointService = {
+  patientDashboard: () => api<PatientDashboard>("/paciente/dashboard"),
+  myPatient: () => api<Patient>("/pacientes/me"),
+  updatePatient: (payload: unknown) => api<Patient>("/pacientes/me", { method: "PATCH", body: JSON.stringify(payload) }),
+  professionals: (filters: Record<string, unknown> = {}) => api<PageResponse<Professional>>(`/profissionais${query(filters as Record<string, string | number | boolean | undefined | null>)}`),
+  professionalSpecialties: () => api<string[]>("/profissionais/especialidades"),
+  professional: (id: string | number) => api<Professional>(`/profissionais/${id}`),
+  clinics: (filters: Record<string, unknown> = {}) => api<PageResponse<Clinic>>(`/clinicas${query(filters as Record<string, string | number | boolean | undefined | null>)}`),
+  clinic: (id: string | number) => api<Clinic>(`/clinicas/${id}`),
+  myRequests: () => api<PageResponse<ServiceRequest>>("/solicitacoes/minhas"),
+  request: (id: string | number) => api<ServiceRequest>(`/solicitacoes/${id}`),
+  createRequest: (payload: unknown) => api<ServiceRequest>("/solicitacoes", { method: "POST", body: JSON.stringify(payload) }),
+  cancelRequest: (id: number) => api<ServiceRequest>(`/solicitacoes/${id}/cancelar`, { method: "PATCH" }),
+  reviewRequest: (id: number, payload: unknown) => api<void>(`/solicitacoes/${id}/avaliacao`, { method: "POST", body: JSON.stringify(payload) }),
+  adminDashboard: () => api<Dashboard>("/admin/dashboard"),
+  adminProfessionals: (filters: Record<string, unknown> = {}) => api<PageResponse<Professional>>(`/admin/profissionais${query(filters as Record<string, string | number | boolean | undefined | null>)}`),
+  adminProfessional: (id: string | number) => api<AdminProfessionalDetail>(`/admin/profissionais/${id}`),
+  saveProfessional: (payload: unknown, id?: string | number) => api<Professional>(id ? `/admin/profissionais/${id}` : "/admin/profissionais", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }),
+  setProfessionalStatus: (id: number, ativo: boolean) => api<void>(`/admin/profissionais/${id}/status?ativo=${ativo}`, { method: "PATCH" }),
+  adminClinics: (filters: Record<string, unknown> = {}) => api<PageResponse<Clinic>>(`/admin/clinicas${query(filters as Record<string, string | number | boolean | undefined | null>)}`),
+  adminClinic: (id: string | number) => api<Clinic>(`/admin/clinicas/${id}`),
+  saveClinic: (payload: unknown, id?: string | number) => api<Clinic>(id ? `/admin/clinicas/${id}` : "/admin/clinicas", { method: id ? "PUT" : "POST", body: JSON.stringify(payload) }),
+  setClinicStatus: (id: number, ativo: boolean) => api<void>(`/admin/clinicas/${id}/status?ativo=${ativo}`, { method: "PATCH" }),
+  adminPatients: (filters: Record<string, unknown> = {}) => api<PageResponse<Patient>>(`/admin/pacientes${query(filters as Record<string, string | number | boolean | undefined | null>)}`),
+  adminPatient: (id: string | number) => api<Patient>(`/admin/pacientes/${id}`),
+  adminRequests: (status?: RequestStatus) => api<PageResponse<ServiceRequest>>(`/admin/solicitacoes${query({ status })}`),
+  adminRequest: (id: string | number) => api<ServiceRequest>(`/admin/solicitacoes/${id}`),
+  updateRequestStatus: (id: number, action: "confirmar" | "rejeitar" | "concluir", observacao?: string) => api<ServiceRequest>(`/admin/solicitacoes/${id}/${action}`, { method: "PATCH", body: observacao ? JSON.stringify({ observacao }) : undefined }),
+};
