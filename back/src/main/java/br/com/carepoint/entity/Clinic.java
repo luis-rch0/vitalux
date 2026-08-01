@@ -3,8 +3,6 @@ package br.com.carepoint.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Entity
 @Table(name = "cp_clinics")
 @Getter
@@ -38,12 +36,6 @@ public class Clinic extends BaseEntity {
 
     @Column(name = "imagem_url", length = 500)
     private String imagemUrl;
-
-    @Column(name = "latitude", precision = 10, scale = 7)
-    private BigDecimal latitude;
-
-    @Column(name = "longitude", precision = 10, scale = 7)
-    private BigDecimal longitude;
 
     @Column(name = "ativo", nullable = false)
     @Builder.Default

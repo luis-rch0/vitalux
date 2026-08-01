@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 back/.env.*
+!back/.env.example
 back/.env.local
 # Java
 back/target/

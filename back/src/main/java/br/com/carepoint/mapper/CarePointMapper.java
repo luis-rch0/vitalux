@@ -23,7 +23,7 @@ public class CarePointMapper {
 
     public ClinicResponse toClinic(Clinic clinic, long totalProfessionals) {
         return new ClinicResponse(clinic.getId(), clinic.getNome(), clinic.getCnpj(), clinic.getDescricao(), clinic.getEndereco(),
-                clinic.getTelefone(), clinic.getEmail(), clinic.getImagemUrl(), clinic.getLatitude(), clinic.getLongitude(), clinic.isAtivo(),
+                clinic.getTelefone(), clinic.getEmail(), clinic.getImagemUrl(), clinic.isAtivo(),
                 totalProfessionals, clinic.getCreatedAt(), clinic.getUpdatedAt());
     }
 

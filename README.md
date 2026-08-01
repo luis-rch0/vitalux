@@ -128,7 +128,8 @@ A interface principal também pode ser usada em português ou inglês. O idioma 
 
 | Variável | Uso |
 | --- | --- |
-| `NEXT_PUBLIC_API_URL` | URL pública da API com o sufixo `/api` |
+| `BACKEND_URL` | URL pública do backend sem o sufixo `/api`; usada pelo proxy do Next.js. |
+| `NEXT_PUBLIC_API_URL` | Caminho usado pelo navegador; mantenha `/api` para evitar cookies de terceiros. |
 
 Nenhum segredo deve ser colocado em variáveis `NEXT_PUBLIC_*`.
 
@@ -141,6 +142,7 @@ O Hibernate usa obrigatoriamente `ddl-auto=validate`; ele não cria nem apaga a 
 | `V1__create_carepoint_schema.sql` | Cria tabelas `cp_` para usuários, pacientes, clínicas, profissionais, solicitações, avaliações e chat, com índices e timestamps. |
 | `V2__import_legacy_clinics_and_professionals.sql` | Importação idempotente e aditiva de clínicas e profissionais legados quando os campos mínimos existem. |
 | `V3__document_legacy_patient_preservation.sql` | Documenta a preservação de dados de pacientes legados: senhas antigas não são migradas automaticamente por não atenderem BCrypt. |
+| `V4__remove_clinic_coordinates.sql` | Remove as antigas colunas de latitude e longitude das clínicas; o endereço permanece como texto comum. |
 
 As tabelas legadas nunca são apagadas. As novas tabelas possuem prefixo `cp_`, evitando colisões e preservando a base existente. Para migrar contas antigas, implemente um fluxo administrativo de redefinição de senha; não copie hashes ou senhas legadas diretamente.
 
@@ -217,11 +219,21 @@ O Docker build executa `mvn package`; o Flyway roda no início do container. Par
 
 ### Vercel — frontend
 
-- **Root Directory:** `front`
-- **Build Command:** `npm run build`
-- **Install Command:** `npm ci`
-- Defina `NEXT_PUBLIC_API_URL=https://<sua-api>.onrender.com/api`.
-- Atualize `FRONTEND_URL` no backend com a URL definitiva da Vercel para CORS e cookies.
+1. Importe o repositório na Vercel e configure **Root Directory** como `front`.
+2. Mantenha o framework **Next.js** detectado automaticamente, **Build Command** como `npm run build` e **Install Command** como `npm ci`.
+3. Em **Settings > Environment Variables**, adicione para produção:
+
+   ```env
+   BACKEND_URL=https://<sua-api>.onrender.com
+   NEXT_PUBLIC_API_URL=/api
+   ```
+
+   `BACKEND_URL` não deve terminar em `/api`. O Next.js encaminha `/api/*` para o Render sem expor uma chamada de navegador entre domínios, tornando os cookies de autenticação de primeira parte.
+
+4. Faça o deploy e copie a URL definitiva, por exemplo `https://carepoint.vercel.app`.
+5. No serviço do backend no Render, configure `FRONTEND_URL=https://carepoint.vercel.app` e `COOKIE_SECURE=true`; depois salve e faça um novo deploy.
+
+Se também houver domínio personalizado, inclua as duas origens em `FRONTEND_URL`, separadas por vírgula e sem barra final.
 
 ## Dados demonstrativos
 

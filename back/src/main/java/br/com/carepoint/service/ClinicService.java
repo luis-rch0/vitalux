@@ -94,8 +94,6 @@ public class ClinicService {
         clinic.setTelefone(phone);
         clinic.setEmail(request.email().trim().toLowerCase(Locale.ROOT));
         clinic.setImagemUrl(blankToNull(request.imagemUrl()));
-        clinic.setLatitude(request.latitude());
-        clinic.setLongitude(request.longitude());
         if (request.ativo() != null) clinic.setAtivo(request.ativo());
     }
 

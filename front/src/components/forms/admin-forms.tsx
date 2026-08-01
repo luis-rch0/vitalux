@@ -45,8 +45,6 @@ const content = {
       email: "E-mail",
       address: "Endereço",
       image: "URL da imagem (opcional)",
-      latitude: "Latitude (opcional)",
-      longitude: "Longitude (opcional)",
       description: "Descrição",
     },
     professions: {
@@ -94,8 +92,6 @@ const content = {
       email: "Email",
       address: "Address",
       image: "Image URL (optional)",
-      latitude: "Latitude (optional)",
-      longitude: "Longitude (optional)",
       description: "Description",
     },
     professions: {
@@ -225,14 +221,12 @@ type ClinicFormData = {
   telefone: string;
   email: string;
   imagemUrl: string;
-  latitude: string;
-  longitude: string;
   ativo: boolean;
 };
 
 const blankClinic: ClinicFormData = {
   nome: "", cnpj: "", descricao: "", endereco: "", telefone: "", email: "", imagemUrl: "",
-  latitude: "", longitude: "", ativo: true,
+  ativo: true,
 };
 
 export function ClinicAdminForm({ id }: { id?: string }) {
@@ -253,8 +247,6 @@ export function ClinicAdminForm({ id }: { id?: string }) {
       telefone: existing.data.telefone,
       email: existing.data.email,
       imagemUrl: existing.data.imagemUrl || "",
-      latitude: existing.data.latitude ? String(existing.data.latitude) : "",
-      longitude: existing.data.longitude ? String(existing.data.longitude) : "",
       ativo: existing.data.ativo,
     });
   }, [existing.data]);
@@ -263,11 +255,7 @@ export function ClinicAdminForm({ id }: { id?: string }) {
     event.preventDefault();
     setSaving(true);
     try {
-      await carepointService.saveClinic({
-        ...data,
-        latitude: data.latitude ? Number(data.latitude) : null,
-        longitude: data.longitude ? Number(data.longitude) : null,
-      }, id);
+      await carepointService.saveClinic(data, id);
       toast.success(id ? copy.clinicUpdated : copy.clinicCreated);
       router.push("/admin/clinicas");
     } catch (error) {
@@ -286,8 +274,6 @@ export function ClinicAdminForm({ id }: { id?: string }) {
         <Input label={copy.clinicFields.email} type="email" value={data.email} onChange={(value) => setData({ ...data, email: value })} />
         <Input label={copy.clinicFields.address} value={data.endereco} onChange={(value) => setData({ ...data, endereco: value })} />
         <Input label={copy.clinicFields.image} value={data.imagemUrl} onChange={(value) => setData({ ...data, imagemUrl: value })} required={false} />
-        <Input label={copy.clinicFields.latitude} type="number" value={data.latitude} onChange={(value) => setData({ ...data, latitude: value })} required={false} />
-        <Input label={copy.clinicFields.longitude} type="number" value={data.longitude} onChange={(value) => setData({ ...data, longitude: value })} required={false} />
       </div>
       <label className="mt-4 block text-sm font-medium">
         {copy.clinicFields.description}

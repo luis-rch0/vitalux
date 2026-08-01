@@ -75,7 +75,7 @@ public class DemoDataSeeder implements CommandLineRunner {
         return Clinic.builder()
                 .nome(seed.name()).cnpj(seed.cnpj()).descricao(seed.description()).endereco(seed.address())
                 .telefone(seed.phone()).email(seed.email()).imagemUrl(seed.imageUrl())
-                .latitude(seed.latitude()).longitude(seed.longitude()).ativo(true).build();
+                .ativo(true).build();
     }
 
     private Professional toProfessional(ProfessionalSeed seed, Clinic clinic) {
@@ -91,27 +91,27 @@ public class DemoDataSeeder implements CommandLineRunner {
                 new ClinicSeed("centro", "Clínica CarePoint Centro", "90000000000001",
                         "Atendimento domiciliar integrado para adultos e idosos, com equipe multiprofissional.",
                         "Av. Paulista, 1000 - Bela Vista, São Paulo - SP", "1130001001", "centro@demo.carepoint.local",
-                        "/images/clinica-carepoint.png", decimal("-23.5614140"), decimal("-46.6558810")),
+                        "/images/clinica-carepoint.png"),
                 new ClinicSeed("vida", "Espaço Vida em Casa", "90000000000002",
                         "Cuidado humanizado em reabilitação, enfermagem e acompanhamento nutricional no domicílio.",
                         "Rua Vergueiro, 1800 - Vila Mariana, São Paulo - SP", "1130001002", "vida@demo.carepoint.local",
-                        "/images/clinicas/clinica-viver-bem.webp", decimal("-23.5853120"), decimal("-46.6357990")),
+                        "/images/clinicas/clinica-viver-bem.webp"),
                 new ClinicSeed("longevidade", "Instituto Longevidade", "90000000000003",
                         "Serviços especializados para envelhecimento saudável, autonomia e apoio aos familiares.",
                         "Rua Cardoso de Almeida, 820 - Perdizes, São Paulo - SP", "1130001003", "longevidade@demo.carepoint.local",
-                        "/images/clinica-carepoint.png", decimal("-23.5358560"), decimal("-46.6752040")),
+                        "/images/clinica-carepoint.png"),
                 new ClinicSeed("movimento", "Centro Movimento & Saúde", "90000000000004",
                         "Reabilitação funcional e respiratória com planos de cuidado individualizados.",
                         "Av. Jabaquara, 1500 - Saúde, São Paulo - SP", "1130001004", "movimento@demo.carepoint.local",
-                        "/images/clinicas/clinica-horizonte.webp", decimal("-23.6176530"), decimal("-46.6384480")),
+                        "/images/clinicas/clinica-horizonte.webp"),
                 new ClinicSeed("familia", "Clínica Bem-Estar Família", "90000000000005",
                         "Acompanhamento clínico, psicológico e terapêutico para pacientes e seus familiares.",
                         "Rua Tuiuti, 1450 - Tatuapé, São Paulo - SP", "1130001005", "familia@demo.carepoint.local",
-                        "/images/clinicas/clinica-viver-bem.webp", decimal("-23.5407430"), decimal("-46.5765750")),
+                        "/images/clinicas/clinica-viver-bem.webp"),
                 new ClinicSeed("horizonte", "Núcleo Horizonte Domiciliar", "90000000000006",
                         "Assistência coordenada para recuperação pós-hospitalar e cuidados continuados.",
                         "Av. Corifeu de Azevedo Marques, 900 - Butantã, São Paulo - SP", "1130001006", "horizonte@demo.carepoint.local",
-                        "/images/clinicas/clinica-horizonte.webp", decimal("-23.5706150"), decimal("-46.7114910"))
+                        "/images/clinicas/clinica-horizonte.webp")
         );
     }
 
@@ -163,7 +163,7 @@ public class DemoDataSeeder implements CommandLineRunner {
     private BigDecimal decimal(String value) { return new BigDecimal(value); }
 
     private record ClinicSeed(String key, String name, String cnpj, String description, String address,
-                              String phone, String email, String imageUrl, BigDecimal latitude, BigDecimal longitude) { }
+                              String phone, String email, String imageUrl) { }
 
     private record ProfessionalSeed(String name, String cpf, Profissao profession, String specialty,
                                     String registration, String photoUrl, BigDecimal price, String phone,

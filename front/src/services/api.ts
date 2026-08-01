@@ -1,6 +1,6 @@
 import type { ApiErrorBody } from "@/types/api";
 
-const baseUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api").replace(/\/$/, "");
+const baseUrl = (process.env.NEXT_PUBLIC_API_URL || "/api").replace(/\/$/, "");
 
 export class ApiError extends Error {
   status: number;
