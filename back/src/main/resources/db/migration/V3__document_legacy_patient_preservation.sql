@@ -1,0 +1,4 @@
+-- As tabelas cliente, consulta, agendamento, farmacia e conformidade_legal do
+-- sistema anterior são deliberadamente preservadas. Não há migração automática
+-- de senhas legadas, pois elas não atendem ao requisito de BCrypt. A conversão
+-- de contas deve ocorrer por fluxo de redefinição de senha administrado.

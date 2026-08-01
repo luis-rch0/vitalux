@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+html { min-height: 100%; }
+html[data-font-scale="112"] { font-size: 112.5%; }
+html[data-font-scale="125"] { font-size: 125%; }
+body { @apply min-h-screen bg-[#f6f8f6] text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100; }
+* { @apply border-slate-200 dark:border-slate-800; }
+button, a, input, select, textarea { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950; }
+input, select, textarea { @apply bg-white dark:bg-slate-900; }
+.surface { @apply rounded-3xl border border-white/70 bg-white shadow-soft dark:border-slate-800 dark:bg-slate-900; }
+.page-title { @apply text-2xl font-extrabold tracking-tight text-slate-950 dark:text-white md:text-3xl; }
+.card-lift { @apply transition duration-300 hover:-translate-y-1 hover:shadow-xl; }
+.admin-kicker { @apply text-xs font-extrabold uppercase tracking-[0.18em] text-brand-700 dark:text-emerald-300; }
+.skip-link { @apply fixed left-4 top-4 z-[100] -translate-y-24 rounded-xl bg-slate-950 px-4 py-3 font-bold text-white shadow-xl transition focus:translate-y-0 dark:bg-white dark:text-slate-950; }
+
+html[data-high-contrast="true"] *:focus-visible { outline: 3px solid #f59e0b !important; outline-offset: 3px !important; }
+html[data-high-contrast="true"] .surface { border-width: 2px; border-color: currentColor; box-shadow: none; }
+html[data-high-contrast="true"] a { text-decoration-thickness: 2px; text-underline-offset: 3px; }
+html[data-high-contrast="true"] body { color: #020617; }
+html.dark[data-high-contrast="true"] body { color: #ffffff; background: #000000; }
+html[data-reduced-motion="true"] *, html[data-reduced-motion="true"] *::before, html[data-reduced-motion="true"] *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bar-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.animate-rise { animation: rise-in .55s ease-out both; }
+.animate-bar { transform-origin: bottom; animation: bar-grow .75s cubic-bezier(.2,.8,.2,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: carepoint-api
+    env: docker
+    rootDir: back
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v3/api-docs
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRATION
+        value: 900000
+      - key: JWT_REFRESH_EXPIRATION
+        value: 604800000
+      - key: ADMIN_INITIAL_PASSWORD
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: COOKIE_SECURE
+        value: true

@@ -1,0 +1,11 @@
+spring:
+  flyway:
+    enabled: false
+  main:
+    banner-mode: "off"
+app:
+  seed-demo-data: false
+  security:
+    jwt-secret: teste123456789101112131415161718192021222324252627282930
+  admin:
+    initial-password: teste-seguro

@@ -1,0 +1,58 @@
+spring:
+  config:
+    # Carrega variáveis locais de desenvolvimento sem versioná-las.
+    import: optional:file:.env[.properties]
+  application:
+    name: carepoint-api
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  error:
+    include-message: never
+  forward-headers-strategy: framework
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+app:
+  security:
+    jwt-secret: ${JWT_SECRET}
+    access-expiration-ms: ${JWT_ACCESS_EXPIRATION}
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION}
+    cookie-secure: ${COOKIE_SECURE:false}
+  cors:
+    allowed-origins: ${FRONTEND_URL}
+  admin:
+    initial-email: kaykesslac@gmail.com
+    initial-name: Kayke
+    initial-password: ${ADMIN_INITIAL_PASSWORD}
+  seed-demo-data: ${APP_SEED_DEMO_DATA}
+
+logging:
+  level:
+    org.springframework.security: WARN
