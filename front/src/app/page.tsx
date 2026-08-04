@@ -22,6 +22,7 @@ const content = {
     humanCare: "Atendimento humanizado",
     clinicAlt: "Clínica parceira CarePoint",
     network: "Rede CarePoint",
+    viewClinics: "Ver clínicas da Rede CarePoint",
     closeCare: "Cuidado próximo e acessível",
     preparedAtHome: "Profissionais preparados para atender em casa.",
     familyAlt: "Profissional de saúde atendendo um paciente com apoio da família em casa",
@@ -44,6 +45,7 @@ const content = {
     humanCare: "Human-centered care",
     clinicAlt: "CarePoint partner clinic",
     network: "CarePoint network",
+    viewClinics: "View CarePoint network clinics",
     closeCare: "Accessible care close to you",
     preparedAtHome: "Professionals prepared to care for you at home.",
     familyAlt: "Healthcare professional assisting a patient and family at home",
@@ -92,7 +94,7 @@ export default function HomePage() {
             <Image src="/images/clinica-carepoint.png" alt={copy.clinicAlt} width={1536} height={1024} className="aspect-[4/3] w-full object-cover" priority />
             <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/30 bg-slate-950/70 p-4 text-white backdrop-blur-xl">
               <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">{copy.network}</p>
-              <div className="mt-2 flex items-end justify-between gap-4"><div><strong className="text-lg">{copy.closeCare}</strong><p className="mt-1 text-sm text-slate-200">{copy.preparedAtHome}</p></div><span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-400 text-slate-950"><ArrowRight size={20} /></span></div>
+              <div className="mt-2 flex items-end justify-between gap-4"><div><strong className="text-lg">{copy.closeCare}</strong><p className="mt-1 text-sm text-slate-200">{copy.preparedAtHome}</p></div><Link href="/clinicas" aria-label={copy.viewClinics} title={copy.viewClinics} className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-400 text-slate-950 transition hover:bg-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"><ArrowRight size={20} aria-hidden="true" /></Link></div>
             </div>
           </div>
         </div>
