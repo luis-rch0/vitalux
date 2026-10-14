@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ClinicService {
+
     private final ClinicRepository clinicRepository;
     private final ProfessionalRepository professionalRepository;
     private final CarePointMapper mapper;
@@ -38,7 +39,9 @@ public class ClinicService {
     public PageResponse<ClinicResponse> list(String search, boolean includeInactive, int page, int size) {
         Specification<Clinic> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (!includeInactive) predicates.add(cb.isTrue(root.get("ativo")));
+            if (!includeInactive) {
+                predicates.add(cb.isTrue(root.get("ativo")));
+            }
             if (search != null && !search.isBlank()) {
                 String pattern = "%" + search.trim().toLowerCase(Locale.ROOT) + "%";
                 predicates.add(cb.or(cb.like(cb.lower(root.get("nome")), pattern), cb.like(cb.lower(root.get("endereco")), pattern)));
@@ -54,15 +57,21 @@ public class ClinicService {
     @Transactional(readOnly = true)
     public ClinicResponse get(Long id, boolean includeInactive) {
         Clinic clinic = clinicRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Clínica"));
-        if (!includeInactive && !clinic.isAtivo()) throw new ResourceNotFoundException("Clínica");
+        if (!includeInactive && !clinic.isAtivo()) {
+            throw new ResourceNotFoundException("Clínica");
+        }
         return mapper.toClinic(clinic, professionalCounts(List.of(clinic)).getOrDefault(id, 0L));
     }
 
     @Transactional
     public ClinicResponse create(ClinicRequest request) {
         String cnpj = digits(request.cnpj());
-        if (cnpj.length() != 14) throw new ApiException(HttpStatus.BAD_REQUEST, "CNPJ inválido.");
-        if (clinicRepository.existsByCnpj(cnpj)) throw new ApiException(HttpStatus.CONFLICT, "CNPJ já cadastrado.");
+        if (cnpj.length() != 14) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "CNPJ inválido.");
+        }
+        if (clinicRepository.existsByCnpj(cnpj)) {
+            throw new ApiException(HttpStatus.CONFLICT, "CNPJ já cadastrado.");
+        }
         Clinic clinic = new Clinic();
         apply(clinic, request);
         clinicRepository.save(clinic);
@@ -73,8 +82,12 @@ public class ClinicService {
     public ClinicResponse update(Long id, ClinicRequest request) {
         Clinic clinic = clinicRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Clínica"));
         String cnpj = digits(request.cnpj());
-        if (cnpj.length() != 14) throw new ApiException(HttpStatus.BAD_REQUEST, "CNPJ inválido.");
-        if (!cnpj.equals(clinic.getCnpj()) && clinicRepository.existsByCnpj(cnpj)) throw new ApiException(HttpStatus.CONFLICT, "CNPJ já cadastrado.");
+        if (cnpj.length() != 14) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "CNPJ inválido.");
+        }
+        if (!cnpj.equals(clinic.getCnpj()) && clinicRepository.existsByCnpj(cnpj)) {
+            throw new ApiException(HttpStatus.CONFLICT, "CNPJ já cadastrado.");
+        }
         apply(clinic, request);
         return mapper.toClinic(clinic, professionalCounts(List.of(clinic)).getOrDefault(id, 0L));
     }
@@ -86,7 +99,9 @@ public class ClinicService {
 
     private void apply(Clinic clinic, ClinicRequest request) {
         String phone = digits(request.telefone());
-        if (phone.length() < 10 || phone.length() > 15) throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        if (phone.length() < 10 || phone.length() > 15) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        }
         clinic.setNome(request.nome().trim());
         clinic.setCnpj(digits(request.cnpj()));
         clinic.setDescricao(blankToNull(request.descricao()));
@@ -94,16 +109,25 @@ public class ClinicService {
         clinic.setTelefone(phone);
         clinic.setEmail(request.email().trim().toLowerCase(Locale.ROOT));
         clinic.setImagemUrl(blankToNull(request.imagemUrl()));
-        if (request.ativo() != null) clinic.setAtivo(request.ativo());
+        if (request.ativo() != null) {
+            clinic.setAtivo(request.ativo());
+        }
     }
 
     private Map<Long, Long> professionalCounts(List<Clinic> clinics) {
-        if (clinics.isEmpty()) return Map.of();
+        if (clinics.isEmpty()) {
+            return Map.of();
+        }
         return professionalRepository.countByClinicIds(clinics.stream().map(Clinic::getId).toList()).stream()
                 .collect(Collectors.toMap(ProfessionalRepository.ClinicProfessionalCount::getClinicId,
                         ProfessionalRepository.ClinicProfessionalCount::getTotal));
     }
 
-    private String digits(String value) { return value == null ? "" : value.replaceAll("\\D", ""); }
-    private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
+    private String digits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
+
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
 }

@@ -26,6 +26,7 @@ import java.util.Locale;
 
 @Service
 public class AuthService {
+
     private final AppUserRepository userRepository;
     private final PatientRepository patientRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,8 +37,8 @@ public class AuthService {
     private final CurrentUserService currentUserService;
 
     public AuthService(AppUserRepository userRepository, PatientRepository patientRepository, PasswordEncoder passwordEncoder,
-                       JwtService jwtService, SecurityProperties securityProperties, LoginRateLimiter rateLimiter,
-                       CarePointMapper mapper, CurrentUserService currentUserService) {
+            JwtService jwtService, SecurityProperties securityProperties, LoginRateLimiter rateLimiter,
+            CarePointMapper mapper, CurrentUserService currentUserService) {
         this.userRepository = userRepository;
         this.patientRepository = patientRepository;
         this.passwordEncoder = passwordEncoder;
@@ -52,9 +53,15 @@ public class AuthService {
     public AuthUserResponse register(RegisterPatientRequest request) {
         String email = normalizeEmail(request.email());
         String cpf = digits(request.cpf());
-        if (cpf.length() != 11) throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
-        if (userRepository.existsByEmailIgnoreCase(email)) throw new ApiException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
-        if (patientRepository.existsByCpf(cpf)) throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        if (cpf.length() != 11) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
+        }
+        if (userRepository.existsByEmailIgnoreCase(email)) {
+            throw new ApiException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
+        }
+        if (patientRepository.existsByCpf(cpf)) {
+            throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        }
 
         AppUser user = userRepository.save(AppUser.builder()
                 .nome(request.nome().trim()).email(email).passwordHash(passwordEncoder.encode(request.senha()))
@@ -88,7 +95,9 @@ public class AuthService {
 
     @Transactional
     public AuthenticatedSession refresh(String refreshToken) {
-        if (refreshToken == null || refreshToken.isBlank()) throw new ApiException(HttpStatus.UNAUTHORIZED, "Sessão expirada.");
+        if (refreshToken == null || refreshToken.isBlank()) {
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "Sessão expirada.");
+        }
         JwtService.TokenData data = jwtService.parseRefreshToken(refreshToken)
                 .orElseThrow(() -> new ApiException(HttpStatus.UNAUTHORIZED, "Sessão expirada."));
         AppUser user = userRepository.findByEmailIgnoreCase(data.email()).filter(AppUser::isAtivo)
@@ -118,12 +127,18 @@ public class AuthService {
                 AppUser user = currentUserService.requireUser(authentication);
                 user.setRefreshTokenHash(null);
                 user.setRefreshTokenExpiresAt(null);
-            } catch (ApiException ignored) { }
+            } catch (ApiException ignored) {
+            }
         }
     }
 
-    public ResponseCookie expiredAccessCookie() { return expiredCookie("carepoint_access"); }
-    public ResponseCookie expiredRefreshCookie() { return expiredCookie("carepoint_refresh"); }
+    public ResponseCookie expiredAccessCookie() {
+        return expiredCookie("carepoint_access");
+    }
+
+    public ResponseCookie expiredRefreshCookie() {
+        return expiredCookie("carepoint_refresh");
+    }
 
     private ResponseCookie accessCookie(String token) {
         return cookie("carepoint_access", token, securityProperties.getAccessExpirationMs());
@@ -133,7 +148,9 @@ public class AuthService {
         return cookie("carepoint_refresh", token, securityProperties.getRefreshExpirationMs());
     }
 
-    private ResponseCookie expiredCookie(String name) { return cookie(name, "", 0); }
+    private ResponseCookie expiredCookie(String name) {
+        return cookie(name, "", 0);
+    }
 
     private ResponseCookie cookie(String name, String value, long maxAgeMs) {
         return ResponseCookie.from(name, value).httpOnly(true).secure(securityProperties.isCookieSecure())
@@ -141,14 +158,25 @@ public class AuthService {
                 .maxAge(Duration.ofMillis(maxAgeMs)).build();
     }
 
-    private String normalizeEmail(String value) { return value.trim().toLowerCase(Locale.ROOT); }
+    private String normalizeEmail(String value) {
+        return value.trim().toLowerCase(Locale.ROOT);
+    }
+
     private String normalizePhone(String value) {
         String digits = digits(value);
-        if (digits.length() < 10 || digits.length() > 15) throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        if (digits.length() < 10 || digits.length() > 15) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        }
         return digits;
     }
-    private String digits(String value) { return value == null ? "" : value.replaceAll("\\D", ""); }
-    private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
+
+    private String digits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
+
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
 
     private String hashRefreshToken(String token) {
         try {
@@ -165,5 +193,7 @@ public class AuthService {
         return MessageDigest.isEqual(calculated, stored);
     }
 
-    public record AuthenticatedSession(AuthUserResponse user, ResponseCookie accessCookie, ResponseCookie refreshCookie) { }
+    public record AuthenticatedSession(AuthUserResponse user, ResponseCookie accessCookie, ResponseCookie refreshCookie) {
+
+    }
 }

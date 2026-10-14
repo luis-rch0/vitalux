@@ -19,6 +19,7 @@ import java.util.List;
 
 @Service
 public class DashboardService {
+
     private final PatientRepository patientRepository;
     private final ProfessionalRepository professionalRepository;
     private final ClinicRepository clinicRepository;
@@ -30,10 +31,10 @@ public class DashboardService {
     private final ServiceRequestService serviceRequestService;
 
     public DashboardService(PatientRepository patientRepository, ProfessionalRepository professionalRepository,
-                            ClinicRepository clinicRepository, ServiceRequestRepository requestRepository,
-                            CurrentUserService currentUserService, PatientService patientService,
-                            ProfessionalService professionalService, ClinicService clinicService,
-                            ServiceRequestService serviceRequestService) {
+            ClinicRepository clinicRepository, ServiceRequestRepository requestRepository,
+            CurrentUserService currentUserService, PatientService patientService,
+            ProfessionalService professionalService, ClinicService clinicService,
+            ServiceRequestService serviceRequestService) {
         this.patientRepository = patientRepository;
         this.professionalRepository = professionalRepository;
         this.clinicRepository = clinicRepository;

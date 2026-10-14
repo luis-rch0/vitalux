@@ -56,4 +56,5 @@ public class Professional extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clinica_id")
     private Clinic clinica;
+
 }

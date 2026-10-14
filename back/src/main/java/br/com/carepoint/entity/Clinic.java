@@ -40,4 +40,5 @@ public class Clinic extends BaseEntity {
     @Column(name = "ativo", nullable = false)
     @Builder.Default
     private boolean ativo = true;
+
 }

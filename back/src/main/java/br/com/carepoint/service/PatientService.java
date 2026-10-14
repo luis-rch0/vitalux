@@ -22,6 +22,7 @@ import java.util.Locale;
 
 @Service
 public class PatientService {
+
     private final PatientRepository patientRepository;
     private final AppUserRepository userRepository;
     private final CurrentUserService currentUserService;
@@ -29,7 +30,7 @@ public class PatientService {
     private final CarePointMapper mapper;
 
     public PatientService(PatientRepository patientRepository, AppUserRepository userRepository, CurrentUserService currentUserService,
-                          PasswordEncoder passwordEncoder, CarePointMapper mapper) {
+            PasswordEncoder passwordEncoder, CarePointMapper mapper) {
         this.patientRepository = patientRepository;
         this.userRepository = userRepository;
         this.currentUserService = currentUserService;
@@ -50,7 +51,9 @@ public class PatientService {
             throw new ApiException(HttpStatus.CONFLICT, "E-mail já cadastrado.");
         }
         String phone = request.telefone().replaceAll("\\D", "");
-        if (phone.length() < 10 || phone.length() > 15) throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        if (phone.length() < 10 || phone.length() > 15) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        }
         patient.setNome(request.nome().trim());
         patient.setTelefone(phone);
         patient.setEndereco(request.endereco().trim());
@@ -79,5 +82,7 @@ public class PatientService {
         return mapper.toPatient(patient);
     }
 
-    private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
 }

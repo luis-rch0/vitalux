@@ -31,7 +31,7 @@ public class Review {
     private Professional profissional;
 
     @Column(name = "nota", nullable = false)
-    private short nota;
+    private Short nota;
 
     @Column(name = "comentario", columnDefinition = "TEXT")
     private String comentario;
@@ -43,4 +43,5 @@ public class Review {
     void onCreate() {
         createdAt = Instant.now();
     }
+ 
 }

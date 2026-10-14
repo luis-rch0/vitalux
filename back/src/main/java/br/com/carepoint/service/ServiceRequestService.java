@@ -1,14 +1,11 @@
 package br.com.carepoint.service;
 
-import br.com.carepoint.dto.*;
-import br.com.carepoint.entity.*;
-import br.com.carepoint.exception.ApiException;
-import br.com.carepoint.exception.ResourceNotFoundException;
-import br.com.carepoint.mapper.CarePointMapper;
-import br.com.carepoint.repository.ClinicRepository;
-import br.com.carepoint.repository.ProfessionalRepository;
-import br.com.carepoint.repository.ReviewRepository;
-import br.com.carepoint.repository.ServiceRequestRepository;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +14,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import br.com.carepoint.dto.PageResponse;
+import br.com.carepoint.dto.ProfessionalResponse;
+import br.com.carepoint.dto.ReviewCreateRequest;
+import br.com.carepoint.dto.ServiceRequestCreateRequest;
+import br.com.carepoint.dto.ServiceRequestResponse;
+import br.com.carepoint.dto.StatusNoteRequest;
+import br.com.carepoint.entity.AppUser;
+import br.com.carepoint.entity.Clinic;
+import br.com.carepoint.entity.Patient;
+import br.com.carepoint.entity.Professional;
+import br.com.carepoint.entity.RequestStatus;
+import br.com.carepoint.entity.Review;
+import br.com.carepoint.entity.Role;
+import br.com.carepoint.entity.ServiceRequest;
+import br.com.carepoint.exception.ApiException;
+import br.com.carepoint.exception.ResourceNotFoundException;
+import br.com.carepoint.mapper.CarePointMapper;
+import br.com.carepoint.repository.ClinicRepository;
+import br.com.carepoint.repository.ProfessionalRepository;
+import br.com.carepoint.repository.ReviewRepository;
+import br.com.carepoint.repository.ServiceRequestRepository;
 
 @Service
 public class ServiceRequestService {
+
     private final ServiceRequestRepository requestRepository;
     private final ReviewRepository reviewRepository;
     private final CurrentUserService currentUserService;
@@ -32,8 +48,8 @@ public class ServiceRequestService {
     private final CarePointMapper mapper;
 
     public ServiceRequestService(ServiceRequestRepository requestRepository, ReviewRepository reviewRepository,
-                                 CurrentUserService currentUserService, ProfessionalService professionalService,
-                                 ClinicRepository clinicRepository, ProfessionalRepository professionalRepository, CarePointMapper mapper) {
+            CurrentUserService currentUserService, ProfessionalService professionalService,
+            ClinicRepository clinicRepository, ProfessionalRepository professionalRepository, CarePointMapper mapper) {
         this.requestRepository = requestRepository;
         this.reviewRepository = reviewRepository;
         this.currentUserService = currentUserService;
@@ -74,7 +90,9 @@ public class ServiceRequestService {
     public ServiceRequestResponse cancel(Authentication authentication, Long id) {
         Patient patient = currentUserService.requirePatient(authentication);
         ServiceRequest request = requestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Solicitação"));
-        if (!request.getPaciente().getId().equals(patient.getId())) throw new ApiException(HttpStatus.FORBIDDEN, "Você só pode cancelar suas próprias solicitações.");
+        if (!request.getPaciente().getId().equals(patient.getId())) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "Você só pode cancelar suas próprias solicitações.");
+        }
         if (request.getStatus() != RequestStatus.PENDENTE && request.getStatus() != RequestStatus.CONFIRMADA) {
             throw new ApiException(HttpStatus.CONFLICT, "Esta solicitação não pode mais ser cancelada.");
         }
@@ -127,9 +145,15 @@ public class ServiceRequestService {
     public void review(Authentication authentication, Long requestId, ReviewCreateRequest input) {
         Patient patient = currentUserService.requirePatient(authentication);
         ServiceRequest request = requestRepository.findById(requestId).orElseThrow(() -> new ResourceNotFoundException("Solicitação"));
-        if (!request.getPaciente().getId().equals(patient.getId())) throw new ApiException(HttpStatus.FORBIDDEN, "Você só pode avaliar seus próprios atendimentos.");
-        if (request.getStatus() != RequestStatus.CONCLUIDA) throw new ApiException(HttpStatus.CONFLICT, "A avaliação só pode ser feita após a conclusão.");
-        if (reviewRepository.existsBySolicitacaoId(requestId)) throw new ApiException(HttpStatus.CONFLICT, "Esta solicitação já foi avaliada.");
+        if (!request.getPaciente().getId().equals(patient.getId())) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "Você só pode avaliar seus próprios atendimentos.");
+        }
+        if (request.getStatus() != RequestStatus.CONCLUIDA) {
+            throw new ApiException(HttpStatus.CONFLICT, "A avaliação só pode ser feita após a conclusão.");
+        }
+        if (reviewRepository.existsBySolicitacaoId(requestId)) {
+            throw new ApiException(HttpStatus.CONFLICT, "Esta solicitação já foi avaliada.");
+        }
         reviewRepository.save(Review.builder().solicitacao(request).paciente(patient).profissional(request.getProfissional())
                 .nota(input.nota()).comentario(blankToNull(input.comentario())).build());
     }
@@ -150,7 +174,9 @@ public class ServiceRequestService {
     }
 
     private List<ServiceRequestResponse> responses(List<ServiceRequest> requests, Long requestingPatientId) {
-        if (requests.isEmpty()) return List.of();
+        if (requests.isEmpty()) {
+            return List.of();
+        }
         Map<Long, ProfessionalResponse> professionals = professionalService.responseMap(requests.stream().map(ServiceRequest::getProfissional).toList());
         Set<Long> reviewed = new HashSet<>(reviewRepository.requestIdsWithReview(requests.stream().map(ServiceRequest::getId).toList()));
         return requests.stream().map(request -> {
@@ -162,16 +188,24 @@ public class ServiceRequestService {
 
     private ServiceRequest findAuthorized(Long id, AppUser user) {
         ServiceRequest request = find(id);
-        if (user.getRole() == Role.ADMIN) return request;
-        if (user.getRole() == Role.PACIENTE && request.getPaciente().getUser().getId().equals(user.getId())) return request;
+        if (user.getRole() == Role.ADMIN) {
+            return request;
+        }
+        if (user.getRole() == Role.PACIENTE && request.getPaciente().getUser().getId().equals(user.getId())) {
+            return request;
+        }
         throw new ApiException(HttpStatus.FORBIDDEN, "Você não tem acesso a esta solicitação.");
     }
 
-    private ServiceRequest find(Long id) { return requestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Solicitação")); }
+    private ServiceRequest find(Long id) {
+        return requestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Solicitação"));
+    }
 
     private Professional getActiveProfessional(Long id) {
         Professional professional = professionalServiceEntity(id);
-        if (!professional.isAtivo()) throw new ApiException(HttpStatus.CONFLICT, "O profissional selecionado está indisponível.");
+        if (!professional.isAtivo()) {
+            throw new ApiException(HttpStatus.CONFLICT, "O profissional selecionado está indisponível.");
+        }
         return professional;
     }
 
@@ -181,9 +215,13 @@ public class ServiceRequestService {
 
     private Clinic resolveClinic(Long clinicId, Professional professional) {
         Clinic professionalClinic = professional.getClinica();
-        if (clinicId == null) return professionalClinic;
+        if (clinicId == null) {
+            return professionalClinic;
+        }
         Clinic requested = clinicRepository.findById(clinicId).orElseThrow(() -> new ResourceNotFoundException("Clínica"));
-        if (!requested.isAtivo()) throw new ApiException(HttpStatus.CONFLICT, "A clínica selecionada está indisponível.");
+        if (!requested.isAtivo()) {
+            throw new ApiException(HttpStatus.CONFLICT, "A clínica selecionada está indisponível.");
+        }
         if (professionalClinic != null && !professionalClinic.getId().equals(requested.getId())) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "O profissional não está associado à clínica informada.");
         }
@@ -191,8 +229,16 @@ public class ServiceRequestService {
     }
 
     private void requireStatus(ServiceRequest request, RequestStatus allowed, String target) {
-        if (request.getStatus() != allowed) throw new ApiException(HttpStatus.CONFLICT, "A solicitação não pode ser " + target + " no status atual.");
+        if (request.getStatus() != allowed) {
+            throw new ApiException(HttpStatus.CONFLICT, "A solicitação não pode ser " + target + " no status atual.");
+        }
     }
-    private Pageable page(int page, int size) { return PageRequest.of(Math.max(0, page), Math.min(Math.max(1, size), 100)); }
-    private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
+
+    private Pageable page(int page, int size) {
+        return PageRequest.of(Math.max(0, page), Math.min(Math.max(1, size), 100));
+    }
+
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
 }

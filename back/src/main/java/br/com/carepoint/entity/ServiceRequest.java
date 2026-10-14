@@ -64,4 +64,5 @@ public class ServiceRequest extends BaseEntity {
 
     @Column(name = "completed_at")
     private Instant completedAt;
+
 }

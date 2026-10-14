@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProfessionalService {
+
     private final ProfessionalRepository professionalRepository;
     private final ClinicRepository clinicRepository;
     private final CarePointMapper mapper;
@@ -42,8 +43,8 @@ public class ProfessionalService {
 
     @Transactional(readOnly = true)
     public PageResponse<ProfessionalResponse> list(String search, Profissao profession, String specialty, Long clinicId,
-                                                    BigDecimal minValue, BigDecimal maxValue, Double minRating,
-                                                    String order, boolean includeInactive, int page, int size) {
+            BigDecimal minValue, BigDecimal maxValue, Double minRating,
+            String order, boolean includeInactive, int page, int size) {
         if (minValue != null && maxValue != null && minValue.compareTo(maxValue) > 0) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "O valor mínimo não pode ser maior que o máximo.");
         }
@@ -57,7 +58,9 @@ public class ProfessionalService {
     @Transactional(readOnly = true)
     public ProfessionalResponse get(Long id, boolean includeInactive) {
         Professional professional = professionalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Profissional"));
-        if (!includeInactive && !professional.isAtivo()) throw new ResourceNotFoundException("Profissional");
+        if (!includeInactive && !professional.isAtivo()) {
+            throw new ResourceNotFoundException("Profissional");
+        }
         return toResponse(professional, ratingFor(professional.getId()));
     }
 
@@ -74,7 +77,9 @@ public class ProfessionalService {
 
         Map<String, String> uniqueSpecialties = new HashMap<>();
         for (String specialty : professionalRepository.findDistinctActiveSpecialties()) {
-            if (specialty == null || specialty.isBlank()) continue;
+            if (specialty == null || specialty.isBlank()) {
+                continue;
+            }
             String normalized = specialty.trim();
             uniqueSpecialties.merge(normalized.toLowerCase(Locale.ROOT), normalized,
                     (left, right) -> left.compareToIgnoreCase(right) <= 0 ? left : right);
@@ -85,8 +90,12 @@ public class ProfessionalService {
     @Transactional
     public ProfessionalResponse create(ProfessionalRequest request) {
         String cpf = digits(request.cpf());
-        if (cpf.length() != 11) throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
-        if (professionalRepository.existsByCpf(cpf)) throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        if (cpf.length() != 11) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
+        }
+        if (professionalRepository.existsByCpf(cpf)) {
+            throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        }
         validateRegistration(request.numeroRegistroProfissional(), null);
         Professional professional = new Professional();
         apply(professional, request);
@@ -98,8 +107,12 @@ public class ProfessionalService {
     public ProfessionalResponse update(Long id, ProfessionalRequest request) {
         Professional professional = professionalRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Profissional"));
         String cpf = digits(request.cpf());
-        if (cpf.length() != 11) throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
-        if (!cpf.equals(professional.getCpf()) && professionalRepository.existsByCpf(cpf)) throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        if (cpf.length() != 11) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "CPF inválido.");
+        }
+        if (!cpf.equals(professional.getCpf()) && professionalRepository.existsByCpf(cpf)) {
+            throw new ApiException(HttpStatus.CONFLICT, "CPF já cadastrado.");
+        }
         validateRegistration(request.numeroRegistroProfissional(), id);
         apply(professional, request);
         return toResponse(professional, ratingFor(id));
@@ -122,20 +135,32 @@ public class ProfessionalService {
     }
 
     private Specification<Professional> specification(String search, Profissao profession, String specialty, Long clinicId,
-                                                       BigDecimal minValue, BigDecimal maxValue, Double minRating,
-                                                       String order, boolean includeInactive) {
+            BigDecimal minValue, BigDecimal maxValue, Double minRating,
+            String order, boolean includeInactive) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (!includeInactive) predicates.add(cb.isTrue(root.get("ativo")));
+            if (!includeInactive) {
+                predicates.add(cb.isTrue(root.get("ativo")));
+            }
             if (search != null && !search.isBlank()) {
                 String pattern = "%" + search.trim().toLowerCase(Locale.ROOT) + "%";
                 predicates.add(cb.or(cb.like(cb.lower(root.get("nome")), pattern), cb.like(cb.lower(root.get("especialidade")), pattern)));
             }
-            if (profession != null) predicates.add(cb.equal(root.get("profissao"), profession));
-            if (specialty != null && !specialty.isBlank()) predicates.add(cb.like(cb.lower(root.get("especialidade")), "%" + specialty.trim().toLowerCase(Locale.ROOT) + "%"));
-            if (clinicId != null) predicates.add(cb.equal(root.get("clinica").get("id"), clinicId));
-            if (minValue != null) predicates.add(cb.greaterThanOrEqualTo(root.get("valorAtendimento"), minValue));
-            if (maxValue != null) predicates.add(cb.lessThanOrEqualTo(root.get("valorAtendimento"), maxValue));
+            if (profession != null) {
+                predicates.add(cb.equal(root.get("profissao"), profession));
+            }
+            if (specialty != null && !specialty.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("especialidade")), "%" + specialty.trim().toLowerCase(Locale.ROOT) + "%"));
+            }
+            if (clinicId != null) {
+                predicates.add(cb.equal(root.get("clinica").get("id"), clinicId));
+            }
+            if (minValue != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("valorAtendimento"), minValue));
+            }
+            if (maxValue != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("valorAtendimento"), maxValue));
+            }
 
             Subquery<Double> averageRating = null;
             if (minRating != null || "AVALIACAO".equalsIgnoreCase(order)) {
@@ -144,7 +169,9 @@ public class ProfessionalService {
                 averageRating.select(cb.avg(review.<Number>get("nota")))
                         .where(cb.equal(review.get("profissional"), root));
             }
-            if (minRating != null) predicates.add(cb.greaterThanOrEqualTo(averageRating, minRating));
+            if (minRating != null) {
+                predicates.add(cb.greaterThanOrEqualTo(averageRating, minRating));
+            }
             if (averageRating != null && "AVALIACAO".equalsIgnoreCase(order) && query.getResultType() != Long.class) {
                 query.orderBy(cb.desc(averageRating), cb.asc(root.get("nome")));
             }
@@ -155,14 +182,20 @@ public class ProfessionalService {
     private Pageable pageable(String order, int page, int size) {
         int safePage = Math.max(0, page);
         int safeSize = Math.min(Math.max(size, 1), 100);
-        if ("MENOR_VALOR".equalsIgnoreCase(order)) return PageRequest.of(safePage, safeSize, Sort.by("valorAtendimento").ascending());
-        if ("AVALIACAO".equalsIgnoreCase(order)) return PageRequest.of(safePage, safeSize);
+        if ("MENOR_VALOR".equalsIgnoreCase(order)) {
+            return PageRequest.of(safePage, safeSize, Sort.by("valorAtendimento").ascending());
+        }
+        if ("AVALIACAO".equalsIgnoreCase(order)) {
+            return PageRequest.of(safePage, safeSize);
+        }
         return PageRequest.of(safePage, safeSize, Sort.by("nome").ascending());
     }
 
     private void apply(Professional professional, ProfessionalRequest request) {
         String phone = digits(request.telefone());
-        if (phone.length() < 10 || phone.length() > 15) throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        if (phone.length() < 10 || phone.length() > 15) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Telefone inválido.");
+        }
         Clinic clinic = request.clinicaId() == null ? null : clinicRepository.findById(request.clinicaId())
                 .orElseThrow(() -> new ResourceNotFoundException("Clínica"));
         professional.setNome(request.nome().trim());
@@ -176,19 +209,27 @@ public class ProfessionalService {
         professional.setEmail(request.email().trim().toLowerCase(Locale.ROOT));
         professional.setDescricao(blankToNull(request.descricao()));
         professional.setClinica(clinic);
-        if (request.ativo() != null) professional.setAtivo(request.ativo());
+        if (request.ativo() != null) {
+            professional.setAtivo(request.ativo());
+        }
     }
 
     private void validateRegistration(String registration, Long currentId) {
         String normalized = blankToNull(registration);
-        if (normalized == null) return;
+        if (normalized == null) {
+            return;
+        }
         professionalRepository.findByNumeroRegistroProfissional(normalized)
                 .filter(existing -> !existing.getId().equals(currentId))
-                .ifPresent(existing -> { throw new ApiException(HttpStatus.CONFLICT, "Registro profissional já cadastrado."); });
+                .ifPresent(existing -> {
+                    throw new ApiException(HttpStatus.CONFLICT, "Registro profissional já cadastrado.");
+                });
     }
 
     private Map<Long, Rating> ratingsFor(Collection<Professional> professionals) {
-        if (professionals.isEmpty()) return Map.of();
+        if (professionals.isEmpty()) {
+            return Map.of();
+        }
         return professionalRepository.ratingsByProfessionalIds(professionals.stream().map(Professional::getId).toList()).stream()
                 .collect(Collectors.toMap(ProfessionalRepository.ProfessionalRating::getProfessionalId,
                         row -> new Rating(row.getAverage() == null ? 0 : row.getAverage(), row.getTotal() == null ? 0 : row.getTotal())));
@@ -208,7 +249,15 @@ public class ProfessionalService {
         return mapper.toProfessional(professional, rating.average(), rating.count());
     }
 
-    private String digits(String value) { return value == null ? "" : value.replaceAll("\\D", ""); }
-    private String blankToNull(String value) { return value == null || value.isBlank() ? null : value.trim(); }
-    private record Rating(double average, long count) { }
+    private String digits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
+
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
+    }
+
+    private record Rating(double average, long count) {
+
+    }
 }
