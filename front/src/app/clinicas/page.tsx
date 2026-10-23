@@ -1,4 +1,6 @@
 "use client";
+import { useDebouncedValue } from "@/lib/use-debounced-value";
+import { QueryError } from "@/components/ui/query-error";
 
 import { useState } from "react";
 import { Search } from "lucide-react";
@@ -40,7 +42,8 @@ export default function ClinicsPage() {
   const copy = content[locale];
   const [busca, setBusca] = useState("");
   const [page, setPage] = useState(0);
-  const clinics = useClinics({ busca, page, size: 12 });
+  const search = useDebouncedValue(busca);
+  const clinics = useClinics({ busca: search, page, size: 12 });
 
   return (
     <AppShell roles={["PACIENTE"]}>
@@ -61,7 +64,9 @@ export default function ClinicsPage() {
         />
       </label>
 
-      {clinics.isLoading ? (
+      {clinics.isError ? (
+        <QueryError retry={clinics.refetch} />
+      ) : clinics.isLoading ? (
         <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <Skeleton className="h-36" />
           <Skeleton className="h-36" />
@@ -69,15 +74,27 @@ export default function ClinicsPage() {
       ) : clinics.data?.content.length ? (
         <>
           <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {clinics.data.content.map((item) => <ClinicCard key={item.id} clinic={item} />)}
+            {clinics.data.content.map((item) => (
+              <ClinicCard key={item.id} clinic={item} />
+            ))}
           </div>
           {clinics.data.totalPages > 1 && (
             <div className="mt-6 flex items-center justify-center gap-3">
-              <button disabled={page === 0} onClick={() => setPage(page - 1)} className="rounded-xl border px-4 py-2 disabled:opacity-50">
+              <button
+                disabled={page === 0}
+                onClick={() => setPage(page - 1)}
+                className="rounded-xl border px-4 py-2 disabled:opacity-50"
+              >
                 {copy.previous}
               </button>
-              <span className="text-sm text-slate-500">{copy.page} {page + 1} {copy.of} {clinics.data.totalPages}</span>
-              <button disabled={page >= clinics.data.totalPages - 1} onClick={() => setPage(page + 1)} className="rounded-xl border px-4 py-2 disabled:opacity-50">
+              <span className="text-sm text-slate-500">
+                {copy.page} {page + 1} {copy.of} {clinics.data.totalPages}
+              </span>
+              <button
+                disabled={page >= clinics.data.totalPages - 1}
+                onClick={() => setPage(page + 1)}
+                className="rounded-xl border px-4 py-2 disabled:opacity-50"
+              >
                 {copy.next}
               </button>
             </div>

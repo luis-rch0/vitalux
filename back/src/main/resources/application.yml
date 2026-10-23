@@ -40,6 +40,9 @@ springdoc:
     path: /v3/api-docs
 
 app:
+  assistant:
+    api-key: ${GROQ_API_KEY}
+    model: ${GROQ_MODEL}
   security:
     jwt-secret: ${JWT_SECRET}
     access-expiration-ms: ${JWT_ACCESS_EXPIRATION}
@@ -56,3 +59,5 @@ app:
 logging:
   level:
     org.springframework.security: WARN
+
+# Optional text help provider. Business queries never send patient records to AI.

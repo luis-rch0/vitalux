@@ -1,4 +1,5 @@
 "use client";
+import { QueryError } from "@/components/ui/query-error";
 
 import Link from "next/link";
 import { AppShell } from "@/components/layout/app-shell";
@@ -24,12 +25,18 @@ const content = {
 
 function localizedDateTime(value: string | undefined, locale: Locale) {
   return value
-    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value))
+    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "pt-BR", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(value))
     : "—";
 }
 
 function localizedCurrency(value: number, locale: Locale) {
-  return new Intl.NumberFormat(locale === "en" ? "en-US" : "pt-BR", { style: "currency", currency: "BRL" }).format(value);
+  return new Intl.NumberFormat(locale === "en" ? "en-US" : "pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
 }
 
 export default function RequestsPage() {
@@ -42,20 +49,30 @@ export default function RequestsPage() {
       <h1 className="page-title">{copy.title}</h1>
       <p className="mt-1 text-slate-500">{copy.subtitle}</p>
 
-      {requests.isLoading ? (
+      {requests.isError ? (
+        <QueryError retry={requests.refetch} />
+      ) : requests.isLoading ? (
         <Skeleton className="mt-6 h-60" />
       ) : requests.data?.content.length ? (
         <div className="mt-6 space-y-3">
           {requests.data.content.map((item) => (
-            <Link key={item.id} href={`/solicitacoes/${item.id}`} className="surface block p-5 transition hover:ring-2 hover:ring-brand-200">
+            <Link
+              key={item.id}
+              href={`/solicitacoes/${item.id}`}
+              className="surface block p-5 transition hover:ring-2 hover:ring-brand-200"
+            >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="font-bold">{item.profissional.nome}</h2>
-                  <p className="mt-1 text-sm text-slate-500">{item.servicoSolicitado} · {localizedDateTime(item.dataDesejada, locale)}</p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {item.servicoSolicitado} · {localizedDateTime(item.dataDesejada, locale)}
+                  </p>
                 </div>
                 <StatusBadge status={item.status} />
               </div>
-              <p className="mt-3 text-sm font-semibold text-brand-700 dark:text-brand-300">{localizedCurrency(item.valor, locale)}</p>
+              <p className="mt-3 text-sm font-semibold text-brand-700 dark:text-brand-300">
+                {localizedCurrency(item.valor, locale)}
+              </p>
             </Link>
           ))}
         </div>

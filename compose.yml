@@ -5,12 +5,16 @@ services:
     restart: unless-stopped
     env_file:
       - ./back/.env
+    environment:
+      POSTGRES_DB: carepoint
+      POSTGRES_USER: ${DATABASE_USERNAME:-carepoint}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Defina DATABASE_PASSWORD em back/.env}
     ports:
       - "5432:5432"
     volumes:
       - carepoint-postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U carepoint -d carepoint"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 12

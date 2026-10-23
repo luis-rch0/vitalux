@@ -107,16 +107,25 @@ export default function EditProfilePage() {
           {fields.map(([name, type]) => (
             <label className="text-sm font-medium" key={name}>
               {copy.fields[name]}
-              <input type={type} className="mt-1 w-full rounded-xl border px-3 py-3" {...form.register(name)} />
+              <input
+                type={type}
+                className="mt-1 w-full rounded-xl border px-3 py-3"
+                {...form.register(name)}
+              />
             </label>
           ))}
         </div>
         <label className="mt-4 block text-sm font-medium">
           {copy.careNeeds}
-          <textarea className="mt-1 min-h-28 w-full rounded-xl border p-3" {...form.register("necessidadesCuidado")} />
+          <textarea
+            className="mt-1 min-h-28 w-full rounded-xl border p-3"
+            {...form.register("necessidadesCuidado")}
+          />
         </label>
         <div className="mt-6 flex gap-3">
-          <Button type="button" variant="secondary" onClick={() => router.back()}>{copy.cancel}</Button>
+          <Button type="button" variant="secondary" onClick={() => router.back()}>
+            {copy.cancel}
+          </Button>
           <Button disabled={update.isPending}>{update.isPending ? copy.saving : copy.save}</Button>
         </div>
       </form>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Building2,
+  CircleHelp,
   ClipboardList,
   LayoutDashboard,
   LogOut,
@@ -53,12 +54,16 @@ function ShellContent({ children }: { children: React.ReactNode }) {
   const links = isAdmin ? adminLinks : patientLinks;
 
   return (
-    <div className={`min-h-screen md:flex ${isAdmin ? "bg-slate-100 dark:bg-[#07101f]" : "bg-[#f5f8f6] dark:bg-slate-950"}`}>
-      <aside className={`hidden w-72 shrink-0 p-6 md:flex md:flex-col ${isAdmin ? "border-r border-slate-800 bg-[#0d1729] text-white" : "border-r bg-white dark:bg-slate-900"}`}>
+    <div className={`care-shell min-h-screen md:flex`}>
+      <aside
+        className={`care-sidebar hidden w-64 shrink-0 p-6 md:sticky md:top-0 md:h-screen md:flex md:flex-col ${isAdmin ? "border-r border-brand-900 bg-brand-900 text-white" : "border-r"}`}
+      >
         <Logo light={isAdmin} />
         {isAdmin && (
           <div className="mt-7 rounded-2xl border border-white/10 bg-white/5 p-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-300">{t("shell.adminCenter")}</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-300">
+              {t("shell.adminCenter")}
+            </p>
             <p className="mt-2 text-sm text-slate-300">{t("shell.adminCenterDescription")}</p>
           </div>
         )}
@@ -70,10 +75,20 @@ function ShellContent({ children }: { children: React.ReactNode }) {
               label={t(labelKey)}
               icon={<Icon size={19} />}
               admin={isAdmin}
-              active={pathname === href || (href !== "/paciente" && href !== "/admin" && pathname.startsWith(`${href}/`))}
+              active={
+                pathname === href ||
+                (href !== "/paciente" && href !== "/admin" && pathname.startsWith(`${href}/`))
+              }
             />
           ))}
         </nav>
+        <Link
+          href="/ajuda"
+          className="mt-8 flex items-center gap-3 rounded-xl border border-current/10 p-3 text-sm"
+        >
+          <CircleHelp size={19} />
+          {t("settings.helpSupport")}
+        </Link>
         <div className={`mt-auto space-y-2 border-t pt-5 ${isAdmin ? "border-white/10" : ""}`}>
           <button
             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
@@ -83,41 +98,83 @@ function ShellContent({ children }: { children: React.ReactNode }) {
             {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             {t("shell.changeTheme")}
           </button>
-          <button onClick={() => void logout()} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${isAdmin ? "text-rose-300 hover:bg-rose-500/10" : "text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950"}`}>
+          <button
+            onClick={() => void logout()}
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition ${isAdmin ? "text-rose-300 hover:bg-rose-500/10" : "text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950"}`}
+          >
             <LogOut size={18} /> {t("nav.logout")}
           </button>
         </div>
       </aside>
 
       <main className="min-w-0 flex-1 pb-20 md:pb-10">
-        <header className={`sticky top-0 z-20 flex h-20 items-center justify-between border-b px-5 backdrop-blur-xl md:px-8 ${isAdmin ? "border-slate-200/80 bg-white/90 dark:border-slate-800 dark:bg-[#0b1424]/90" : "bg-white/90 dark:bg-slate-900/90"}`}>
-          <div className="md:hidden"><Logo /></div>
+        <header
+          className={`sticky top-0 z-20 flex h-20 items-center justify-between border-b px-5 backdrop-blur-xl md:px-8 ${isAdmin ? "border-slate-200/80 bg-white/90 dark:border-slate-800 dark:bg-[#0b1424]/90" : "bg-white/90 dark:bg-slate-900/90"}`}
+        >
+          <div className="md:hidden">
+            <Logo />
+          </div>
           <div className="hidden md:block">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700 dark:text-brand-300">{isAdmin ? t("shell.administration") : t("shell.patientArea")}</p>
-            <p className="mt-1 text-sm text-slate-500">{isAdmin ? t("shell.adminSubtitle") : t("shell.patientSubtitle")}</p>
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-700 dark:text-brand-300">
+              {isAdmin ? t("shell.administration") : t("shell.patientArea")}
+            </p>
+            <p className="mt-1 text-sm text-slate-500">
+              {isAdmin ? t("shell.adminSubtitle") : t("shell.patientSubtitle")}
+            </p>
           </div>
           <div className="flex items-center gap-3">
-            <button onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")} className="grid h-10 w-10 place-items-center rounded-xl text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800" aria-label={t("theme.toggle")}>
+            {isAdmin && (
+              <Link
+                href="/admin/configuracoes"
+                aria-label={t("nav.settings")}
+                className="rounded-xl p-2 text-slate-600 dark:text-slate-300 md:hidden"
+              >
+                <Settings size={20} />
+              </Link>
+            )}
+            <button
+              onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+              className="grid h-10 w-10 place-items-center rounded-xl text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+              aria-label={t("theme.toggle")}
+            >
               {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <div className="hidden text-right sm:block">
-              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{user?.nome}</p>
-              <p className="text-xs text-slate-500">{isAdmin ? t("shell.administrator") : t("shell.patient")}</p>
+              <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                {user?.nome}
+              </p>
+              <p className="text-xs text-slate-500">
+                {isAdmin ? t("shell.administrator") : t("shell.patient")}
+              </p>
             </div>
-            <span className={`grid h-11 w-11 place-items-center rounded-2xl font-bold ${isAdmin ? "bg-[#123f31] text-emerald-200" : "bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200"}`}>
+            <span
+              className={`grid h-11 w-11 place-items-center rounded-2xl font-bold ${isAdmin ? "bg-[#123f31] text-emerald-200" : "bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200"}`}
+            >
               {user?.nome?.slice(0, 1).toUpperCase()}
             </span>
           </div>
         </header>
-        <div className={`mx-auto p-5 md:p-8 ${isAdmin ? "max-w-[1600px]" : "max-w-7xl"}`}>{children}</div>
+        <div className={`mx-auto p-5 md:p-8 ${isAdmin ? "max-w-[1600px]" : "max-w-7xl"}`}>
+          {children}
+        </div>
       </main>
 
-      <nav className={`fixed inset-x-0 bottom-0 z-30 flex justify-around border-t p-2 md:hidden ${isAdmin ? "border-slate-800 bg-[#0d1729]" : "bg-white dark:bg-slate-900"}`}>
+      <nav
+        className={`fixed inset-x-0 bottom-0 z-30 flex justify-around border-t p-2 md:hidden ${isAdmin ? "border-slate-800 bg-[#0d1729]" : "bg-white dark:bg-slate-900"}`}
+      >
         {links.slice(0, 5).map(([href, labelKey, Icon]) => {
-          const active = pathname === href;
+          const active =
+            pathname === href ||
+            (href !== "/admin" && href !== "/paciente" && pathname.startsWith(`${href}/`));
           return (
-            <Link key={href} href={href} className={`grid min-w-14 place-items-center gap-1 rounded-xl px-2 py-1 text-[11px] ${active ? "text-emerald-400" : isAdmin ? "text-slate-400" : "text-slate-500"}`}>
-              <Icon size={19} /><span>{t(labelKey)}</span>
+            <Link
+              key={href}
+              href={href}
+              aria-current={active ? "page" : undefined}
+              className={`grid min-w-0 flex-1 place-items-center gap-1 rounded-xl px-1 py-2 text-[11px] ${active ? (isAdmin ? "text-emerald-300" : "text-brand-700 dark:text-brand-200") : isAdmin ? "text-slate-400" : "text-slate-500"}`}
+            >
+              <Icon size={19} />
+              <span className="max-w-full truncate">{t(labelKey)}</span>
             </Link>
           );
         })}
@@ -126,9 +183,34 @@ function ShellContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-function NavLink({ href, label, icon, active, admin }: { href: string; label: string; icon: React.ReactNode; active: boolean; admin: boolean }) {
+function NavLink({
+  href,
+  label,
+  icon,
+  active,
+  admin,
+}: {
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  active: boolean;
+  admin: boolean;
+}) {
   const classes = admin
-    ? active ? "bg-emerald-400/15 text-emerald-300 shadow-[inset_3px_0_0_#34d399]" : "text-slate-300 hover:bg-white/5 hover:text-white"
-    : active ? "bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-200" : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800";
-  return <Link href={href} className={`flex items-center gap-3 rounded-xl px-3 py-3 font-medium transition ${classes}`}>{icon}{label}</Link>;
+    ? active
+      ? "bg-emerald-400/15 text-emerald-300 shadow-[inset_3px_0_0_#34d399]"
+      : "text-slate-300 hover:bg-white/5 hover:text-white"
+    : active
+      ? "bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-200"
+      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800";
+  return (
+    <Link
+      href={href}
+      aria-current={active ? "page" : undefined}
+      className={`flex items-center gap-3 rounded-xl px-3 py-3 font-medium transition ${classes}`}
+    >
+      {icon}
+      {label}
+    </Link>
+  );
 }

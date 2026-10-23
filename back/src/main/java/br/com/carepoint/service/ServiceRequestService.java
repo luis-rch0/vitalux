@@ -216,6 +216,9 @@ public class ServiceRequestService {
     private Clinic resolveClinic(Long clinicId, Professional professional) {
         Clinic professionalClinic = professional.getClinica();
         if (clinicId == null) {
+            if (professionalClinic != null && !professionalClinic.isAtivo()) {
+                throw new ApiException(HttpStatus.CONFLICT, "A clínica selecionada está indisponível.");
+            }
             return professionalClinic;
         }
         Clinic requested = clinicRepository.findById(clinicId).orElseThrow(() -> new ResourceNotFoundException("Clínica"));

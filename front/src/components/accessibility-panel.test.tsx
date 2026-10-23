@@ -14,7 +14,11 @@ describe("AccessibilityPanel", () => {
   afterEach(cleanup);
 
   it("applies and persists visual accessibility preferences", async () => {
-    render(<I18nProvider><AccessibilityPanel /></I18nProvider>);
+    render(
+      <I18nProvider>
+        <AccessibilityPanel />
+      </I18nProvider>,
+    );
     fireEvent.click(screen.getByRole("button", { name: "Abrir opções de acessibilidade" }));
     fireEvent.click(screen.getByRole("button", { name: "A++ Muito grande" }));
     fireEvent.click(screen.getByRole("button", { name: /Alto contraste/ }));

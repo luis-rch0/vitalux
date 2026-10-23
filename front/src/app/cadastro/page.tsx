@@ -40,8 +40,13 @@ const content = {
     back: "Voltar para o início",
     kicker: "Cadastro do paciente",
     heroTitle: "Seu cuidado começa com informações bem organizadas.",
-    heroDescription: "Crie sua conta para encontrar profissionais, solicitar atendimento domiciliar e acompanhar cada etapa.",
-    benefits: ["Busca personalizada de profissionais", "Solicitações acompanhadas em um só lugar", "Seus dados protegidos e sob seu controle"],
+    heroDescription:
+      "Crie sua conta para encontrar profissionais, solicitar atendimento domiciliar e acompanhar cada etapa.",
+    benefits: [
+      "Busca personalizada de profissionais",
+      "Solicitações acompanhadas em um só lugar",
+      "Seus dados protegidos e sob seu controle",
+    ],
     imageCaption: "Cuidado profissional, perto de você.",
     title: "Crie sua conta",
     subtitle: "Preencha seus dados para começar. Leva menos de 3 minutos.",
@@ -58,7 +63,8 @@ const content = {
     submit: "Criar minha conta",
     hasAccount: "Já possui uma conta?",
     signIn: "Entrar",
-    privacy: "Ao criar sua conta, seus dados serão usados somente para viabilizar os serviços do CarePoint.",
+    privacy:
+      "Ao criar sua conta, seus dados serão usados somente para viabilizar os serviços do CarePoint.",
     showPassword: "Mostrar senha",
     hidePassword: "Ocultar senha",
     fields: {
@@ -87,8 +93,13 @@ const content = {
     back: "Back to home",
     kicker: "Patient registration",
     heroTitle: "Your care starts with well-organized information.",
-    heroDescription: "Create your account to find professionals, request home care, and follow every step.",
-    benefits: ["Personalized professional search", "Requests tracked in one place", "Your data protected and under your control"],
+    heroDescription:
+      "Create your account to find professionals, request home care, and follow every step.",
+    benefits: [
+      "Personalized professional search",
+      "Requests tracked in one place",
+      "Your data protected and under your control",
+    ],
     imageCaption: "Professional care, close to you.",
     title: "Create your account",
     subtitle: "Enter your information to get started. It takes less than 3 minutes.",
@@ -132,9 +143,12 @@ const content = {
   },
 } as const;
 
-const controlClass = "group flex min-h-12 items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-brand-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950/70 dark:focus-within:border-brand-400 dark:focus-within:bg-slate-950";
-const inputClass = "min-w-0 flex-1 border-0 bg-transparent py-3 text-sm text-slate-950 outline-none !ring-0 placeholder:text-slate-400 focus:!outline-none focus:!ring-0 focus-visible:!outline-none focus-visible:!ring-0 focus-visible:!ring-offset-0 dark:bg-transparent dark:text-white dark:placeholder:text-slate-500";
-const iconClass = "shrink-0 text-slate-400 transition group-focus-within:text-brand-600 dark:group-focus-within:text-brand-300";
+const controlClass =
+  "group flex min-h-12 items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 transition focus-within:border-brand-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-brand-500/10 dark:border-slate-700 dark:bg-slate-950/70 dark:focus-within:border-brand-400 dark:focus-within:bg-slate-950";
+const inputClass =
+  "min-w-0 flex-1 border-0 bg-transparent py-3 text-sm text-slate-950 outline-none !ring-0 placeholder:text-slate-400 focus:!outline-none focus:!ring-0 focus-visible:!outline-none focus-visible:!ring-0 focus-visible:!ring-offset-0 dark:bg-transparent dark:text-white dark:placeholder:text-slate-500";
+const iconClass =
+  "shrink-0 text-slate-400 transition group-focus-within:text-brand-600 dark:group-focus-within:text-brand-300";
 
 export default function RegisterPage() {
   const { locale } = useI18n();
@@ -172,7 +186,10 @@ export default function RegisterPage() {
           <Logo />
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
-            <Link href="/" className="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-white hover:text-brand-700 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-brand-300 sm:inline-flex">
+            <Link
+              href="/"
+              className="hidden items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-slate-600 transition hover:bg-white hover:text-brand-700 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-brand-300 sm:inline-flex"
+            >
               <ArrowLeft size={16} aria-hidden="true" /> {copy.back}
             </Link>
           </div>
@@ -185,21 +202,40 @@ export default function RegisterPage() {
               <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-emerald-50">
                 <Sparkles size={14} aria-hidden="true" /> {copy.kicker}
               </span>
-              <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight">{copy.heroTitle}</h1>
+              <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight">
+                {copy.heroTitle}
+              </h1>
               <p className="mt-4 leading-7 text-emerald-50/85">{copy.heroDescription}</p>
               <ul className="mt-7 space-y-3">
-                {copy.benefits.map(item => (
-                  <li key={item} className="flex items-center gap-3 text-sm font-semibold text-white/90">
-                    <CheckCircle2 size={18} className="shrink-0 text-emerald-200" aria-hidden="true" /> {item}
+                {copy.benefits.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 text-sm font-semibold text-white/90"
+                  >
+                    <CheckCircle2
+                      size={18}
+                      className="shrink-0 text-emerald-200"
+                      aria-hidden="true"
+                    />{" "}
+                    {item}
                   </li>
                 ))}
               </ul>
             </div>
 
             <div className="relative mt-8 min-h-64 flex-1 overflow-hidden rounded-3xl border border-white/15 shadow-xl">
-              <Image src="/images/profissionais/medica-geriatra.webp" alt="Profissional de saúde do CarePoint" fill sizes="(min-width: 1024px) 360px, 0px" className="object-cover object-top" priority />
+              <Image
+                src="/images/profissionais/medica-geriatra.webp"
+                alt="Profissional de saúde do CarePoint"
+                fill
+                sizes="(min-width: 1024px) 360px, 0px"
+                className="object-cover object-top"
+                priority
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-transparent to-transparent" />
-              <p className="absolute bottom-0 left-0 right-0 p-5 text-lg font-extrabold">{copy.imageCaption}</p>
+              <p className="absolute bottom-0 left-0 right-0 p-5 text-lg font-extrabold">
+                {copy.imageCaption}
+              </p>
             </div>
           </aside>
 
@@ -207,104 +243,295 @@ export default function RegisterPage() {
             <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-6 dark:border-slate-800">
               <div>
                 <p className="admin-kicker lg:hidden">{copy.kicker}</p>
-                <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">{copy.title}</h2>
-                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">{copy.subtitle}</p>
+                <h2 className="mt-1 text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  {copy.title}
+                </h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
+                  {copy.subtitle}
+                </p>
               </div>
-              <span className="rounded-full bg-brand-50 px-3 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">{copy.requiredHint}</span>
+              <span className="rounded-full bg-brand-50 px-3 py-1.5 text-xs font-bold text-brand-700 dark:bg-brand-900/40 dark:text-brand-200">
+                {copy.requiredHint}
+              </span>
             </div>
 
             <form onSubmit={form.handleSubmit(submit)} className="mt-7 space-y-8" noValidate>
-              <FormSection icon={<UserRound size={18} />} title={copy.personalSection} description={copy.personalDescription}>
-                <FormField id="nome" label={copy.fields.nome} required error={errors.nome?.message} className="sm:col-span-2">
+              <FormSection
+                icon={<UserRound size={18} />}
+                title={copy.personalSection}
+                description={copy.personalDescription}
+              >
+                <FormField
+                  id="nome"
+                  label={copy.fields.nome}
+                  required
+                  error={errors.nome?.message}
+                  className="sm:col-span-2"
+                >
                   <div className={controlClass}>
                     <UserRound size={18} className={iconClass} aria-hidden="true" />
-                    <input id="nome" autoComplete="name" placeholder={copy.placeholders.nome} aria-invalid={Boolean(errors.nome)} aria-describedby={errors.nome ? "nome-error" : undefined} className={inputClass} {...form.register("nome")} />
+                    <input
+                      id="nome"
+                      autoComplete="name"
+                      placeholder={copy.placeholders.nome}
+                      aria-invalid={Boolean(errors.nome)}
+                      aria-describedby={errors.nome ? "nome-error" : undefined}
+                      className={inputClass}
+                      {...form.register("nome")}
+                    />
                   </div>
                 </FormField>
 
                 <FormField id="cpf" label={copy.fields.cpf} required error={errors.cpf?.message}>
                   <div className={controlClass}>
                     <IdCard size={18} className={iconClass} aria-hidden="true" />
-                    <Controller control={form.control} name="cpf" render={({ field }) => (
-                      <input id="cpf" inputMode="numeric" autoComplete="off" maxLength={14} value={field.value ?? ""} onBlur={field.onBlur} onChange={event => field.onChange(formatCpf(event.target.value))} placeholder={copy.placeholders.cpf} aria-invalid={Boolean(errors.cpf)} aria-describedby={errors.cpf ? "cpf-error" : undefined} className={inputClass} />
-                    )} />
+                    <Controller
+                      control={form.control}
+                      name="cpf"
+                      render={({ field }) => (
+                        <input
+                          id="cpf"
+                          inputMode="numeric"
+                          autoComplete="off"
+                          maxLength={14}
+                          value={field.value ?? ""}
+                          onBlur={field.onBlur}
+                          onChange={(event) => field.onChange(formatCpf(event.target.value))}
+                          placeholder={copy.placeholders.cpf}
+                          aria-invalid={Boolean(errors.cpf)}
+                          aria-describedby={errors.cpf ? "cpf-error" : undefined}
+                          className={inputClass}
+                        />
+                      )}
+                    />
                   </div>
                 </FormField>
 
-                <FormField id="dataNascimento" label={copy.fields.dataNascimento} required error={errors.dataNascimento?.message}>
+                <FormField
+                  id="dataNascimento"
+                  label={copy.fields.dataNascimento}
+                  required
+                  error={errors.dataNascimento?.message}
+                >
                   <div className={controlClass}>
                     <CalendarDays size={18} className={iconClass} aria-hidden="true" />
-                    <input id="dataNascimento" type="date" autoComplete="bday" aria-invalid={Boolean(errors.dataNascimento)} aria-describedby={errors.dataNascimento ? "dataNascimento-error" : undefined} className={`${inputClass} [color-scheme:light] dark:[color-scheme:dark]`} {...form.register("dataNascimento")} />
+                    <input
+                      id="dataNascimento"
+                      type="date"
+                      autoComplete="bday"
+                      aria-invalid={Boolean(errors.dataNascimento)}
+                      aria-describedby={errors.dataNascimento ? "dataNascimento-error" : undefined}
+                      className={`${inputClass} [color-scheme:light] dark:[color-scheme:dark]`}
+                      {...form.register("dataNascimento")}
+                    />
                   </div>
                 </FormField>
               </FormSection>
 
-              <FormSection icon={<Mail size={18} />} title={copy.contactSection} description={copy.contactDescription}>
-                <FormField id="telefone" label={copy.fields.telefone} required error={errors.telefone?.message}>
+              <FormSection
+                icon={<Mail size={18} />}
+                title={copy.contactSection}
+                description={copy.contactDescription}
+              >
+                <FormField
+                  id="telefone"
+                  label={copy.fields.telefone}
+                  required
+                  error={errors.telefone?.message}
+                >
                   <div className={controlClass}>
                     <Phone size={18} className={iconClass} aria-hidden="true" />
-                    <Controller control={form.control} name="telefone" render={({ field }) => (
-                      <input id="telefone" type="tel" inputMode="tel" autoComplete="tel" maxLength={15} value={field.value ?? ""} onBlur={field.onBlur} onChange={event => field.onChange(formatPhone(event.target.value))} placeholder={copy.placeholders.telefone} aria-invalid={Boolean(errors.telefone)} aria-describedby={errors.telefone ? "telefone-error" : undefined} className={inputClass} />
-                    )} />
+                    <Controller
+                      control={form.control}
+                      name="telefone"
+                      render={({ field }) => (
+                        <input
+                          id="telefone"
+                          type="tel"
+                          inputMode="tel"
+                          autoComplete="tel"
+                          maxLength={15}
+                          value={field.value ?? ""}
+                          onBlur={field.onBlur}
+                          onChange={(event) => field.onChange(formatPhone(event.target.value))}
+                          placeholder={copy.placeholders.telefone}
+                          aria-invalid={Boolean(errors.telefone)}
+                          aria-describedby={errors.telefone ? "telefone-error" : undefined}
+                          className={inputClass}
+                        />
+                      )}
+                    />
                   </div>
                 </FormField>
 
-                <FormField id="email" label={copy.fields.email} required error={errors.email?.message}>
+                <FormField
+                  id="email"
+                  label={copy.fields.email}
+                  required
+                  error={errors.email?.message}
+                >
                   <div className={controlClass}>
                     <Mail size={18} className={iconClass} aria-hidden="true" />
-                    <input id="email" type="email" inputMode="email" autoComplete="email" placeholder={copy.placeholders.email} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? "email-error" : undefined} className={inputClass} {...form.register("email")} />
+                    <input
+                      id="email"
+                      type="email"
+                      inputMode="email"
+                      autoComplete="email"
+                      placeholder={copy.placeholders.email}
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? "email-error" : undefined}
+                      className={inputClass}
+                      {...form.register("email")}
+                    />
                   </div>
                 </FormField>
 
-                <FormField id="senha" label={copy.fields.senha} required error={errors.senha?.message} className="sm:col-span-2">
+                <FormField
+                  id="senha"
+                  label={copy.fields.senha}
+                  required
+                  error={errors.senha?.message}
+                  className="sm:col-span-2"
+                >
                   <div className={controlClass}>
                     <LockKeyhole size={18} className={iconClass} aria-hidden="true" />
-                    <input id="senha" type={showPassword ? "text" : "password"} autoComplete="new-password" placeholder={copy.placeholders.senha} aria-invalid={Boolean(errors.senha)} aria-describedby={errors.senha ? "senha-error" : undefined} className={inputClass} {...form.register("senha")} />
-                    <button type="button" onClick={() => setShowPassword(current => !current)} aria-label={showPassword ? copy.hidePassword : copy.showPassword} aria-pressed={showPassword} className="shrink-0 rounded-lg p-2 text-slate-400 transition hover:bg-white hover:text-brand-700 focus-visible:ring-offset-0 dark:hover:bg-slate-800 dark:hover:text-brand-300">
-                      {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+                    <input
+                      id="senha"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      placeholder={copy.placeholders.senha}
+                      aria-invalid={Boolean(errors.senha)}
+                      aria-describedby={errors.senha ? "senha-error" : undefined}
+                      className={inputClass}
+                      {...form.register("senha")}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((current) => !current)}
+                      aria-label={showPassword ? copy.hidePassword : copy.showPassword}
+                      aria-pressed={showPassword}
+                      className="shrink-0 rounded-lg p-2 text-slate-400 transition hover:bg-white hover:text-brand-700 focus-visible:ring-offset-0 dark:hover:bg-slate-800 dark:hover:text-brand-300"
+                    >
+                      {showPassword ? (
+                        <EyeOff size={18} aria-hidden="true" />
+                      ) : (
+                        <Eye size={18} aria-hidden="true" />
+                      )}
                     </button>
                   </div>
                 </FormField>
               </FormSection>
 
-              <FormSection icon={<HeartHandshake size={18} />} title={copy.careSection} description={copy.careDescription}>
-                <FormField id="endereco" label={copy.fields.endereco} required error={errors.endereco?.message} className="sm:col-span-2">
+              <FormSection
+                icon={<HeartHandshake size={18} />}
+                title={copy.careSection}
+                description={copy.careDescription}
+              >
+                <FormField
+                  id="endereco"
+                  label={copy.fields.endereco}
+                  required
+                  error={errors.endereco?.message}
+                  className="sm:col-span-2"
+                >
                   <div className={controlClass}>
                     <MapPin size={18} className={iconClass} aria-hidden="true" />
-                    <input id="endereco" autoComplete="street-address" placeholder={copy.placeholders.endereco} aria-invalid={Boolean(errors.endereco)} aria-describedby={errors.endereco ? "endereco-error" : undefined} className={inputClass} {...form.register("endereco")} />
+                    <input
+                      id="endereco"
+                      autoComplete="street-address"
+                      placeholder={copy.placeholders.endereco}
+                      aria-invalid={Boolean(errors.endereco)}
+                      aria-describedby={errors.endereco ? "endereco-error" : undefined}
+                      className={inputClass}
+                      {...form.register("endereco")}
+                    />
                   </div>
                 </FormField>
 
-                <FormField id="necessidadesCuidado" label={copy.fields.necessidadesCuidado} optionalLabel={copy.optional} error={errors.necessidadesCuidado?.message}>
+                <FormField
+                  id="necessidadesCuidado"
+                  label={copy.fields.necessidadesCuidado}
+                  optionalLabel={copy.optional}
+                  error={errors.necessidadesCuidado?.message}
+                >
                   <div className={`${controlClass} items-start`}>
-                    <HeartHandshake size={18} className={`${iconClass} mt-3.5`} aria-hidden="true" />
-                    <textarea id="necessidadesCuidado" rows={3} placeholder={copy.placeholders.necessidadesCuidado} aria-invalid={Boolean(errors.necessidadesCuidado)} aria-describedby={errors.necessidadesCuidado ? "necessidadesCuidado-error" : undefined} className={`${inputClass} resize-none`} {...form.register("necessidadesCuidado")} />
+                    <HeartHandshake
+                      size={18}
+                      className={`${iconClass} mt-3.5`}
+                      aria-hidden="true"
+                    />
+                    <textarea
+                      id="necessidadesCuidado"
+                      rows={3}
+                      placeholder={copy.placeholders.necessidadesCuidado}
+                      aria-invalid={Boolean(errors.necessidadesCuidado)}
+                      aria-describedby={
+                        errors.necessidadesCuidado ? "necessidadesCuidado-error" : undefined
+                      }
+                      className={`${inputClass} resize-none`}
+                      {...form.register("necessidadesCuidado")}
+                    />
                   </div>
                 </FormField>
 
-                <FormField id="familiarResponsavel" label={copy.fields.familiarResponsavel} optionalLabel={copy.optional} error={errors.familiarResponsavel?.message}>
+                <FormField
+                  id="familiarResponsavel"
+                  label={copy.fields.familiarResponsavel}
+                  optionalLabel={copy.optional}
+                  error={errors.familiarResponsavel?.message}
+                >
                   <div className={`${controlClass} items-start`}>
                     <UsersRound size={18} className={`${iconClass} mt-3.5`} aria-hidden="true" />
-                    <textarea id="familiarResponsavel" rows={3} placeholder={copy.placeholders.familiarResponsavel} aria-invalid={Boolean(errors.familiarResponsavel)} aria-describedby={errors.familiarResponsavel ? "familiarResponsavel-error" : undefined} className={`${inputClass} resize-none`} {...form.register("familiarResponsavel")} />
+                    <textarea
+                      id="familiarResponsavel"
+                      rows={3}
+                      placeholder={copy.placeholders.familiarResponsavel}
+                      aria-invalid={Boolean(errors.familiarResponsavel)}
+                      aria-describedby={
+                        errors.familiarResponsavel ? "familiarResponsavel-error" : undefined
+                      }
+                      className={`${inputClass} resize-none`}
+                      {...form.register("familiarResponsavel")}
+                    />
                   </div>
                 </FormField>
               </FormSection>
 
               <div className="rounded-2xl border border-brand-100 bg-brand-50/70 p-4 dark:border-brand-900 dark:bg-brand-950/30">
                 <div className="flex gap-3">
-                  <ShieldCheck size={20} className="mt-0.5 shrink-0 text-brand-700 dark:text-brand-300" aria-hidden="true" />
-                  <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">{copy.privacy}</p>
+                  <ShieldCheck
+                    size={20}
+                    className="mt-0.5 shrink-0 text-brand-700 dark:text-brand-300"
+                    aria-hidden="true"
+                  />
+                  <p className="text-xs leading-5 text-slate-600 dark:text-slate-300">
+                    {copy.privacy}
+                  </p>
                 </div>
               </div>
 
-              <Button type="submit" className="w-full gap-2 rounded-2xl py-3.5 text-base shadow-lg shadow-brand-700/15" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? <LoaderCircle size={19} className="animate-spin" aria-hidden="true" /> : null}
+              <Button
+                type="submit"
+                className="w-full gap-2 rounded-2xl py-3.5 text-base shadow-lg shadow-brand-700/15"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <LoaderCircle size={19} className="animate-spin" aria-hidden="true" />
+                ) : null}
                 {form.formState.isSubmitting ? copy.submitting : copy.submit}
-                {!form.formState.isSubmitting ? <ChevronRight size={19} aria-hidden="true" /> : null}
+                {!form.formState.isSubmitting ? (
+                  <ChevronRight size={19} aria-hidden="true" />
+                ) : null}
               </Button>
 
               <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-                {copy.hasAccount} <Link href="/login/paciente" className="font-extrabold text-brand-700 hover:underline dark:text-brand-300">{copy.signIn}</Link>
+                {copy.hasAccount}{" "}
+                <Link
+                  href="/login/paciente"
+                  className="font-extrabold text-brand-700 hover:underline dark:text-brand-300"
+                >
+                  {copy.signIn}
+                </Link>
               </p>
             </form>
           </section>
@@ -314,15 +541,32 @@ export default function RegisterPage() {
   );
 }
 
-function FormSection({ icon, title, description, children }: { icon: ReactNode; title: string; description: string; children: ReactNode }) {
+function FormSection({
+  icon,
+  title,
+  description,
+  children,
+}: {
+  icon: ReactNode;
+  title: string;
+  description: string;
+  children: ReactNode;
+}) {
   return (
     <fieldset>
       <legend className="sr-only">{title}</legend>
       <div className="mb-4 flex items-start gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200" aria-hidden="true">{icon}</span>
+        <span
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:bg-brand-900/40 dark:text-brand-200"
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
         <div>
           <h3 className="font-extrabold text-slate-900 dark:text-white">{title}</h3>
-          <p className="mt-0.5 text-xs leading-5 text-slate-500 dark:text-slate-400">{description}</p>
+          <p className="mt-0.5 text-xs leading-5 text-slate-500 dark:text-slate-400">
+            {description}
+          </p>
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">{children}</div>
@@ -330,14 +574,48 @@ function FormSection({ icon, title, description, children }: { icon: ReactNode; 
   );
 }
 
-function FormField({ id, label, required = false, optionalLabel, error, className = "", children }: { id: string; label: string; required?: boolean; optionalLabel?: string; error?: string; className?: string; children: ReactNode }) {
+function FormField({
+  id,
+  label,
+  required = false,
+  optionalLabel,
+  error,
+  className = "",
+  children,
+}: {
+  id: string;
+  label: string;
+  required?: boolean;
+  optionalLabel?: string;
+  error?: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="mb-1.5 block text-sm font-bold text-slate-700 dark:text-slate-200">
-        {label} {required ? <span className="text-rose-600" aria-hidden="true">*</span> : optionalLabel ? <span className="text-xs font-medium text-slate-400">({optionalLabel})</span> : null}
+      <label
+        htmlFor={id}
+        className="mb-1.5 block text-sm font-bold text-slate-700 dark:text-slate-200"
+      >
+        {label}{" "}
+        {required ? (
+          <span className="text-rose-600" aria-hidden="true">
+            *
+          </span>
+        ) : optionalLabel ? (
+          <span className="text-xs font-medium text-slate-400">({optionalLabel})</span>
+        ) : null}
       </label>
       {children}
-      {error ? <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">{error}</p> : null}
+      {error ? (
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="mt-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400"
+        >
+          {error}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -358,6 +636,7 @@ function formatPhone(value: string) {
   const digits = digitsOnly(value).slice(0, 11);
   if (digits.length <= 2) return digits ? `(${digits}` : "";
   if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  if (digits.length <= 10) return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  if (digits.length <= 10)
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }

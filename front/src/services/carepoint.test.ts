@@ -8,7 +8,18 @@ describe("validações e integração HTTP", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", fetchMock);
     fetchMock.mockReset();
-    fetchMock.mockResolvedValue(new Response(JSON.stringify({ id: 1, nome: "Ana", email: "ana@exemplo.com", role: "PACIENTE", pacienteId: 1 }), { status: 200, headers: { "Content-Type": "application/json" } }));
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          id: 1,
+          nome: "Ana",
+          email: "ana@exemplo.com",
+          role: "PACIENTE",
+          pacienteId: 1,
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      ),
+    );
   });
 
   it("rejeita credenciais de login inválidas antes do envio", () => {
@@ -16,17 +27,36 @@ describe("validações e integração HTTP", () => {
   });
 
   it("envia login sem armazenar token no navegador", async () => {
-    await authService.login({ email: "ana@exemplo.com", senha: "senha-segura", perfilSelecionado: "PACIENTE" });
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/auth/login"), expect.objectContaining({ method: "POST", credentials: "include" }));
+    await authService.login({
+      email: "ana@exemplo.com",
+      senha: "senha-segura",
+      perfilSelecionado: "PACIENTE",
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/auth/login"),
+      expect.objectContaining({ method: "POST", credentials: "include" }),
+    );
   });
 
   it("envia criação de solicitação ao endpoint protegido", async () => {
-    await carepointService.createRequest({ profissionalId: 2, servicoSolicitado: "Fisioterapia" });
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/solicitacoes"), expect.objectContaining({ method: "POST", credentials: "include" }));
+    await carepointService.createRequest({
+      profissionalId: 2,
+      servicoSolicitado: "Fisioterapia",
+      necessidadesInformadas: "Mobilidade",
+      dataDesejada: "2027-01-01T10:00:00Z",
+      enderecoAtendimento: "Rua de teste, 1",
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/solicitacoes"),
+      expect.objectContaining({ method: "POST", credentials: "include" }),
+    );
   });
 
   it("usa endpoint administrativo para confirmar solicitação", async () => {
     await carepointService.updateRequestStatus(5, "confirmar");
-    expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining("/admin/solicitacoes/5/confirmar"), expect.objectContaining({ method: "PATCH", credentials: "include" }));
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining("/admin/solicitacoes/5/confirmar"),
+      expect.objectContaining({ method: "PATCH", credentials: "include" }),
+    );
   });
 });
