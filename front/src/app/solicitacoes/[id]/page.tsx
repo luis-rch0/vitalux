@@ -1,5 +1,6 @@
 "use client";
 
+import { ActionReview } from "@/features/assistant/action-review";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -56,12 +57,18 @@ const content = {
 
 function localizedDateTime(value: string | undefined, locale: Locale) {
   return value
-    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "pt-BR", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value))
+    ? new Intl.DateTimeFormat(locale === "en" ? "en-US" : "pt-BR", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      }).format(new Date(value))
     : "—";
 }
 
 function localizedCurrency(value: number, locale: Locale) {
-  return new Intl.NumberFormat(locale === "en" ? "en-US" : "pt-BR", { style: "currency", currency: "BRL" }).format(value);
+  return new Intl.NumberFormat(locale === "en" ? "en-US" : "pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
 }
 
 export default function RequestDetailPage() {
@@ -97,17 +104,31 @@ export default function RequestDetailPage() {
     }
   };
 
-  if (request.isLoading) return <AppShell roles={["PACIENTE"]}><Skeleton className="h-96" /></AppShell>;
-  if (!item) return <AppShell roles={["PACIENTE"]}><p>{copy.notFound}</p></AppShell>;
+  if (request.isLoading)
+    return (
+      <AppShell roles={["PACIENTE"]}>
+        <Skeleton className="h-96" />
+      </AppShell>
+    );
+  if (!item)
+    return (
+      <AppShell roles={["PACIENTE"]}>
+        <p>{copy.notFound}</p>
+      </AppShell>
+    );
 
   return (
     <AppShell roles={["PACIENTE"]}>
-      <button onClick={() => router.back()} className="text-sm font-semibold text-brand-700">{copy.back}</button>
+      <button onClick={() => router.back()} className="text-sm font-semibold text-brand-700">
+        {copy.back}
+      </button>
       <Card className="mt-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="page-title">{item.servicoSolicitado}</h1>
-            <p className="mt-1 text-slate-500">{copy.professional}: {item.profissional.nome}</p>
+            <p className="mt-1 text-slate-500">
+              {copy.professional}: {item.profissional.nome}
+            </p>
           </div>
           <StatusBadge status={item.status} />
         </div>
@@ -127,9 +148,22 @@ export default function RequestDetailPage() {
         )}
 
         {(item.status === "PENDENTE" || item.status === "CONFIRMADA") && (
-          <Button variant="danger" className="mt-7" onClick={() => void doCancel()} disabled={cancel.isPending}>
-            {copy.cancelRequest}
-          </Button>
+          <div>
+            <ActionReview
+              input={{ type: "CANCEL_REQUEST", requestId: item.id }}
+              onComplete={() => {
+                void request.refetch();
+              }}
+            />
+            <Button
+              variant="danger"
+              className="mt-7"
+              onClick={() => void doCancel()}
+              disabled={cancel.isPending}
+            >
+              {copy.cancelRequest}
+            </Button>
+          </div>
         )}
       </Card>
 
@@ -138,15 +172,29 @@ export default function RequestDetailPage() {
           <h2 className="text-lg font-bold">{copy.reviewTitle}</h2>
           <label className="mt-4 block text-sm font-medium">
             {copy.score}
-            <select value={score} onChange={(event) => setScore(event.target.value)} className="mt-1 w-full rounded-xl border px-3 py-3">
-              {[1, 2, 3, 4, 5].map((value) => <option key={value} value={value}>{value} {copy.stars}</option>)}
+            <select
+              value={score}
+              onChange={(event) => setScore(event.target.value)}
+              className="mt-1 w-full rounded-xl border px-3 py-3"
+            >
+              {[1, 2, 3, 4, 5].map((value) => (
+                <option key={value} value={value}>
+                  {value} {copy.stars}
+                </option>
+              ))}
             </select>
           </label>
           <label className="mt-4 block text-sm font-medium">
             {copy.comment}
-            <textarea value={comment} onChange={(event) => setComment(event.target.value)} className="mt-1 min-h-24 w-full rounded-xl border p-3" />
+            <textarea
+              value={comment}
+              onChange={(event) => setComment(event.target.value)}
+              className="mt-1 min-h-24 w-full rounded-xl border p-3"
+            />
           </label>
-          <Button className="mt-4" onClick={() => void review()}>{copy.submitReview}</Button>
+          <Button className="mt-4" onClick={() => void review()}>
+            {copy.submitReview}
+          </Button>
         </Card>
       )}
     </AppShell>
@@ -154,5 +202,10 @@ export default function RequestDetailPage() {
 }
 
 function Detail({ label, value }: { label: string; value: string }) {
-  return <div><dt className="text-slate-500">{label}</dt><dd className="mt-1 font-medium">{value}</dd></div>;
+  return (
+    <div>
+      <dt className="text-slate-500">{label}</dt>
+      <dd className="mt-1 font-medium">{value}</dd>
+    </div>
+  );
 }

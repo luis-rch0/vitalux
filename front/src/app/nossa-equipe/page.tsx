@@ -64,19 +64,23 @@ const content = {
     journey: [
       {
         title: "Encontre o cuidado",
-        description: "Pesquise profissionais e clínicas por profissão, especialidade, localização e valor.",
+        description:
+          "Pesquise profissionais e clínicas por profissão, especialidade, localização e valor.",
       },
       {
         title: "Conheça quem atende",
-        description: "Compare perfis, experiências, serviços e avaliações antes de tomar sua decisão.",
+        description:
+          "Compare perfis, experiências, serviços e avaliações antes de tomar sua decisão.",
       },
       {
         title: "Solicite em casa",
-        description: "Informe sua necessidade, endereço e data desejada para o atendimento domiciliar.",
+        description:
+          "Informe sua necessidade, endereço e data desejada para o atendimento domiciliar.",
       },
       {
         title: "Acompanhe cada etapa",
-        description: "Veja a análise da equipe administrativa e acompanhe o status da solicitação com clareza.",
+        description:
+          "Veja a análise da equipe administrativa e acompanhe o status da solicitação com clareza.",
       },
     ],
     networkLabel: "Quem faz parte",
@@ -86,19 +90,23 @@ const content = {
     ecosystem: [
       {
         title: "Pacientes e familiares",
-        description: "Encontram o cuidado adequado, enviam solicitações e acompanham o atendimento em um só lugar.",
+        description:
+          "Encontram o cuidado adequado, enviam solicitações e acompanham o atendimento em um só lugar.",
       },
       {
         title: "Clínicas e profissionais",
-        description: "Apresentam especialidades e serviços para que cada pessoa faça uma escolha mais informada.",
+        description:
+          "Apresentam especialidades e serviços para que cada pessoa faça uma escolha mais informada.",
       },
       {
         title: "Administração",
-        description: "Mantém os cadastros organizados e analisa as solicitações para apoiar uma jornada segura.",
+        description:
+          "Mantém os cadastros organizados e analisa as solicitações para apoiar uma jornada segura.",
       },
     ],
     teamLabel: "Nossa equipe",
-    teamDescription: "Somos o time responsável por idealizar e desenvolver o CarePoint como Projeto Integrador.",
+    teamDescription:
+      "Somos o time responsável por idealizar e desenvolver o CarePoint como Projeto Integrador.",
     membersCount: "5 integrantes",
     memberLabel: "Integrante Vitalux",
     teachers: "Docentes",
@@ -124,11 +132,13 @@ const content = {
     journey: [
       {
         title: "Find the right care",
-        description: "Search professionals and clinics by profession, specialty, location, and price.",
+        description:
+          "Search professionals and clinics by profession, specialty, location, and price.",
       },
       {
         title: "Know your provider",
-        description: "Compare profiles, experience, services, and reviews before making your decision.",
+        description:
+          "Compare profiles, experience, services, and reviews before making your decision.",
       },
       {
         title: "Request care at home",
@@ -150,7 +160,8 @@ const content = {
       },
       {
         title: "Clinics and professionals",
-        description: "Present specialties and services so each person can make a more informed choice.",
+        description:
+          "Present specialties and services so each person can make a more informed choice.",
       },
       {
         title: "Administration",
@@ -158,7 +169,8 @@ const content = {
       },
     ],
     teamLabel: "Our team",
-    teamDescription: "We are the team that envisioned and developed CarePoint as an Integrative Project.",
+    teamDescription:
+      "We are the team that envisioned and developed CarePoint as an Integrative Project.",
     membersCount: "5 team members",
     memberLabel: "Vitalux team member",
     teachers: "Faculty advisors",
@@ -186,7 +198,10 @@ export default function TeamPage() {
       <div className={styles.ambientTwo} aria-hidden="true" />
 
       <div className="relative mx-auto max-w-6xl">
-        <nav className={`${styles.reveal} flex items-center justify-between gap-4`} aria-label={copy.navigationLabel}>
+        <nav
+          className={`${styles.reveal} flex items-center justify-between gap-4`}
+          aria-label={copy.navigationLabel}
+        >
           <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-full px-2 py-2 text-sm font-semibold text-brand-700 transition-colors hover:bg-brand-50 dark:text-brand-300 dark:hover:bg-brand-900/30"
@@ -194,13 +209,20 @@ export default function TeamPage() {
             <ArrowLeft aria-hidden="true" size={17} />
             {copy.back}
           </Link>
-          <div className="flex items-center gap-3"><LanguageSwitcher /><Logo /></div>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <Logo />
+          </div>
         </nav>
 
-        <section className={`${styles.hero} mt-8 overflow-hidden rounded-[2rem] bg-brand-900 text-white shadow-soft`}>
+        <section
+          className={`${styles.hero} mt-8 overflow-hidden rounded-[2rem] bg-brand-900 text-white shadow-soft`}
+        >
           <div className="grid lg:grid-cols-[1.02fr_0.98fr]">
             <div className="relative z-10 flex flex-col justify-center px-6 py-10 sm:px-10 sm:py-14 lg:px-14 lg:py-16">
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-100">{copy.about}</p>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-brand-100">
+                {copy.about}
+              </p>
               <h1 className="mt-4 max-w-xl text-4xl font-bold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
                 {copy.heroTitle}
               </h1>
@@ -221,7 +243,9 @@ export default function TeamPage() {
               </div>
             </div>
 
-            <figure className={`${styles.photoFrame} relative min-h-[330px] sm:min-h-[440px] lg:min-h-full`}>
+            <figure
+              className={`${styles.photoFrame} relative min-h-[330px] sm:min-h-[440px] lg:min-h-full`}
+            >
               <Image
                 src="/images/equipe-saude-carepoint.png"
                 alt={copy.photoAlt}
@@ -240,7 +264,10 @@ export default function TeamPage() {
         <section className="py-16 sm:py-20" aria-labelledby="carepoint-title">
           <div className={`${styles.reveal} mx-auto max-w-3xl text-center`}>
             <Eyebrow>{copy.universeLabel}</Eyebrow>
-            <h2 id="carepoint-title" className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+            <h2
+              id="carepoint-title"
+              className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl"
+            >
               {copy.universeTitle}
             </h2>
             <p className="mt-5 text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
@@ -262,18 +289,28 @@ export default function TeamPage() {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
-                <h3 className="mt-6 text-lg font-bold text-slate-900 dark:text-white">{step.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{step.description}</p>
+                <h3 className="mt-6 text-lg font-bold text-slate-900 dark:text-white">
+                  {step.title}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  {step.description}
+                </p>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="rounded-[2rem] border bg-white/80 p-6 shadow-soft backdrop-blur-sm dark:bg-slate-900/80 sm:p-10" aria-labelledby="ecosystem-title">
+        <section
+          className="rounded-[2rem] border bg-white/80 p-6 shadow-soft backdrop-blur-sm dark:bg-slate-900/80 sm:p-10"
+          aria-labelledby="ecosystem-title"
+        >
           <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
             <div className={styles.reveal}>
               <Eyebrow>{copy.networkLabel}</Eyebrow>
-              <h2 id="ecosystem-title" className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+              <h2
+                id="ecosystem-title"
+                className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white"
+              >
                 {copy.networkTitle}
               </h2>
               <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
@@ -283,13 +320,18 @@ export default function TeamPage() {
 
             <div className={`${styles.staggerGrid} grid gap-4`}>
               {copy.ecosystem.map((item, index) => (
-                <article key={item.title} className={`${styles.ecosystemCard} flex gap-4 rounded-2xl border bg-white p-5 dark:bg-slate-950`}>
+                <article
+                  key={item.title}
+                  className={`${styles.ecosystemCard} flex gap-4 rounded-2xl border bg-white p-5 dark:bg-slate-950`}
+                >
                   <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-brand-600 text-white">
                     {ecosystemIcons[index]}
                   </span>
                   <div>
                     <h3 className="font-bold text-slate-900 dark:text-white">{item.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{item.description}</p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                      {item.description}
+                    </p>
                   </div>
                 </article>
               ))}
@@ -298,10 +340,15 @@ export default function TeamPage() {
         </section>
 
         <section className="py-16 sm:py-20" aria-labelledby="team-title">
-          <div className={`${styles.reveal} flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between`}>
+          <div
+            className={`${styles.reveal} flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between`}
+          >
             <div>
               <Eyebrow>{copy.teamLabel}</Eyebrow>
-              <h2 id="team-title" className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+              <h2
+                id="team-title"
+                className="mt-5 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl"
+              >
                 Vitalux
               </h2>
               <p className="mt-3 max-w-2xl leading-7 text-slate-600 dark:text-slate-300">
@@ -315,8 +362,14 @@ export default function TeamPage() {
 
           <ul className={`${styles.staggerGrid} mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5`}>
             {team.map((member, index) => (
-              <li key={member} className={`${styles.memberCard} rounded-3xl border bg-white p-5 shadow-soft dark:bg-slate-900`}>
-                <span className="grid h-11 w-11 place-items-center rounded-full bg-brand-600 font-bold text-white" aria-hidden="true">
+              <li
+                key={member}
+                className={`${styles.memberCard} rounded-3xl border bg-white p-5 shadow-soft dark:bg-slate-900`}
+              >
+                <span
+                  className="grid h-11 w-11 place-items-center rounded-full bg-brand-600 font-bold text-white"
+                  aria-hidden="true"
+                >
                   {member
                     .split(" ")
                     .map((part) => part[0])
@@ -324,18 +377,26 @@ export default function TeamPage() {
                     .join("")}
                 </span>
                 <p className="mt-5 font-bold leading-6 text-slate-900 dark:text-white">{member}</p>
-                <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">{copy.memberLabel} {index + 1}</p>
+                <p className="mt-1 text-xs uppercase tracking-wider text-slate-500">
+                  {copy.memberLabel} {index + 1}
+                </p>
               </li>
             ))}
           </ul>
 
-          <div className={`${styles.reveal} mt-6 flex flex-col gap-4 rounded-3xl border border-brand-100 bg-brand-50 p-6 dark:border-brand-900 dark:bg-brand-900/30 sm:flex-row sm:items-center`}>
+          <div
+            className={`${styles.reveal} mt-6 flex flex-col gap-4 rounded-3xl border border-brand-100 bg-brand-50 p-6 dark:border-brand-900 dark:bg-brand-900/30 sm:flex-row sm:items-center`}
+          >
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-white text-brand-700 shadow-sm dark:bg-slate-900 dark:text-brand-200">
               <GraduationCap aria-hidden="true" />
             </span>
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700 dark:text-brand-200">{copy.teachers}</p>
-              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">Debora Souza e Felippe Nascimento</p>
+              <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700 dark:text-brand-200">
+                {copy.teachers}
+              </p>
+              <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">
+                Debora Souza e Felippe Nascimento
+              </p>
             </div>
           </div>
         </section>

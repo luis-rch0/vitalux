@@ -55,9 +55,11 @@ const ptBR = {
   "settings.toggleReminders": "Ativar ou desativar lembretes",
   "settings.toggleDarkMode": "Ativar ou desativar modo escuro",
   "adminSettings.title": "Configurações administrativas",
-  "adminSettings.subtitle": "A segurança de contas, CORS e integrações é configurada por variáveis de ambiente do backend.",
+  "adminSettings.subtitle":
+    "A segurança de contas, CORS e integrações é configurada por variáveis de ambiente do backend.",
   "adminSettings.operation": "Operação do CarePoint",
-  "adminSettings.description": "Use as áreas de Profissionais, Clínicas, Pacientes e Solicitações para gerenciar os dados do marketplace. Dados confidenciais e preferências de implantação não são expostos na interface.",
+  "adminSettings.description":
+    "Use as áreas de Profissionais, Clínicas, Pacientes e Solicitações para gerenciar os dados do marketplace. Dados confidenciais e preferências de implantação não são expostos na interface.",
   "accessibility.panelLabel": "Opções de acessibilidade",
   "accessibility.title": "Acessibilidade",
   "accessibility.customize": "Personalize a visualização",
@@ -133,9 +135,11 @@ const en: Record<TranslationKey, string> = {
   "settings.toggleReminders": "Enable or disable reminders",
   "settings.toggleDarkMode": "Enable or disable dark mode",
   "adminSettings.title": "Administrative settings",
-  "adminSettings.subtitle": "Account security, CORS, and integrations are configured through backend environment variables.",
+  "adminSettings.subtitle":
+    "Account security, CORS, and integrations are configured through backend environment variables.",
   "adminSettings.operation": "CarePoint operations",
-  "adminSettings.description": "Use the Professionals, Clinics, Patients, and Requests sections to manage marketplace data. Confidential data and deployment preferences are not exposed in the interface.",
+  "adminSettings.description":
+    "Use the Professionals, Clinics, Patients, and Requests sections to manage marketplace data. Confidential data and deployment preferences are not exposed in the interface.",
   "accessibility.panelLabel": "Accessibility options",
   "accessibility.title": "Accessibility",
   "accessibility.customize": "Customize the display",
@@ -193,12 +197,18 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("storage", syncLocale);
   }, [applyLocale]);
 
-  const setLocale = useCallback((nextLocale: Locale) => {
-    localStorage.setItem(STORAGE_KEY, nextLocale);
-    applyLocale(nextLocale);
-  }, [applyLocale]);
+  const setLocale = useCallback(
+    (nextLocale: Locale) => {
+      localStorage.setItem(STORAGE_KEY, nextLocale);
+      applyLocale(nextLocale);
+    },
+    [applyLocale],
+  );
 
-  const value = useMemo<I18nContextValue>(() => ({ locale, setLocale, t: key => dictionaries[locale][key] }), [locale, setLocale]);
+  const value = useMemo<I18nContextValue>(
+    () => ({ locale, setLocale, t: (key) => dictionaries[locale][key] }),
+    [locale, setLocale],
+  );
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }

@@ -7,9 +7,11 @@ export const loginSchema = z.object({
 
 export const patientRegistrationSchema = z.object({
   nome: z.string().min(3, "Informe seu nome completo"),
-  cpf: z.string().refine(value => value.replace(/\D/g, "").length === 11, "Informe um CPF com 11 dígitos"),
+  cpf: z
+    .string()
+    .refine((value) => value.replace(/\D/g, "").length === 11, "Informe um CPF com 11 dígitos"),
   dataNascimento: z.string().min(1, "Data obrigatória"),
-  telefone: z.string().refine(value => {
+  telefone: z.string().refine((value) => {
     const length = value.replace(/\D/g, "").length;
     return length === 10 || length === 11;
   }, "Informe um telefone válido"),

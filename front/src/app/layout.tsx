@@ -11,8 +11,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
-        <a href="#conteudo-principal" className="skip-link">Pular para o conteúdo principal</a>
-        <Providers><div id="conteudo-principal">{children}</div></Providers>
+        <a href="#conteudo-principal" className="skip-link">
+          Pular para o conteúdo principal
+        </a>
+        <Providers>
+          <div id="conteudo-principal">{children}</div>
+        </Providers>
       </body>
     </html>
   );
