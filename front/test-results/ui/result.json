@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "browser": "156.0.8078.4",
+  "checks": [
+    "patient desktop/mobile",
+    "assistant query and navigation",
+    "explicit action confirmation",
+    "help accordion",
+    "search error vs empty and retry",
+    "mobile admin settings",
+    "dark theme",
+    "landing",
+    "no horizontal overflow",
+    "no page errors"
+  ]
+}
