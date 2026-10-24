@@ -51,8 +51,8 @@ export function ProfessionalCard({ professional }: { professional: Professional 
   const copy = cardCopy[locale];
 
   return (
-    <article className="surface card-lift animate-rise group overflow-hidden p-3">
-      <div className="relative h-48 overflow-hidden rounded-2xl bg-brand-50 dark:bg-slate-800">
+    <article className="surface care-directory-card card-lift animate-rise group overflow-hidden p-4">
+      <div className="relative h-40 overflow-hidden rounded-lg bg-brand-50 dark:bg-slate-800">
         <img
           src={professional.fotoUrl || fallbackProfessional(professional.id)}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
@@ -79,7 +79,7 @@ export function ProfessionalCard({ professional }: { professional: Professional 
           {professional.clinica?.nome || copy.homeCare}
         </p>
         <Link
-          className="mt-4 flex items-center justify-between rounded-xl bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+          className="mt-4 flex items-center justify-between border-t border-brand-100 px-1 py-3 text-sm font-bold text-brand-700 transition hover:text-brand-900 dark:text-brand-200 dark:hover:text-white"
           href={`/profissionais/${professional.id}`}
         >
           {copy.viewProfile} <ArrowUpRight size={16} />

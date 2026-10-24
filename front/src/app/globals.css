@@ -168,3 +168,102 @@ html[data-reduced-motion="true"] *::after {
 .care-sidebar:has(.text-emerald-300) {
   background: #173f35;
 }
+
+/* CarePoint: a calm, editorial care space. */
+.care-welcome {
+  border-radius: 8px 40px 8px 8px;
+  background: #173f35;
+  color: #fffefa;
+}
+.care-welcome-aside {
+  background: #e9edda;
+  color: #263e32;
+}
+.care-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+.care-step {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.care-metrics {
+  border-block: 1px solid var(--cp-line);
+}
+.care-metrics > div + div {
+  border-left: 1px solid var(--cp-line);
+}
+.care-shell .surface {
+  box-shadow: none;
+  border-radius: 12px;
+}
+.care-shell .card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #173f350d;
+}
+.care-sidebar nav a[aria-current="page"] {
+  border-radius: 6px;
+  box-shadow: inset 3px 0 0 currentColor;
+}
+.care-shell main > header {
+  height: 72px;
+}
+.care-directory-card {
+  border-top: 3px solid #b36946 !important;
+}
+.dark .care-welcome-aside {
+  background: #2a3d30;
+  color: #e9edda;
+}
+@media (max-width: 639px) {
+  .care-metrics > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--cp-line);
+  }
+}
+
+.care-landing {
+  background: var(--cp-canvas);
+}
+.landing-hero {
+  min-height: 580px;
+}
+.landing-hero-photo {
+  position: absolute;
+  inset: 0 0 0 34%;
+}
+.landing-hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--cp-canvas), transparent 48%),
+    linear-gradient(0deg, var(--cp-canvas), transparent 22%);
+}
+.dark .landing-hero-photo {
+  opacity: 0.48;
+}
+@media (max-width: 767px) {
+  .landing-hero-photo {
+    position: relative;
+    inset: auto;
+    height: 260px;
+  }
+  .landing-hero-photo::after {
+    background: linear-gradient(0deg, var(--cp-canvas), transparent 35%);
+  }
+  .landing-hero {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .landing-hero > .relative {
+    padding-bottom: 24px;
+  }
+}

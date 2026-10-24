@@ -2,13 +2,14 @@
 
 import { QueryError } from "@/components/ui/query-error";
 import { CareOverview } from "@/features/requests/care-overview";
-import Image from "next/image";
+
 import Link from "next/link";
 import {
   ArrowRight,
   Building2,
   CalendarClock,
   Search,
+  MessageCircle,
   Settings,
   Stethoscope,
   UserRoundPen,
@@ -119,33 +120,51 @@ export default function PatientHomePage() {
         </div>
       </div>
 
-      <section className="animate-rise relative mt-7 overflow-hidden rounded-[2rem] care-hero text-white">
-        <div className="relative z-10 max-w-2xl p-7 md:p-10">
-          <span className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-widest backdrop-blur">
-            {copy.homeCare}
-          </span>
-          <h2 className="mt-5 max-w-xl font-display text-4xl font-normal leading-tight md:text-6xl">
-            {copy.heroTitle}
-          </h2>
-          <p className="mt-4 max-w-lg text-sm leading-6 text-emerald-50 md:text-base">
-            {copy.heroDescription}
+      <section className="care-welcome mt-8 grid overflow-hidden lg:grid-cols-[1.35fr_1fr]">
+        <div className="p-7 md:p-10">
+          <p className="care-eyebrow">
+            CAREPOINT / {locale === "en" ? "YOUR CARE SPACE" : "SEU ESPAÇO DE CUIDADO"}
           </p>
+          <h2 className="mt-6 max-w-lg font-display text-4xl leading-[1.08] md:text-6xl">
+            {locale === "en" ? "More presence. Better care." : "Mais presença. Mais cuidado."}
+          </h2>
+          <p className="mt-5 max-w-md text-sm leading-7 opacity-80">{copy.heroDescription}</p>
           <Link
             href="/profissionais"
-            className="mt-7 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-extrabold text-[#143c2d] shadow-lg transition hover:-translate-y-0.5 hover:bg-emerald-50 hover:shadow-xl focus-visible:ring-white"
+            className="mt-7 inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#173f35]"
           >
-            <Search size={19} /> {copy.findProfessional} <ArrowRight size={18} />
+            <Search size={18} /> {copy.findProfessional} <ArrowRight size={18} />
           </Link>
         </div>
-        <Image
-          src="/images/medica-carepoint.png"
-          alt={copy.professionalAlt}
-          width={640}
-          height={640}
-          className="absolute right-0 top-0 hidden h-full w-[42%] object-cover object-top opacity-90 [mask-image:linear-gradient(to_right,transparent,black_35%)] lg:block"
-          priority
-        />
-        <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-emerald-300/10 blur-3xl" />
+        <div className="care-welcome-aside flex flex-col justify-between gap-8 p-7 md:p-10">
+          <div className="flex items-center justify-between border-b border-current/20 pb-4">
+            <span className="care-eyebrow">
+              {locale === "en" ? "ONE STEP AT A TIME" : "UM PASSO DE CADA VEZ"}
+            </span>
+            <span className="font-display text-3xl">01—03</span>
+          </div>
+          <ol className="space-y-5 text-sm">
+            {(locale === "en"
+              ? ["Find the right professional", "Choose when and where", "Follow your request"]
+              : ["Encontre seu profissional", "Escolha quando e onde", "Acompanhe sua solicitação"]
+            ).map((label, i) => (
+              <li key={label} className="flex items-center gap-4">
+                <span className="care-step">0{i + 1}</span>
+                {label}
+              </li>
+            ))}
+          </ol>
+          <button
+            onClick={() => window.dispatchEvent(new Event("carepoint:open-assistant"))}
+            className="flex items-center justify-between border-t border-current/20 pt-5 text-left text-sm font-semibold"
+          >
+            <span className="flex items-center gap-2">
+              <MessageCircle size={18} />
+              {locale === "en" ? "Let’s find your next step" : "Vamos encontrar seu próximo passo"}
+            </span>
+            <ArrowRight size={18} />
+          </button>
+        </div>
       </section>
 
       {dashboard.isError ? (
@@ -156,7 +175,7 @@ export default function PatientHomePage() {
         data && (
           <>
             <CareOverview requests={data.solicitacoesRecentes} />
-            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="care-metrics mt-6 grid sm:grid-cols-3">
               <QuickStat
                 icon={<Stethoscope />}
                 value={data.profissionaisRecomendados.length}
@@ -271,7 +290,7 @@ function Section({
     <section className="mt-12">
       <div className="mb-5 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-xl font-extrabold md:text-2xl">{title}</h2>
+          <h2 className="font-display text-2xl font-normal md:text-3xl">{title}</h2>
           <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
         </div>
         <Link href={href} className="shrink-0 text-sm font-bold text-brand-700 dark:text-brand-300">
@@ -293,7 +312,7 @@ function QuickStat({
   label: string;
 }) {
   return (
-    <div className="surface card-lift flex items-center gap-4 p-4">
+    <div className="flex items-center gap-4 p-5">
       <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200">
         {icon}
       </span>

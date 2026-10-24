@@ -1,39 +1,76 @@
+
 name: CarePoint quality
+
 on:
   push:
   pull_request:
+
 jobs:
   frontend:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: front
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
           cache-dependency-path: front/package-lock.json
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint
-      - run: npm test
-      - run: npm run typecheck
-      - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:ui
-      - run: npm audit --omit=dev --audit-level=high
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Check TypeScript
+        run: npm run typecheck
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run UI regression tests
+        run: npm run test:ui
+        timeout-minutes: 5
+        env:
+          DEBUG: pw:api
+
+      - name: Security audit
+        run: npm audit --omit=dev --audit-level=high
+
   backend:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: back
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
           cache: maven
-      - run: mvn -B verify
+
+      - name: Verify backend
+        run: mvn -B verify
