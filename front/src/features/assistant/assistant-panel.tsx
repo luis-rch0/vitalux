@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { TaskPanel } from "./task-panel";
+import { understand } from "./understand";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowUpRight, MessageCircle, Plus, Send, Trash2, X } from "lucide-react";
@@ -19,9 +21,11 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
   const [conversationId, setConversationId] = useState<number>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [links, setLinks] = useState<Reply["links"]>([]);
+  const [task, setTask] = useState<"CREATE" | "CANCEL">();
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
   const [useAi, setUseAi] = useState(false);
+  const [providerUnavailable, setProviderUnavailable] = useState(false);
   const [mode, setMode] = useState<Reply["mode"]>("GUIDED");
   const [page, setPage] = useState(0);
   const [hasOlder, setHasOlder] = useState(false);
@@ -34,8 +38,8 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
   });
   const remove = useMutation({ mutationFn: assistantApi.remove });
   const send = useMutation({
-    mutationFn: ({ message, intent }: { message: string; intent: Intent }) =>
-      assistantApi.send({ conversationId, message, intent, search, locale, useAi }),
+    mutationFn: ({ message, intent, term }: { message: string; intent: Intent; term?: string }) =>
+      assistantApi.send({ conversationId, message, intent, search: term ?? search, locale, useAi }),
     onSuccess: (reply, input) => {
       setConversationId(reply.conversationId);
       setMessages((current) => [
@@ -46,6 +50,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
       setText("");
       setLinks(reply.links);
       setMode(reply.mode);
+      setProviderUnavailable(useAi && input.intent === "HELP" && reply.mode === "GUIDED");
       void client.invalidateQueries({ queryKey: ["assistant-conversations", user?.id] });
     },
   });
@@ -57,6 +62,8 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
     end.current?.scrollIntoView({ block: "nearest" });
   }, [messages, send.isPending]);
   const reset = () => {
+    setProviderUnavailable(false);
+    setTask(undefined);
     setConversationId(undefined);
     setMessages([]);
     setLinks([]);
@@ -69,6 +76,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
   const load = async (id: number, nextPage = 0) => {
     try {
       const items = await history.mutateAsync({ id, page: nextPage });
+      setTask(undefined);
       setConversationId(id);
       setMessages((current) => (nextPage ? [...items, ...current] : items));
       setPage(nextPage);
@@ -110,7 +118,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
             }
           }
         }}
-        className="absolute inset-y-0 right-0 flex w-full flex-col bg-[var(--cp-paper)] text-slate-900 shadow-2xl dark:text-slate-100 sm:m-4 sm:w-[440px] sm:rounded-3xl"
+        className="absolute inset-y-0 right-0 flex w-full flex-col bg-[var(--cp-paper)] text-slate-900 shadow-2xl dark:text-slate-100 sm:m-4 sm:w-[500px] sm:rounded-3xl"
       >
         <header className="flex items-center justify-between rounded-t-3xl bg-brand-900 p-5 text-white">
           <div>
@@ -223,8 +231,23 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
           )}
           {(send.isError || history.isError || remove.isError || conversations.isError) && (
             <p role="alert" className="mt-4 rounded-xl bg-rose-50 p-3 text-sm text-rose-800">
-              {copy.error}
+              {(send.error ?? history.error ?? remove.error ?? conversations.error)?.message ||
+                copy.error}
             </p>
+          )}
+          {task && user?.role === "PACIENTE" && (
+            <TaskPanel
+              key={task}
+              task={task}
+              onDone={(message) => {
+                panel.current?.querySelector<HTMLButtonElement>("button")?.focus();
+                setTask(undefined);
+                setMessages((current) => [
+                  ...current,
+                  { id: Date.now(), role: "ASSISTANT", content: message },
+                ]);
+              }}
+            />
           )}
           <div ref={end} />
         </div>
@@ -260,10 +283,57 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
               </button>
             ))}
           </div>
+          {user?.role === "PACIENTE" && (
+            <div className="mb-3 flex gap-2">
+              <button
+                disabled={busy}
+                className="rounded-lg bg-brand-900 px-3 py-2 text-xs text-white"
+                onClick={() => setTask("CREATE")}
+              >
+                {locale === "en" ? "Request care" : "Solicitar atendimento"}
+              </button>
+              <button
+                disabled={busy}
+                className="rounded-lg border px-3 py-2 text-xs"
+                onClick={() => setTask("CANCEL")}
+              >
+                {locale === "en" ? "Cancel request" : "Cancelar pedido"}
+              </button>
+            </div>
+          )}
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              if (text.trim() && !busy) send.mutate({ intent: "HELP", message: text.trim() });
+              if (!text.trim() || busy) return;
+              const message = text.trim();
+              const parsed = understand(message);
+              if (parsed.task && user?.role === "PACIENTE") {
+                setTask(parsed.task);
+                setMessages((current) => [
+                  ...current,
+                  { id: Date.now(), role: "USER", content: message },
+                  {
+                    id: Date.now() + 1,
+                    role: "ASSISTANT",
+                    content:
+                      locale === "en"
+                        ? "Let’s prepare this together. Complete the details below; you will review before anything changes."
+                        : "Vamos preparar isso juntos. Complete os dados abaixo; você vai revisar antes de qualquer alteração.",
+                  },
+                ]);
+                setText("");
+                setLinks([]);
+              } else {
+                setTask(undefined);
+                send.mutate({
+                  intent:
+                    parsed.intent === "MY_REQUESTS" && user?.role !== "PACIENTE"
+                      ? "HELP"
+                      : parsed.intent,
+                  message,
+                  term: parsed.search,
+                });
+              }
             }}
             className="flex items-end gap-2"
           >
@@ -294,7 +364,15 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
             {copy.consent}
           </label>
           {useAi && <p className="mt-2 text-xs leading-5 text-slate-500">{copy.privacy}</p>}
-          <p className="mt-2 text-[11px] text-slate-500">{mode === "AI" ? copy.ai : copy.guided}</p>
+          <p className="mt-2 text-[11px] text-slate-500">
+            {mode === "AI"
+              ? copy.ai
+              : providerUnavailable
+                ? locale === "en"
+                  ? "External AI did not answer this query. Guided mode is available."
+                  : "A IA externa não respondeu esta consulta. O modo guiado está disponível."
+                : copy.guided}
+          </p>
         </div>
       </section>
     </div>

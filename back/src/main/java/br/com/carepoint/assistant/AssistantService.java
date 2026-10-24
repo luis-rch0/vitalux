@@ -104,20 +104,7 @@ public class AssistantService {
                 ? ai.answer(input.message(), english ? "English" : "Brazilian Portuguese")
                 : java.util.Optional.<String>empty();
         mode = generated.isPresent() ? "AI" : "GUIDED";
-        answer =
-            generated.orElse(
-                english
-                    ? "I can help you find professionals and clinics, track requests and prepare"
-                          + " care requests. Choose a consultation below. To request care, open a"
-                          + " professional profile and complete the form. Requests start as"
-                          + " pending; an administrator confirms them. You can cancel pending or"
-                          + " confirmed requests and review completed care."
-                    : "Posso ajudar você a encontrar profissionais e clínicas, acompanhar"
-                          + " solicitações e preparar pedidos de atendimento. Escolha uma consulta"
-                          + " abaixo. Para solicitar atendimento, abra o perfil do profissional e"
-                          + " preencha o formulário. O pedido começa como pendente e a"
-                          + " administração confirma. Você pode cancelar pedidos pendentes ou"
-                          + " confirmados e avaliar atendimentos concluídos.");
+        answer = generated.orElseGet(() -> GuidedHelp.answer(input.message(), english));
         links.add(new Link(english ? "Help center" : "Central de ajuda", "/ajuda"));
         links.add(
             new Link(

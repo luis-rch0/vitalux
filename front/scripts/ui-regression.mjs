@@ -16,7 +16,7 @@ const paged = content => ({ content, page: 0, size: 12, totalElements: content.l
   const browser = await chromium.launch({ headless: true, ...(process.env.CHROMIUM_EXECUTABLE ? { executablePath: process.env.CHROMIUM_EXECUTABLE } : {}), args: ['--no-sandbox', '--disable-dev-shm-usage', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
-  let role = 'PACIENTE', failProfessionals = false, confirmed = 0;
+  let role = 'PACIENTE', failProfessionals = false, confirmed = 0, preparedType = '', preparedDraft;
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   await page.route('**/api/**', async route => {
@@ -35,8 +35,8 @@ const paged = content => ({ content, page: 0, size: 12, totalElements: content.l
     else if (path === '/solicitacoes/1') data = request;
     else if (path === '/assistant/conversations') data = [];
     else if (path === '/assistant/messages') data = { conversationId: 10, answer: 'Sua solicitação #1 está PENDENTE.', mode: 'GUIDED', links: [{ label: 'Ver solicitação #1', href: '/solicitacoes/1' }] };
-    else if (path === '/assistant/actions') data = { token: 'test-token', type: 'CANCEL_REQUEST', summary: 'Cancelar solicitação #1 · Dra. Marina Costa', expiresAt: '2027-01-01T00:00:00Z' };
-    else if (path === '/assistant/actions/test-token/confirm') { confirmed++; request.status = 'CANCELADA'; data = request; }
+    else if (path === '/assistant/actions') { const payload = route.request().postDataJSON(); preparedType = payload.type; preparedDraft = payload.draft; data = { token: 'test-token', type: preparedType, summary: preparedType === 'CREATE_REQUEST' ? 'Solicitar atendimento com Dra. Marina Costa · R$ 180' : 'Cancelar solicitação #1 · Dra. Marina Costa', expiresAt: '2027-01-01T00:00:00Z' }; }
+    else if (path === '/assistant/actions/test-token/confirm') { confirmed++; request.status = preparedType === 'CREATE_REQUEST' ? 'PENDENTE' : 'CANCELADA'; data = request; }
     return route.fulfill({ status: 200, json: data });
   });
   await page.goto(base + '/paciente');
@@ -66,7 +66,7 @@ const paged = content => ({ content, page: 0, size: 12, totalElements: content.l
   await page.getByRole('heading', { name: 'Dra. Marina Costa' }).waitFor();
   await page.screenshot({ animations: "disabled", path: `${out}/professionals-desktop.png`, fullPage: true });
   failProfessionals = true;
-  await page.reload();
+  await page.reload({ waitUntil: 'domcontentloaded' });
   await page.getByRole('alert').filter({ hasText: 'Não foi possível carregar' }).waitFor();
   assert.equal(await page.getByText('Nenhum profissional encontrado', { exact: true }).count(), 0);
   failProfessionals = false;
@@ -81,6 +81,28 @@ const paged = content => ({ content, page: 0, size: 12, totalElements: content.l
   await page.getByRole('dialog').waitFor();
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   await page.screenshot({ animations: "disabled", path: `${out}/assistant-mobile.png` });
+  await page.getByRole('textbox', { name: 'Escreva sua dúvida…' }).fill('quero agendar atendimento');
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+  await page.locator('select[name=professional]').selectOption('1');
+  await page.getByLabel('Serviço desejado').fill('Fisioterapia');
+  await page.getByLabel('Data e hora desejadas (seu horário local)').fill('2027-05-20T15:00');
+  await page.getByLabel('Endereço do atendimento').fill('Endereço sintético de teste');
+  await page.getByLabel('Necessidades do atendimento').fill('Acompanhamento de teste');
+  await page.getByRole('button', { name: 'Continuar para revisão' }).click();
+  await page.getByRole('button', { name: 'Revisar com o assistente' }).click();
+  await page.getByText('Solicitar atendimento com Dra. Marina Costa · R$ 180', { exact: true }).waitFor();
+  assert.equal(confirmed, 1);
+  assert.equal(preparedDraft.profissionalId, 1);
+  assert.equal(preparedDraft.servicoSolicitado, 'Fisioterapia');
+  await page.getByRole('button', { name: 'Confirmar ação', exact: true }).click();
+  await page.getByText('Solicitação #1: criada e aguardando confirmação da administração.', { exact: true }).waitFor();
+  assert.equal(confirmed, 2);
+  await page.getByRole('button', { name: 'Cancelar pedido', exact: true }).click();
+  await page.getByRole('button', { name: /#1 · Dra. Marina Costa/ }).click();
+  await page.getByRole('button', { name: 'Revisar com o assistente' }).click();
+  await page.getByRole('button', { name: 'Confirmar ação', exact: true }).click();
+  await page.getByText('Solicitação #1: cancelamento realizado.', { exact: true }).waitFor();
+  assert.equal(confirmed, 3);
   await page.keyboard.press('Escape');
   await page.getByRole('button', { name: /Alternar tema|Toggle theme/ }).first().click();
   await page.screenshot({ animations: "disabled", path: `${out}/patient-dark.png`, fullPage: true });
@@ -90,8 +112,16 @@ const paged = content => ({ content, page: 0, size: 12, totalElements: content.l
   assert.ok(await page.getByRole('link', { name: /Configurações|Settings/ }).last().isVisible());
   await page.screenshot({ animations: "disabled", path: `${out}/admin-mobile.png`, fullPage: true });
   await page.goto(base + '/');
-  await page.getByRole('heading', { name: 'O cuidado certo encontra você.' }).waitFor();
+  await page.getByRole('heading', { name: /Cuidado para você/ }).waitFor();
   await page.screenshot({ animations: "disabled", path: `${out}/landing-mobile.png`, fullPage: true });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  await page.evaluate(() => { localStorage.setItem('theme', 'light'); });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await page.getByRole('heading', { name: /Cuidado para você/ }).waitFor();
+  await page.locator('.landing-hero-photo img').evaluate(img => img.decode());
+  assert.ok(await page.locator('.landing-hero-photo img').evaluate(img => img.naturalWidth > 0));
+  await page.screenshot({ animations: 'disabled', path: `${out}/landing-desktop.png`, fullPage: true });
   assert.deepEqual(errors, []);
   fs.writeFileSync(`${out}/result.json`, JSON.stringify({ passed: true, browser: browser.version(), checks: ['patient desktop/mobile', 'assistant query and navigation', 'explicit action confirmation', 'help accordion', 'search error vs empty and retry', 'mobile admin settings', 'dark theme', 'landing', 'no horizontal overflow', 'no page errors'] }, null, 2));
   await browser.close();

@@ -2,15 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CheckCircle2,
-  HeartHandshake,
-  ShieldCheck,
-  ShieldPlus,
-  Stethoscope,
-  UserRound,
-} from "lucide-react";
+import { ArrowRight, CheckCircle2, HeartHandshake, ShieldCheck, Stethoscope } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useI18n } from "@/providers/i18n-provider";
@@ -70,152 +62,262 @@ export default function HomePage() {
   const { locale } = useI18n();
   const copy = content[locale];
 
+  const en = locale === "en";
+  const benefits = [
+    {
+      icon: Stethoscope,
+      title: en ? "Find your professional" : "Encontre seu profissional",
+      text: en ? "Specialties and profiles" : "Especialidades e perfis",
+    },
+    {
+      icon: HeartHandshake,
+      title: en ? "Care at home" : "Cuidado em casa",
+      text: en ? "Choose your care address" : "Escolha onde ser atendido",
+    },
+    {
+      icon: CheckCircle2,
+      title: en ? "Follow each step" : "Acompanhe cada etapa",
+      text: en ? "Request status in one place" : "Status dos pedidos em um lugar",
+    },
+    {
+      icon: ShieldCheck,
+      title: en ? "Your personal space" : "Seu espaço pessoal",
+      text: en ? "Profile and care history" : "Perfil e histórico de cuidado",
+    },
+  ];
+  const services = [
+    {
+      image: "medica-carepoint.png",
+      title: en ? "Professionals" : "Profissionais",
+      text: en ? "Compare profiles and specialties." : "Compare perfis e especialidades.",
+      href: "/profissionais",
+    },
+    {
+      image: "clinica-carepoint.png",
+      title: en ? "Partner clinics" : "Clínicas parceiras",
+      text: en ? "Get to know the care network." : "Conheça a rede de atendimento.",
+      href: "/clinicas",
+    },
+    {
+      image: "fisioterapeuta-carepoint.png",
+      title: en ? "Personalized care" : "Cuidado individualizado",
+      text: en
+        ? "Find the right care for your needs."
+        : "Busque atendimento para suas necessidades.",
+      href: "/profissionais",
+    },
+    {
+      image: "cuidado-domiciliar-familia.png",
+      title: en ? "Your requests" : "Seus atendimentos",
+      text: en ? "Follow your requests from home." : "Acompanhe seus pedidos sem sair de casa.",
+      href: "/solicitacoes",
+    },
+  ];
   return (
-    <main className="min-h-screen overflow-hidden bg-[#f5f8f6] text-slate-950 dark:bg-slate-950 dark:text-white">
-      <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-5 py-6 md:px-8">
+    <main className="care-landing min-h-screen overflow-hidden text-slate-950 dark:text-white">
+      <header className="relative z-20 mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 md:px-8">
         <Logo />
+        <nav
+          aria-label={en ? "Main navigation" : "Navegação principal"}
+          className="hidden items-center gap-7 text-sm font-semibold lg:flex"
+        >
+          <a href="#inicio">{en ? "Home" : "Início"}</a>
+          <a href="#sobre">{en ? "About" : "Sobre"}</a>
+          <a href="#cuidado">{en ? "Care network" : "Rede de cuidado"}</a>
+          <Link href="/nossa-equipe">{copy.ourTeam}</Link>
+        </nav>
         <div className="flex items-center gap-3">
-          <Link
-            href="/nossa-equipe"
-            className="text-sm font-bold text-brand-700 dark:text-brand-300"
-          >
-            {copy.ourTeam}
-          </Link>
           <LanguageSwitcher />
+          <Link
+            href="/login/paciente"
+            className="rounded-full bg-brand-700 px-4 py-2.5 text-xs font-bold text-white"
+          >
+            {en ? "Sign in" : "Entrar"}
+          </Link>
         </div>
       </header>
-
-      <section className="mx-auto grid min-h-[calc(100vh-96px)] max-w-7xl items-center gap-10 px-5 pb-12 md:px-8 lg:grid-cols-[1.05fr_.95fr]">
-        <div className="animate-rise relative z-10">
-          <span className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.16em] text-brand-700 shadow-sm dark:border-brand-900 dark:bg-slate-900 dark:text-brand-300">
-            <HeartHandshake size={15} /> {copy.badge}
-          </span>
-          <h1 className="mt-6 max-w-3xl font-display text-5xl font-normal leading-[1.02] tracking-tight sm:text-6xl lg:text-8xl">
-            {copy.title}
-          </h1>
-          <p className="mt-6 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 md:text-lg">
-            {copy.description}
-          </p>
-
-          <div className="mt-8 grid max-w-2xl gap-4 sm:grid-cols-2">
-            <EntryCard
-              href="/login/paciente"
-              icon={<UserRound size={25} />}
-              title={copy.patientLogin}
-              description={copy.patientLoginDescription}
-              primary
-            />
-            <EntryCard
-              href="/login/admin"
-              icon={<ShieldPlus size={25} />}
-              title={copy.adminArea}
-              description={copy.adminAreaDescription}
-            />
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-slate-600 dark:text-slate-300">
-            <span className="flex items-center gap-2">
-              <CheckCircle2 size={17} className="text-brand-600" /> {copy.reviewedProfessionals}
-            </span>
-            <span className="flex items-center gap-2">
-              <ShieldCheck size={17} className="text-brand-600" /> {copy.protectedData}
-            </span>
-            <span className="flex items-center gap-2">
-              <Stethoscope size={17} className="text-brand-600" /> {copy.humanCare}
-            </span>
-          </div>
+      <section id="inicio" className="landing-hero relative mx-auto max-w-[1600px]">
+        <div className="landing-hero-photo">
+          <Image
+            src="/images/cuidado-domiciliar-familia.png"
+            alt={copy.familyAlt}
+            fill
+            sizes="(max-width: 767px) 100vw, 65vw"
+            priority
+            className="object-cover object-center"
+          />
         </div>
-
-        <div className="animate-rise relative mx-auto w-full max-w-xl lg:max-w-none">
-          <div className="absolute -inset-10 rounded-full bg-brand-300/20 blur-3xl dark:bg-brand-700/20" />
-          <div className="relative overflow-hidden rounded-t-[8rem] rounded-b-2xl border border-brand-200 bg-white shadow-soft dark:border-slate-900 dark:bg-slate-900">
-            <Image
-              src="/images/clinica-carepoint.png"
-              alt={copy.clinicAlt}
-              width={1536}
-              height={1024}
-              className="aspect-[4/3] w-full object-cover"
-              priority
-            />
-            <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/30 bg-slate-950/70 p-4 text-white backdrop-blur-xl">
-              <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">
-                {copy.network}
-              </p>
-              <div className="mt-2 flex items-end justify-between gap-4">
-                <div>
-                  <strong className="text-lg">{copy.closeCare}</strong>
-                  <p className="mt-1 text-sm text-slate-200">{copy.preparedAtHome}</p>
-                </div>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-400 text-slate-950">
-                  <ArrowRight size={20} />
-                </span>
-              </div>
+        <div className="relative z-10 mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
+          <div className="max-w-xl">
+            <span className="inline-flex items-center gap-2 rounded-full bg-brand-100 px-4 py-2 text-xs font-bold text-brand-800 dark:bg-brand-900 dark:text-brand-100">
+              <HeartHandshake size={16} />
+              {copy.badge}
+            </span>
+            <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+              {en ? "Care for you." : "Cuidado para você."}
+              <br />
+              <span className="text-brand-700 dark:text-brand-300">
+                {en ? "Peace of mind" : "Tranquilidade"}
+              </span>
+              <br />
+              {en ? "for your family." : "para sua família."}
+            </h1>
+            <p className="mt-5 max-w-md text-base leading-7 text-slate-600 dark:text-slate-300">
+              {copy.description}
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/cadastro"
+                className="inline-flex items-center gap-3 rounded-xl bg-brand-700 px-5 py-3 text-sm font-bold text-white"
+              >
+                {copy.startNow}
+                <ArrowRight size={17} />
+              </Link>
+              <a
+                href="#cuidado"
+                className="inline-flex items-center gap-3 rounded-xl border border-brand-700 bg-[var(--cp-paper)] px-5 py-3 text-sm font-bold text-brand-700 dark:text-brand-200"
+              >
+                {en ? "Explore care" : "Conhecer a rede"}
+                <Stethoscope size={17} />
+              </a>
             </div>
           </div>
         </div>
       </section>
-
-      <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8">
-        <div className="overflow-hidden rounded-[2.5rem] bg-white shadow-soft dark:bg-slate-900 lg:grid lg:grid-cols-2">
+      <section
+        aria-label={en ? "Platform features" : "Recursos da plataforma"}
+        className="relative z-10 mx-5 rounded-2xl border bg-[var(--cp-paper)] p-6 shadow-soft md:mx-auto md:-mt-8 md:max-w-6xl"
+      >
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map(({ icon: Icon, title, text }) => (
+            <div key={title} className="flex items-center gap-3">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-brand-100 text-brand-700">
+                <Icon size={23} />
+              </span>
+              <div>
+                <h2 className="text-sm font-bold">{title}</h2>
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section
+        id="sobre"
+        className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-20 md:px-8 lg:grid-cols-2"
+      >
+        <div className="relative">
           <Image
-            src="/images/cuidado-domiciliar-familia.png"
-            alt={copy.familyAlt}
-            width={1536}
-            height={1024}
-            className="h-full min-h-72 w-full object-cover"
+            src="/images/clinica-carepoint.png"
+            alt={copy.clinicAlt}
+            width={900}
+            height={650}
+            className="aspect-[4/3] w-full rounded-[12px_60px_12px_12px] object-cover"
           />
-          <div className="flex flex-col justify-center p-7 md:p-12">
-            <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-brand-700 dark:text-brand-300">
-              {copy.welcomingCare}
-            </span>
-            <h2 className="mt-3 text-3xl font-black leading-tight md:text-4xl">
-              {copy.professionalAtHome}
-            </h2>
-            <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
-              {copy.closingDescription}
-            </p>
+          <span className="absolute bottom-5 left-5 rounded-xl bg-brand-900 px-5 py-3 text-sm font-bold text-white">
+            {copy.network}
+          </span>
+        </div>
+        <div>
+          <p className="admin-kicker">{en ? "Closer to what matters" : "Perto do que importa"}</p>
+          <h2 className="mt-4 text-3xl font-bold leading-tight md:text-4xl">
+            {copy.professionalAtHome}
+          </h2>
+          <p className="mt-5 leading-7 text-slate-600 dark:text-slate-300">
+            {copy.closingDescription}
+          </p>
+          <div className="mt-7 grid grid-cols-2 gap-5">
+            {benefits.slice(0, 2).map(({ icon: Icon, title }) => (
+              <div key={title}>
+                <Icon className="mb-3 text-brand-700 dark:text-brand-300" />
+                <p className="text-sm font-semibold">{title}</p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/login/paciente"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-bold text-brand-700 dark:text-brand-300"
+          >
+            {copy.patientLogin}
+            <ArrowRight size={17} />
+          </Link>
+        </div>
+      </section>
+      <section id="cuidado" className="rounded-t-[40px] bg-[var(--cp-paper)] px-5 py-14 md:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="admin-kicker">CAREPOINT</p>
+              <h2 className="mt-3 text-3xl font-bold">
+                {en ? "A network around your care" : "Uma rede ao redor do seu cuidado"}
+              </h2>
+            </div>
             <Link
-              href="/login/paciente"
-              className="mt-6 inline-flex w-fit items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 font-bold text-white transition hover:bg-brand-700"
+              href="/profissionais"
+              className="inline-flex items-center gap-2 text-sm font-bold text-brand-700 dark:text-brand-300"
             >
-              {copy.startNow} <ArrowRight size={18} />
+              {en ? "View professionals" : "Ver profissionais"}
+              <ArrowRight size={17} />
             </Link>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {services.map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="group overflow-hidden rounded-2xl border bg-[var(--cp-canvas)]"
+              >
+                <Image
+                  src={`/images/${item.image}`}
+                  alt=""
+                  width={420}
+                  height={300}
+                  className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                />
+                <div className="p-5">
+                  <h3 className="flex items-center justify-between text-base font-bold">
+                    {item.title}
+                    <ArrowRight size={16} />
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                    {item.text}
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
+      <section className="mx-auto max-w-7xl px-5 py-12 md:px-8">
+        <div className="flex flex-col justify-between gap-6 rounded-[32px_8px_32px_8px] bg-brand-900 p-8 text-white md:flex-row md:items-center md:p-12">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-brand-200">{copy.welcomingCare}</p>
+            <h2 className="mt-3 text-3xl font-bold">
+              {en ? "Your next step starts here." : "Seu próximo passo começa aqui."}
+            </h2>
+            <p className="mt-3 max-w-lg text-sm leading-6 text-brand-100">
+              {en
+                ? "Create your profile, find a professional and follow your request."
+                : "Crie seu perfil, encontre um profissional e acompanhe sua solicitação."}
+            </p>
+          </div>
+          <Link
+            href="/cadastro"
+            className="inline-flex shrink-0 items-center justify-center gap-4 rounded-xl bg-white px-6 py-4 text-sm font-bold text-brand-900"
+          >
+            {copy.startNow}
+            <ArrowRight size={18} />
+          </Link>
+        </div>
+      </section>
+      <footer className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 border-t px-5 py-8 text-sm md:px-8">
+        <Logo />
+        <div className="flex flex-wrap gap-6">
+          <Link href="/nossa-equipe">{copy.ourTeam}</Link>
+          <Link href="/login/admin">{copy.adminArea}</Link>
+          <Link href="/login/paciente">{copy.patientLogin}</Link>
+        </div>
+      </footer>
     </main>
-  );
-}
-
-function EntryCard({
-  href,
-  icon,
-  title,
-  description,
-  primary = false,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  primary?: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`group flex items-center gap-4 rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 hover:shadow-xl ${primary ? "border-brand-600 bg-brand-600 text-white hover:bg-brand-700" : "border-slate-200 bg-white text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-white"}`}
-    >
-      <span
-        className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl ${primary ? "bg-white/15" : "bg-brand-100 text-brand-700 dark:bg-brand-900 dark:text-brand-200"}`}
-      >
-        {icon}
-      </span>
-      <span className="min-w-0">
-        <strong className="block">{title}</strong>
-        <small className={`mt-1 block leading-5 ${primary ? "text-brand-100" : "text-slate-500"}`}>
-          {description}
-        </small>
-      </span>
-    </Link>
   );
 }
