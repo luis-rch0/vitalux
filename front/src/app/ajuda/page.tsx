@@ -25,7 +25,7 @@ const questions = {
     ],
     [
       "Como o assistente usa meus dados?",
-      "As consultas aos seus pedidos respeitam sua conta e ficam na plataforma. A IA externa é opcional para dúvidas gerais: ao ativá-la, o texto da pergunta é enviado ao provedor. Evite dados pessoais e informações clínicas nesse campo. Você pode excluir suas conversas no painel.",
+      "As consultas respeitam sua conta. Ao ativar a conversa com IA, sua mensagem e até 12 mensagens recentes são enviadas à Groq, junto de resultados de buscas e números/status dos seus pedidos quando consultados. Não envie senhas, documentos ou informações de saúde. As ações exigem confirmação. Você pode excluir suas conversas no painel.",
     ],
     [
       "Como ajusto a leitura?",
@@ -51,7 +51,7 @@ const questions = {
     ],
     [
       "How does the assistant use my data?",
-      "Request lookups are scoped to your account and stay in the platform. External AI is optional for general help: enabling it sends your question to the provider. Avoid personal or clinical information. You can delete conversations from the panel.",
+      "Lookups are scoped to your account. When you enable AI conversation, your message and up to 12 recent messages are sent to Groq, along with directory results and request numbers/statuses when looked up. Do not send passwords, documents or health information. Actions require confirmation. You can delete conversations from the panel.",
     ],
     [
       "How can I adjust readability?",

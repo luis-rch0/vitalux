@@ -7,6 +7,8 @@ A referência enviada orientou a página pública: navegação horizontal, abert
 
 Dashboard do paciente: apresentação em duas colunas, etapas do pedido, indicadores em faixa, atalhos e informações existentes preservados. Cartões de profissionais: fotografia mais compacta e ação com menor peso visual. Estilos compartilhados preservam temas claro/escuro e acessibilidade existente.
 
+> Registro da entrega anterior. A evolução de contexto, ferramentas e privacidade está em [AGENTE-CONVERSACIONAL.md](AGENTE-CONVERSACIONAL.md). As limitações descritas abaixo refletem aquela versão.
+
 ## Assistente
 - Criação de solicitação e cancelamento agora podem ocorrer dentro do painel do chat.
 - Comandos locais como “agendar atendimento”, “cancelar pedido” e “meus pedidos” abrem fluxos ou consultas existentes. Esse reconhecimento é determinístico e limitado; não é um novo modelo de IA.

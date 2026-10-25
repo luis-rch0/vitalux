@@ -19,6 +19,7 @@ export interface Reply {
   answer: string;
   mode: "AI" | "GUIDED";
   links: { label: string; href: string }[];
+  task?: "CREATE" | "CANCEL" | null;
 }
 export interface ActionPreview {
   token: string;

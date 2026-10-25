@@ -26,7 +26,8 @@ public final class AssistantContracts {
 
   public record Link(String label, String href) {}
 
-  public record Reply(Long conversationId, String answer, String mode, List<Link> links) {}
+  public record Reply(
+      Long conversationId, String answer, String mode, List<Link> links, String task) {}
 
   public record Conversation(Long id, String title, Instant updatedAt) {}
 
