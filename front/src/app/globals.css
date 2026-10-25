@@ -267,3 +267,100 @@ html[data-reduced-motion="true"] *::after {
     padding-bottom: 24px;
   }
 }
+
+/* CarePoint community-first opening: manual, touch-friendly image stories. */
+.care-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 76px;
+  padding: 16px;
+  border: 1px solid var(--cp-line);
+  border-radius: 16px;
+  background: var(--cp-paper);
+  color: var(--cp-ink);
+  font-size: 13px;
+  font-weight: 650;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+.care-choice:hover {
+  border-color: #43876b;
+  background: #e9f0e7;
+}
+.dark .care-choice:hover {
+  background: #213b30;
+}
+.care-choice > span {
+  flex: 1;
+}
+.care-choice > svg {
+  flex-shrink: 0;
+}
+.care-story-carousel {
+  min-width: 0;
+}
+.care-story-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  border-radius: 36px 36px 12px 36px;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.care-story-track::-webkit-scrollbar {
+  display: none;
+}
+.care-story-slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 4.6;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+.care-story-slide img {
+  object-position: center;
+}
+.care-story-slide::after {
+  content: "";
+  position: absolute;
+  inset: 30% 0 0;
+  background: linear-gradient(transparent, #0b241de8);
+  pointer-events: none;
+}
+.care-story-caption {
+  position: absolute;
+  z-index: 1;
+  bottom: 30px;
+  left: 28px;
+  right: 28px;
+  color: #fff;
+}
+.care-carousel-control {
+  display: grid;
+  place-items: center;
+  height: 44px;
+  width: 44px;
+  border: 1px solid var(--cp-line);
+  border-radius: 50%;
+  color: var(--cp-ink);
+  background: var(--cp-paper);
+}
+.care-carousel-control:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.care-carousel-control:not(:disabled):hover {
+  border-color: currentColor;
+}
+@media (max-width: 639px) {
+  .care-choice {
+    padding: 12px;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .care-story-slide {
+    aspect-ratio: 4 / 3.8;
+  }
+}

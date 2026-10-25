@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { CareCarousel } from "@/components/home/care-carousel";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, HeartHandshake, ShieldCheck, Stethoscope } from "lucide-react";
 import { Logo } from "@/components/logo";
@@ -136,57 +137,76 @@ export default function HomePage() {
           </Link>
         </div>
       </header>
-      <section id="inicio" className="landing-hero relative mx-auto max-w-[1600px]">
-        <div className="landing-hero-photo">
-          <Image
-            src="/images/cuidado-domiciliar-familia.png"
-            alt={copy.familyAlt}
-            fill
-            sizes="(max-width: 767px) 100vw, 65vw"
-            priority
-            className="object-cover object-center"
-          />
-        </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-24">
-          <div className="max-w-xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-100 px-4 py-2 text-xs font-bold text-brand-800 dark:bg-brand-900 dark:text-brand-100">
-              <HeartHandshake size={16} />
-              {copy.badge}
+      <section
+        id="inicio"
+        className="inclusive-opening mx-auto grid max-w-7xl items-center gap-9 px-5 py-8 md:px-8 lg:grid-cols-2 lg:gap-14 lg:py-14"
+      >
+        <div>
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand-100 px-4 py-2 text-xs font-bold text-brand-800 dark:bg-brand-900 dark:text-brand-100">
+            <HeartHandshake size={16} />
+            {en ? "Care that fits your life" : "Cuidado que cabe na sua vida"}
+          </span>
+          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
+            {en ? "Care for you." : "Cuidado para você."}
+            <br />
+            <span className="text-brand-700 dark:text-brand-300">
+              {en ? "For every stage." : "Em cada fase."}
             </span>
-            <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
-              {en ? "Care for you." : "Cuidado para você."}
-              <br />
-              <span className="text-brand-700 dark:text-brand-300">
-                {en ? "Peace of mind" : "Tranquilidade"}
-              </span>
-              <br />
-              {en ? "for your family." : "para sua família."}
-            </h1>
-            <p className="mt-5 max-w-md text-base leading-7 text-slate-600 dark:text-slate-300">
-              {copy.description}
-            </p>
-            <div className="mt-7 flex flex-wrap gap-3">
+            <br />
+            {en ? "In your own way." : "Do seu jeito."}
+          </h1>
+          <p className="mt-5 max-w-lg text-base leading-7 text-slate-600 dark:text-slate-300">
+            {en
+              ? "For you, someone in your family or someone you care for. Find professionals and follow care requests in one place."
+              : "Para você, alguém da sua família ou quem está sob seus cuidados. Encontre profissionais e acompanhe atendimentos em um só lugar."}
+          </p>
+          <p className="mt-7 text-sm font-bold">
+            {en ? "What kind of support are you looking for?" : "Que apoio você procura hoje?"}
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {[
+              [
+                "/profissionais",
+                en ? "Find a professional" : "Encontrar profissional",
+                Stethoscope,
+              ],
+              ["/clinicas", en ? "Explore clinics" : "Conhecer clínicas", ShieldCheck],
+              ["/solicitacoes", en ? "Follow my care" : "Acompanhar cuidado", CheckCircle2],
+              ["/cadastro", en ? "Start my profile" : "Criar meu perfil", HeartHandshake],
+            ].map(([href, label, Icon]) => {
+              const Mark = Icon as typeof Stethoscope;
+              return (
+                <Link key={String(href)} href={String(href)} className="care-choice">
+                  <Mark size={21} aria-hidden />
+                  <span>{String(label)}</span>
+                  <ArrowRight size={15} aria-hidden />
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
+            <Link
+              href="/cadastro"
+              className="rounded-full bg-brand-700 px-6 py-3 font-bold text-white"
+            >
+              {en ? "Get started" : "Começar agora"}
+            </Link>
+            <span className="text-slate-600 dark:text-slate-300">
+              {en ? "Already have an account?" : "Já tem uma conta?"}{" "}
               <Link
-                href="/cadastro"
-                className="inline-flex items-center gap-3 rounded-xl bg-brand-700 px-5 py-3 text-sm font-bold text-white"
+                href="/login/paciente"
+                className="font-bold text-brand-700 underline dark:text-brand-300"
               >
-                {copy.startNow}
-                <ArrowRight size={17} />
+                {en ? "Sign in" : "Entrar"}
               </Link>
-              <a
-                href="#cuidado"
-                className="inline-flex items-center gap-3 rounded-xl border border-brand-700 bg-[var(--cp-paper)] px-5 py-3 text-sm font-bold text-brand-700 dark:text-brand-200"
-              >
-                {en ? "Explore care" : "Conhecer a rede"}
-                <Stethoscope size={17} />
-              </a>
-            </div>
+            </span>
           </div>
         </div>
+        <CareCarousel />
       </section>
       <section
         aria-label={en ? "Platform features" : "Recursos da plataforma"}
-        className="relative z-10 mx-5 rounded-2xl border bg-[var(--cp-paper)] p-6 shadow-soft md:mx-auto md:-mt-8 md:max-w-6xl"
+        className="relative z-10 mx-5 rounded-2xl border bg-[var(--cp-paper)] p-6 shadow-soft md:mx-auto md:mt-6 md:max-w-6xl"
       >
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map(({ icon: Icon, title, text }) => (

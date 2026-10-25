@@ -5,10 +5,17 @@ export function Logo({ light = false }: { light?: boolean }) {
   return (
     <Link
       href="/"
-      className={`inline-flex items-center gap-2 font-bold text-xl ${light ? "text-white" : "text-brand-700 dark:text-brand-300"}`}
+      className={`inline-flex shrink-0 overflow-hidden rounded-xl bg-[#080808] ${light ? "ring-1 ring-white/15" : "ring-1 ring-black/5"}`}
       aria-label="Página inicial CarePoint"
     >
-      <Image src="/carepoint-mark.svg" width={34} height={34} alt="" priority /> CarePoint
+      <Image
+        src="/brand/carepoint-logo.png"
+        width={280}
+        height={107}
+        alt="CarePoint"
+        className="h-auto w-[140px] sm:w-[160px]"
+        priority
+      />
     </Link>
   );
 }
