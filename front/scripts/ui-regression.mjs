@@ -357,7 +357,19 @@ function logStep(label) {
     imageNetworkIssues.length = 0;
     await page.goto(`${base}/`, { waitUntil: "domcontentloaded", timeout: 20000 });
     await page.getByRole("heading", { name: /Cuidado para você/ }).waitFor();
-    const heroImage = page.locator(".landing-hero-photo img");
+    await page.getByRole("button", { name: "Próxima imagem", exact: true }).click();
+    await page.getByRole("status").filter({ hasText: "Imagem 2 / 3" }).waitFor();
+    await page.getByRole("button", { name: "Imagem anterior", exact: true }).click();
+    await page.getByRole("status").filter({ hasText: "Imagem 1 / 3" }).waitFor();
+    const carousel = page.getByLabel("Imagens de cuidado. Use as setas para navegar.", { exact: true });
+    await carousel.focus();
+    await page.keyboard.press("End");
+    await page.getByRole("status").filter({ hasText: "Imagem 3 / 3" }).waitFor();
+    await page.keyboard.press("Home");
+    await page.getByRole("status").filter({ hasText: "Imagem 1 / 3" }).waitFor();
+    assert.ok(await page.getByRole("img", { name: "CarePoint", exact: true }).first().isVisible());
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    const heroImage = page.locator(".care-story-slide:first-child img");
     await heroImage.waitFor({ state: "visible" });
     // Imagens lazy só começam a carregar quando entram na área visível.
     await heroImage.scrollIntoViewIfNeeded();
@@ -365,7 +377,7 @@ function logStep(label) {
     try {
       await page.waitForFunction(
         () => {
-          const img = document.querySelector(".landing-hero-photo img");
+          const img = document.querySelector(".care-story-slide:first-child img");
           return Boolean(img?.complete && img.naturalWidth > 0);
         },
         undefined,
