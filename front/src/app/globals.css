@@ -215,9 +215,6 @@ html[data-reduced-motion="true"] *::after {
 .care-shell main > header {
   height: 72px;
 }
-.care-directory-card {
-  border-top: 3px solid #b36946 !important;
-}
 .dark .care-welcome-aside {
   background: #2a3d30;
   color: #e9edda;
