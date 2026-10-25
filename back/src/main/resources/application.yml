@@ -41,8 +41,8 @@ springdoc:
 
 app:
   assistant:
-    api-key: ${GROQ_API_KEY}
-    model: ${GROQ_MODEL}
+    api-key: ${GROQ_API_KEY:}
+    model: ${GROQ_MODEL:}
   security:
     jwt-secret: ${JWT_SECRET}
     access-expiration-ms: ${JWT_ACCESS_EXPIRATION}

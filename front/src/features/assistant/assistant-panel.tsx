@@ -39,7 +39,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
   const remove = useMutation({ mutationFn: assistantApi.remove });
   const send = useMutation({
     mutationFn: ({ message, intent, term }: { message: string; intent: Intent; term?: string }) =>
-      assistantApi.send({ conversationId, message, intent, search: term ?? search, locale, useAi }),
+      assistantApi.send({ conversationId, message, intent, search: term, locale, useAi }),
     onSuccess: (reply, input) => {
       setConversationId(reply.conversationId);
       setMessages((current) => [
@@ -50,6 +50,9 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
       setText("");
       setLinks(reply.links);
       setMode(reply.mode);
+      if (user?.role === "PACIENTE" && (reply.task === "CREATE" || reply.task === "CANCEL")) {
+        setTask(reply.task);
+      }
       setProviderUnavailable(useAi && input.intent === "HELP" && reply.mode === "GUIDED");
       void client.invalidateQueries({ queryKey: ["assistant-conversations", user?.id] });
     },
@@ -63,6 +66,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
   }, [messages, send.isPending]);
   const reset = () => {
     setProviderUnavailable(false);
+    setMode("GUIDED");
     setTask(undefined);
     setConversationId(undefined);
     setMessages([]);
@@ -252,17 +256,22 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
           <div ref={end} />
         </div>
         <div className="border-t p-4">
-          <label className="sr-only" htmlFor="assistant-search">
-            {copy.search}
-          </label>
-          <input
-            id="assistant-search"
-            value={search}
-            maxLength={160}
-            onChange={(event) => setSearch(event.target.value)}
-            placeholder={copy.search}
-            className="mb-2 w-full rounded-lg border p-2 text-sm"
-          />
+          <details className="mb-3">
+            <summary className="cursor-pointer text-xs text-brand-700 dark:text-brand-300">
+              {locale === "en" ? "Filter directory searches" : "Filtrar buscas no catálogo"}
+            </summary>
+            <label className="sr-only" htmlFor="assistant-search">
+              {copy.search}
+            </label>
+            <input
+              id="assistant-search"
+              value={search}
+              maxLength={160}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder={copy.search}
+              className="mb-2 w-full rounded-lg border p-2 text-sm"
+            />
+          </details>
           <div className="mb-3 flex flex-wrap gap-2">
             {(
               [
@@ -275,7 +284,11 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
                 key={intent}
                 disabled={busy}
                 onClick={() =>
-                  send.mutate({ intent, message: search ? `${label}: ${search}` : label })
+                  send.mutate({
+                    intent,
+                    message: search ? `${label}: ${search}` : label,
+                    term: search,
+                  })
                 }
                 className="rounded-full border px-3 py-2 text-xs font-semibold hover:bg-brand-50 dark:hover:bg-slate-800"
               >
@@ -306,6 +319,13 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
               event.preventDefault();
               if (!text.trim() || busy) return;
               const message = text.trim();
+              // Free text goes to the contextual agent when the user has opted in.
+              // Explicit buttons and offline routing remain available as fallbacks.
+              if (useAi) {
+                setTask(undefined);
+                send.mutate({ intent: "HELP", message });
+                return;
+              }
               const parsed = understand(message);
               if (parsed.task && user?.role === "PACIENTE") {
                 setTask(parsed.task);
@@ -358,6 +378,7 @@ export default function AssistantPanel({ onClose }: { onClose: () => void }) {
           <label className="mt-3 flex items-center gap-2 text-xs">
             <input
               type="checkbox"
+              disabled={busy}
               checked={useAi}
               onChange={(event) => setUseAi(event.target.checked)}
             />

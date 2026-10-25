@@ -19,9 +19,9 @@ export const assistantCopy = {
     error: "Não foi possível responder. Sua mensagem foi mantida; tente novamente.",
     guided: "Ajuda guiada",
     ai: "Resposta com IA",
-    consent: "Usar IA externa para dúvidas gerais",
+    consent: "Ativar conversa com IA",
     privacy:
-      "Ao ativar, sua pergunta será enviada ao provedor de IA. Evite dados pessoais e informações de saúde. Consultas aos seus pedidos ficam na plataforma.",
+      "Ao ativar, sua mensagem e até 12 mensagens recentes desta conversa serão enviadas à Groq, junto de resultados de buscas e números/status dos seus pedidos quando consultados. Não envie senhas, documentos ou informações de saúde. Ações continuam exigindo sua confirmação.",
     remove: "Apagar conversa",
     confirmRemove: "Apagar esta conversa permanentemente?",
     older: "Carregar mensagens anteriores",
@@ -52,9 +52,9 @@ export const assistantCopy = {
     error: "We could not reply. Your message was kept; please try again.",
     guided: "Guided help",
     ai: "AI response",
-    consent: "Use external AI for general questions",
+    consent: "Enable AI conversation",
     privacy:
-      "When enabled, your question is sent to the AI provider. Avoid personal or health information. Your request lookups stay in the platform.",
+      "When enabled, your message and up to 12 recent messages in this conversation are sent to Groq, along with directory results and request numbers/statuses when looked up. Do not send passwords, documents or health information. Actions still require your confirmation.",
     remove: "Delete conversation",
     confirmRemove: "Permanently delete this conversation?",
     older: "Load older messages",

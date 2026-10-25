@@ -45,6 +45,7 @@ public class AssistantService {
     String answer;
     String mode = "GUIDED";
     List<Link> links = new ArrayList<>();
+    String task = null;
     switch (input.intent()) {
       case PROFESSIONALS -> {
         var found =
@@ -99,24 +100,44 @@ public class AssistantService {
         }
       }
       default -> {
+        var recent =
+            input.conversationId() == null
+                ? List.<Message>of()
+                : conversations.history(user.getId(), input.conversationId(), 0);
+        var tools = new AssistantTools(auth, admin, professionals, clinics, requests);
         var generated =
             input.useAi()
-                ? ai.answer(input.message(), english ? "English" : "Brazilian Portuguese")
+                ? ai.converse(
+                    input.message(),
+                    english ? "English" : "Brazilian Portuguese",
+                    user.getRole().name(),
+                    recent,
+                    tools)
                 : java.util.Optional.<String>empty();
         mode = generated.isPresent() ? "AI" : "GUIDED";
-        answer = generated.orElseGet(() -> GuidedHelp.answer(input.message(), english));
-        links.add(new Link(english ? "Help center" : "Central de ajuda", "/ajuda"));
-        links.add(
-            new Link(
-                english ? "Professionals" : "Profissionais",
-                admin ? "/admin/profissionais" : "/profissionais"));
-        links.add(
-            new Link(
-                english ? "Requests" : "Solicitações",
-                admin ? "/admin/solicitacoes" : "/solicitacoes"));
+        answer =
+            generated.orElseGet(
+                () ->
+                    admin && GuidedHelp.isProfileQuestion(input.message())
+                        ? (english
+                            ? "Patient profile editing is not available for administrators. Open"
+                                  + " administrator settings or contact the person responsible for"
+                                  + " account access."
+                            : "A edição de perfil de paciente não se aplica ao administrador. Abra"
+                                  + " as configurações administrativas ou procure o responsável"
+                                  + " pelo acesso à conta.")
+                        : GuidedHelp.answer(input.message(), english));
+        if (generated.isPresent()) {
+          links.addAll(tools.links());
+          task = tools.task();
+        } else if (!admin && GuidedHelp.isProfileQuestion(input.message())) {
+          links.add(new Link(english ? "Edit profile" : "Editar perfil", "/perfil/editar"));
+        } else {
+          links.add(new Link(english ? "Help center" : "Central de ajuda", "/ajuda"));
+        }
       }
     }
     Long id = conversations.append(user.getId(), input.conversationId(), input.message(), answer);
-    return new Reply(id, answer, mode, List.copyOf(links));
+    return new Reply(id, answer, mode, links.stream().distinct().toList(), task);
   }
 }
